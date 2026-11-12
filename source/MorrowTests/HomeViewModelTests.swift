@@ -29,4 +29,23 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appending(path: fileName).path))
         XCTAssertNil(store.thumbnailData(for: fileName))
     }
+
+    func testLoadBuildsTimelineWithInjectedCalendarAndNow() throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        let now = Date(timeIntervalSince1970: 1_794_490_200)
+        try repo.add(Memory(id: UUID(uuidString: "B0000000-0000-0000-0000-000000000001")!, kind: .note, title: "Hi", createdAt: now))
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Ho_Chi_Minh") ?? .gmt
+        calendar.locale = Locale(identifier: "en_GB")
+        let model = HomeViewModel(
+            repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory),
+            calendar: calendar, now: { now }
+        )
+        XCTAssertFalse(model.hasLoaded)
+        model.load()
+        XCTAssertTrue(model.hasLoaded)
+        XCTAssertEqual(model.timeline.rows.map(\.id), [
+            "sprout", "day-2026-11-12", "m-B0000000-0000-0000-0000-000000000001", "origin",
+        ])
+    }
 }

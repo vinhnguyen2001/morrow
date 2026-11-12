@@ -10,15 +10,17 @@ struct StoredPhotoView: View {
     @State private var image: UIImage?
 
     var body: some View {
-        ZStack {
-            placeholder
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
+        // The image is an overlay so its pixel size never decides the layout size (it made cards
+        // wider than their column); the placeholder colour takes the size the parent offers.
+        placeholder
+            .overlay {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                }
             }
-        }
-        .clipped()
+            .clipped()
         .accessibilityHidden(true)
         .task(id: fileName) {
             let store = store

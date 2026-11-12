@@ -29,6 +29,8 @@ Persistent project context so no one has to re-read old conversations. Read this
 ### Tickets
 - [T-001 Skeleton, tokens, MemoryCard (M0)](tickets/T-001-skeleton-tokens-memorycard.md): Done, approved round 2, not compiled; Mac checklist open
 
+- [T-005 Home per design](tickets/T-005-home-per-design.md): steps 1-2 done (header, tokens, timeline, empty state, fixtures); steps 3+ pending
+
 ### Notes
 - [AR performance budget](notes/ar-performance-budget.md): thresholds, how to measure, how to keep AR fast, positioning fallbacks
 - [Dev environment and workflow](notes/dev-environment.md): Windows has no Xcode, source/ layout, XcodeGen, agents and review loop, user's working rules

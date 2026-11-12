@@ -11,16 +11,20 @@ extension View {
 
     /// Small rotation, stable for a given item ID. Disabled under Reduce Motion.
     func tilt(for id: UUID, maxDegrees: Double = 2) -> some View {
-        modifier(TiltModifier(id: id, maxDegrees: maxDegrees))
+        tilt(degrees: Tilt.degrees(for: id, maxDegrees: maxDegrees))
+    }
+
+    /// Rotation by a given angle. Disabled under Reduce Motion.
+    func tilt(degrees: Double) -> some View {
+        modifier(TiltModifier(degrees: degrees))
     }
 }
 
 struct TiltModifier: ViewModifier {
-    let id: UUID
-    let maxDegrees: Double
+    let degrees: Double
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
-        content.rotationEffect(.degrees(reduceMotion ? 0 : Tilt.degrees(for: id, maxDegrees: maxDegrees)))
+        content.rotationEffect(.degrees(reduceMotion ? 0 : degrees))
     }
 }

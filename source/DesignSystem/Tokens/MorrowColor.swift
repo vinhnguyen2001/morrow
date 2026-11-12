@@ -23,6 +23,9 @@ enum MorrowColor {
     /// Darkened for 4.5:1 contrast on ground and white.
     static let textSecondary = Color(hex: 0x5C5C5C)
     static let card = Color.white
+    /// Timeline spine, connectors and leaves (Main.dc.html lines 86-148).
+    static let leaf = Color(hex: 0x7CC48A)
+    static let leafLight = Color(hex: 0xA9DDB2)
     /// Dot on the notification bell (Main.dc.html line 26). Decorative, not text.
     static let notificationDot = Color(hex: 0xE8542F)
     /// Error text, about 6:1 on ground and white.

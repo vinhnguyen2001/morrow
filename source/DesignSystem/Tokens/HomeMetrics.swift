@@ -9,7 +9,8 @@ enum HomeMetrics {
     static let pageBottom: CGFloat = 130
     /// Gap between the bottom of the status bar and the header. The design's 54 minus the 47pt status bar
     /// of a 390pt-wide iPhone (SwiftUI's safe area already covers the status bar and Dynamic Island).
-    static let pageTopBelowStatusBar: CGFloat = 7
+    static let pageTopBelowStatusBar: CGFloat = pageTop - statusBarHeight
+    static let statusBarHeight: CGFloat = 47
 
     // Header (lines 22-25)
     static let headerHeight: CGFloat = 48
@@ -29,4 +30,49 @@ enum HomeMetrics {
     static let notificationDotTop: CGFloat = 11
     static let notificationDotTrailing: CGFloat = 12
     static let notificationDotRing: CGFloat = 2
+
+    // "Recent moments" section (lines 78-84): 22pt below the header block, timeline starts 4pt under the title.
+    static let sectionTop: CGFloat = 22
+    static let timelineTop: CGFloat = 4
+
+    // Sprout block (lines 85-91): 46 high, 34pt sprout 12 above the bottom, 16pt stem of spine under it.
+    static let sproutBlockHeight: CGFloat = 46
+    static let sproutSize: CGFloat = 34
+    static let sproutBottom: CGFloat = 12
+    static let sproutSpine: CGFloat = 16
+    static let spineWidth: CGFloat = 1.6
+
+    // Day row (lines 92-100): padding 16/0/12, badge 46 with a 4pt ground ring, gap 10. (The design also shifts the group by margin-left -23; see DateBadge for why it is not copied.)
+    static let dayRowTop: CGFloat = 16
+    static let dayRowBottom: CGFloat = 12
+    static let dayBadge: CGFloat = 46
+    static let dayBadgeRing: CGFloat = 4
+    static let dayBadgeGap: CGFloat = 10
+
+    // Memory row (lines 112-137): padding 6/0/10, connector 44 wide, dot 12 at top 40 (2pt border), leaf 18,
+    // opposite-column text padding top 38 and 16 from the spine side.
+    static let memoryRowTop: CGFloat = 6
+    static let memoryRowBottom: CGFloat = 10
+    static let connectorWidth: CGFloat = 44
+    static let rowDot: CGFloat = 12
+    static let rowDotTop: CGFloat = 40
+    static let rowDotBorder: CGFloat = 2
+    static let leafSize: CGFloat = 18
+    static let leafSideOffset: CGFloat = 10
+    static let sideTextTop: CGFloat = 38
+    static let sideTextInset: CGFloat = 16
+
+    // Origin (lines 144-150): padding top 8, stem 18, dot 10, gap 4.
+    static let originTop: CGFloat = 8
+    static let originStem: CGFloat = 18
+    static let originDot: CGFloat = 10
+    static let originGap: CGFloat = 4
+
+    // Empty state (lines 48-56): 36 below the header, 14 gap, illustration 190x170, CTA 52 high.
+    static let emptyTop: CGFloat = 36
+    static let emptyGap: CGFloat = 14
+    static let emptyInset: CGFloat = 18
+    static let gardenWidth: CGFloat = 190
+    static let gardenHeight: CGFloat = 170
+    static let ctaHeight: CGFloat = 52
 }

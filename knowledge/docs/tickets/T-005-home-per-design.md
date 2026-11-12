@@ -1,6 +1,6 @@
 # T-005: Home per design (full Home, reopens ADR 0003 scope)
 
-- Status: In progress. Step 1 done, step 2 next (see "Implementation summary"). User decisions applied 2026-11-12 (see "User decisions").
+- Status: In progress. Steps 1-2 done (Home display); step 3+ waits for T-004 step 3-4 (see "Implementation summary"). User decisions applied 2026-11-12 (see "User decisions").
 - Author: Danny (spec). Mark implements. User rules: one screen/step = one commit, tests green; no dead buttons; no fake data shown as real.
 - Related: ADR 0001-0004, 0007-0009, new 0010 (Home scope), 0011 (Journey). Design: knowledge/design/canvas/Main.dc.html (HOME lines 18-209, JOURNEYS 991, rows/segs 1241-1290, TILTS/OFFS 1085-1086), MemoryCard.dc.html.
 - Nothing here is compiled; measurements are read from the HTML. Mark re-checks while building.
@@ -82,8 +82,28 @@ Files: `DesignSystem/Tokens/HomeMetrics.swift` (new), `MorrowMetrics.swift` (Mor
 Deliberate step shift: the Add button moved from the header to `FloatingActionBar` in step 1 (otherwise Add would vanish between steps). The Map button, its badge and `nearbyCount` are NOT built (no destination until step 7; no dead constant).
 Decisions: header top = safe area + 7 (design 54 minus the 47pt status bar), not 54 below the safe area. Add/bell/gear use the one `CircleIconButton`. Bell label is "Notifications" (hint "Coming soon"), the dot is decorative and hidden from VoiceOver. Bell tap shows a `Toast` and posts a VoiceOver announcement.
 Fixtures: `-MorrowFixtures` (add `empty` for no memories), DEBUG only, returns before `makeContainer`, in-memory SwiftData, temp photo folder, generated gradients, fixed IDs/dates ("now" = 2026-11-12 20:30 UTC+7). Release build compiled and the binary has no "MorrowFixtures" string.
-Tests: 52 pass on iPhone 17 simulator (was 47; +5 HomeMetricsTests).
+Tests: 52 pass on iPhone 17 simulator (was 48; +4 HomeMetricsTests).
 Visual check on iPhone 16e simulator (390pt, iOS 26 runtime; the phone runs iOS 17.4, so system chrome differs). Screenshot taken by `simctl io`, viewed by eye, crops not measured to the pixel:
 - Match: header buttons 46pt, top of buttons about 55pt, bell dot position (26pt from button left, top-right), logo mark + "Morrow" green, logo placed by space-between as in the design, Add 64pt 20pt from the right and 30pt from the bottom, #1E3B2F, no rotation.
 - Differences: system font instead of Inter (accepted), search slot empty (step 5), Journeys/segments/"Recent moments"/timeline not yet (step 2+), shadows are the app's `morrowCardShadow` not the lighter header shadow.
-- Not checked: Settings sheet and toast appearance (no UI automation here); VoiceOver; 375pt width.
+- Not checked in step 1: Settings sheet (checked in step 2), toast appearance (no UI automation here), VoiceOver, 375pt width.
+
+### Step 2 (Mark, timeline with real data)
+Files: `Features/Home/Projection/{DayPart,Stagger,TimelineBuilder}.swift` (pure, no SwiftUI; calendar/locale/now injected), `Features/Home/{DateBadge,TimelineMemoryRow,TimelineOrigin,TimelineView,HomeEmptyState}.swift`, `DesignSystem/Components/{SVGShape,TimelineMarks,GardenIllustration}.swift` (SproutMark, LeafMark, TimelineConnector Shape, FractionalPosition Layout), `MemoryCard.swift` (imageHeight, timeText, label with time), `StoredPhotoView.swift`, `MorrowModifiers.swift` (`tilt(degrees:)`, TiltModifier now takes degrees; `tilt(for:)` kept for the gallery), `HomeViewModel.swift` (`timeline`, `hasLoaded`, injected calendar/now, signpost "load memories"), `HomeView.swift`, tokens (HomeMetrics, MorrowFont, MorrowColor), fixtures (`App/LaunchFixtures.swift`).
+Design decisions:
+- Paths are pasted from the canvas into a tiny `SVGPathParser` (M m L l H h V v C c Z z) + `SVGShape`, so no hand transcription; logo mark now uses it too.
+- Stagger index counts from the oldest memory; the newest row can therefore start on either side (the design's top row always starts left). Order: createdAt desc, tie by id; ID strings "sprout", "day-yyyy-MM-dd", "m-<uuid>", "origin".
+- Day part (morning 5-11, afternoon 12-16, evening 17-20, night 21-4) replaces mood. Time formatting uses the injected calendar's locale and time zone.
+- "since" shows the year only when the oldest memory is in another year.
+- Accessibility sizes: one column, spine at the left (46pt gutter), no tilt, sprout hidden, "Recent moments" header stacks. Reduce Motion: tilt 0 (existing modifier). Header logo word stops scaling at xxxLarge.
+- DEVIATION from design: the date badge is centred on the spine and its labels sit to the right. Read literally (margin-left -23 between two flex spacers) the spine runs through "Today / November 2026" (seen in the first screenshot); the 4pt ground ring only makes sense if the spine passes behind the badge.
+- Bug fixed on the way: `StoredPhotoView` let the image's pixel size set the layout size, so photo cards were wider than their column. Image is now an overlay on the placeholder.
+- `load()` also runs when the scene becomes active so "Today" and day groups follow the clock. The empty state waits for `hasLoaded` (no flash).
+- Delete stays reachable on rows: context menu and accessibility action "Delete".
+Tests: 68 pass on iPhone 17 simulator (+16: TimelineBuilder grouping, Today, midnight, fixed time zone UTC+7, order and ties, stability when adding, IDs, empty, since text, DayPart edges, Stagger tables, SVG parser, view model timeline, label with time). Release build compiles.
+Visual check (iPhone 16e simulator, 390pt, iOS 26 runtime; screenshots by `simctl io`, viewed by eye, not measured to the pixel; the iPhone 11 Pro runs iOS 17.4 so system chrome differs):
+- Match: header (46pt buttons, logo, bell dot), "Recent moments" + "since Nov 2" (baseline aligned, green), sprout block, spine 1.6pt #7CC48A, 46pt badge with ring, curved connectors bowing as in the design, 12pt dots, leaves at varied heights, left/right alternation with tilt and offsets, tall/normal photo heights, time + day part column, "where it all began" origin, empty state (illustration, copy, tagline, CTA pill), Add button 64pt at 20/30, single column at accessibility-extra-large.
+- Differs: system font not Inter; secondary text #5C5C5C not #7C7C7C (decision); badge centred on spine (above); header shadow is the card shadow; empty copy says "a photo or a note" and drops "planted where you are"; no Journeys row, no segmented control, no search, no Map button (later steps / decisions).
+- Not checked: scroll FPS and `refresh()` time on the iPhone 11 Pro (no device in this session, so no optimisation was made); 375pt width; the "coming soon" toast appearance; VoiceOver; Reduce Motion (code path only).
+Rode along with step 2: `project.yml` had no MARKETING_VERSION/CURRENT_PROJECT_VERSION, so the built Info.plist had no version and the Settings sheet would have shown a made-up one. Set to 0.1.0 (1); Settings shows "Unknown" if a value is missing or empty. Settings sheet seen in a screenshot (version "0.1.0 (1)", storage line). `TimelineView` renamed `HomeTimeline` (clashes with SwiftUI.TimelineView). Removed unused `dayBadgeShift`; `pageTopBelowStatusBar` = `pageTop` - 47. `StoredPhotoView` is only used by `MemoryCard` (always given a height).
+Screenshots (scratchpad, not committed): s2c.png, s2cbottom.png, s2empty.png, s2ax2.png.

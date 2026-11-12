@@ -11,10 +11,14 @@ enum MemoryCardDensity {
 
 /// Builds the single VoiceOver description for a card. Pure, unit tested.
 enum MemoryCardAccessibility {
-    static func label(for memory: Memory) -> String {
+    /// `timeText` is the already formatted time of day, added at the end when known.
+    static func label(for memory: Memory, timeText: String? = nil) -> String {
         var parts = [MemoryKindStyle.style(for: memory.kind).displayName, memory.title]
         if let place = memory.placeName, !place.isEmpty {
             parts.append("at \(place)")
+        }
+        if let timeText, !timeText.isEmpty {
+            parts.append(timeText)
         }
         return parts.joined(separator: ", ")
     }
@@ -24,6 +28,10 @@ enum MemoryCardAccessibility {
 struct MemoryCard: View {
     let memory: Memory
     var density: MemoryCardDensity = .compact
+    /// Photo height override (the timeline varies it); nil uses the density's height.
+    var imageHeight: CGFloat?
+    /// Formatted time of day, for the note's corner and the VoiceOver label.
+    var timeText: String?
     var action: () -> Void = {}
 
     @Environment(\.photoStore) private var photoStore
@@ -39,7 +47,7 @@ struct MemoryCard: View {
         }
         .buttonStyle(.plain)
         .morrowCardShadow()
-        .accessibilityLabel(MemoryCardAccessibility.label(for: memory))
+        .accessibilityLabel(MemoryCardAccessibility.label(for: memory, timeText: timeText))
     }
 
     @ViewBuilder
@@ -56,7 +64,7 @@ struct MemoryCard: View {
     private var photoContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             photoArea
-                .frame(height: density.imageHeight)
+                .frame(height: imageHeight ?? density.imageHeight)
                 .clipShape(RoundedRectangle(cornerRadius: MorrowRadius.cardImage, style: .continuous))
                 .padding(7)
             VStack(alignment: .leading, spacing: 3) {
@@ -92,7 +100,7 @@ struct MemoryCard: View {
                     .background(RoundedRectangle(cornerRadius: 15, style: .continuous).fill(style.background))
                     .rotationEffect(.degrees(-6))
                 Spacer()
-                Text(memory.createdAt, format: .dateTime.hour().minute())
+                timeLabel
                     .font(MorrowFont.caption)
                     .foregroundStyle(MorrowColor.textSecondary)
             }
@@ -109,6 +117,15 @@ struct MemoryCard: View {
             }
         }
         .padding(14)
+    }
+
+    @ViewBuilder
+    private var timeLabel: some View {
+        if let timeText {
+            Text(timeText)
+        } else {
+            Text(memory.createdAt, format: .dateTime.hour().minute())
+        }
     }
 
     private var titleText: some View {

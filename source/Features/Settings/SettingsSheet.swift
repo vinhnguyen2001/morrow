@@ -6,9 +6,14 @@ struct SettingsSheet: View {
 
     private var versionText: String {
         let info = Bundle.main.infoDictionary
-        let version = info?["CFBundleShortVersionString"] as? String ?? "1.0"
-        let build = info?["CFBundleVersion"] as? String
-        return build.map { "\(version) (\($0))" } ?? version
+        // Empty counts as missing: never show a made-up version.
+        let version = (info?["CFBundleShortVersionString"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        let build = (info?["CFBundleVersion"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        switch (version, build) {
+        case let (version?, build?): return "\(version) (\(build))"
+        case let (version?, nil): return version
+        default: return "Unknown"
+        }
     }
 
     var body: some View {

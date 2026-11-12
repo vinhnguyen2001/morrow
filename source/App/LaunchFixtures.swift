@@ -35,7 +35,10 @@ enum LaunchFixtures {
         if !wantsEmpty {
             for memory in memories(photoStore: photoStore) { try? repository.add(memory) }
         }
-        return HomeViewModel(repository: repository, photoStore: photoStore)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        calendar.locale = Locale(identifier: "en_US")
+        return HomeViewModel(repository: repository, photoStore: photoStore, calendar: calendar, now: { now })
     }
 
     // Force unwraps are intended: compile-time UUID literals (notes/sample-data.md).
@@ -59,7 +62,7 @@ enum LaunchFixtures {
             photo(3, "Rooftop with friends", nil, hoursAgo: 8, colors: (0x7FB3D5, 0x2E5E8C)),
             photo(4, "Lanterns on the river", "Hội An", hoursAgo: 27, colors: (0xE8C468, 0x8E5B3A)),
             note(5, "Remember to call Mom", nil, nil, hoursAgo: 30),
-            photo(6, "Market morning", "Thu Bồn", hoursAgo: 55, colors: (0x8FCB9B, 0x2F6B4F)),
+            photo(6, "Market morning", "Thu Bồn", hoursAgo: 61, colors: (0x8FCB9B, 0x2F6B4F)),
             note(7, "Train to Huế leaves at nine, bring snacks and the blue charger", "Window seat on the left side for the sea view.", "Đà Nẵng", hoursAgo: 80),
             photo(8, "First night in the city", "Hà Nội", hoursAgo: 240, colors: (0xB9A3E3, 0x5B3FB8)),
         ]

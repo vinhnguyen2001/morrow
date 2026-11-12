@@ -31,6 +31,20 @@ enum MorrowFont {
     static let logo = Font.system(.title2, weight: .heavy)
     /// Empty-state title (design 24/800).
     static let emptyTitle = Font.system(.title2, weight: .heavy)
+    /// "Recent moments" (design 18/800).
+    static let sectionTitle = Font.system(.headline, weight: .heavy)
+    /// "since Sep 1" (design 13/600).
+    static let sectionMeta = Font.system(.footnote, weight: .semibold)
+    /// Day name and time beside the timeline (design 14/800).
+    static let rowTitle = Font.system(.subheadline, weight: .heavy)
+    /// Month and year, day part (design 12/600 and 12.5/600).
+    static let rowDetail = Font.system(.caption, weight: .semibold)
+    /// Day number in the 46pt badge (design 19/800). Fixed: the badge is a fixed-size circle.
+    static let dayNumber = Font.system(size: 19, weight: .heavy)
+    /// Empty-state tagline (design 14/600).
+    static let tagline = Font.system(.subheadline, weight: .semibold)
+    /// Primary button text (design 16/800).
+    static let cta = Font.system(.callout, weight: .heavy)
     /// Small transient messages (design has none; sized like section meta, 13/600).
     static let notice = Font.system(.footnote, weight: .semibold)
     // Icons use fixed sizes: they sit in fixed-size containers and must not scale with Dynamic Type.

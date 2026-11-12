@@ -30,4 +30,9 @@ final class MemoryStyleTests: XCTestCase {
         let memory = Memory(kind: .note, title: "Call Mom")
         XCTAssertEqual(MemoryCardAccessibility.label(for: memory), "Note, Call Mom")
     }
+
+    func testAccessibilityLabelAppendsTime() {
+        let memory = Memory(kind: .photo, title: "Sunrise", placeName: "Hoi An")
+        XCTAssertEqual(MemoryCardAccessibility.label(for: memory, timeText: "15:30"), "Photo, Sunrise, at Hoi An, 15:30")
+    }
 }
