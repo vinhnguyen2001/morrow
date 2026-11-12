@@ -1,3 +1,4 @@
+import SwiftData
 import XCTest
 @testable import Morrow
 
@@ -11,6 +12,7 @@ final class StoreLocationTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        try? FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: storeDir.path)
         try? FileManager.default.removeItem(at: root)
     }
 
@@ -41,5 +43,54 @@ final class StoreLocationTests: XCTestCase {
         try Data("old".utf8).write(to: root.appending(path: "default.store"))
         let url = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
         XCTAssertEqual(try String(contentsOf: url, encoding: .utf8), "new")
+        XCTAssertEqual(try String(contentsOf: root.appending(path: "default.store"), encoding: .utf8), "old")
+    }
+
+    func testInterruptedMoveIsCompletedAndKeepsAlreadyMovedFile() throws {
+        try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
+        try Data("main".utf8).write(to: root.appending(path: "default.store"))
+        try Data("shm".utf8).write(to: root.appending(path: "default.store-shm"))
+        try Data("wal-new".utf8).write(to: storeDir.appending(path: "default.store-wal"))
+        let url = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
+        XCTAssertEqual(try String(contentsOf: url, encoding: .utf8), "main")
+        XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-shm"), encoding: .utf8), "shm")
+        XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-wal"), encoding: .utf8), "wal-new")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appending(path: "default.store").path))
+    }
+
+    func testFailedMoveRollsBackToLegacyLocation() throws {
+        for name in ["default.store", "default.store-wal", "default.store-shm"] {
+            try Data(name.utf8).write(to: root.appending(path: name))
+        }
+        // A directory squats on the shm destination, so that step fails after wal was moved.
+        try FileManager.default.createDirectory(
+            at: storeDir.appending(path: "default.store-shm"), withIntermediateDirectories: true)
+        do {
+            _ = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
+            XCTFail("expected failure")
+        } catch StoreLocation.MoveError.rolledBack(let legacyStore, _) {
+            XCTAssertEqual(legacyStore, root.appending(path: "default.store"))
+        }
+        for name in ["default.store", "default.store-wal", "default.store-shm"] {
+            XCTAssertEqual(try String(contentsOf: root.appending(path: name), encoding: .utf8), name)
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeDir.appending(path: "default.store-wal").path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeDir.appending(path: "default.store").path))
+    }
+
+    @MainActor
+    func testMakeContainerFallsBackToLegacyStoreAfterRollback() throws {
+        let legacyURL = root.appending(path: "default.store")
+        do {
+            let container = try ModelContainer(for: MemoryRecord.self, configurations: ModelConfiguration(url: legacyURL))
+            try SwiftDataMemoryRepository(container: container).add(Memory(kind: .note, title: "Kept"))
+        }
+        // Read-only target directory makes the move of the main file fail; nothing else had moved.
+        try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
+        try FileManager.default.setAttributes([.posixPermissions: 0o555], ofItemAtPath: storeDir.path)
+
+        let container = try SwiftDataMemoryRepository.makeContainer(storeDirectory: storeDir, legacyDirectory: root)
+        XCTAssertEqual(try SwiftDataMemoryRepository(container: container).all().map(\.title), ["Kept"])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: legacyURL.path))
     }
 }

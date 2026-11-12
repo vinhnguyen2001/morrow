@@ -11,10 +11,22 @@ final class SwiftDataMemoryRepository: MemoryRepository {
         self.container = container
     }
 
-    static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
-        let config = inMemory
-            ? ModelConfiguration(isStoredInMemoryOnly: true)
-            : ModelConfiguration(url: try StoreLocation.prepare())
+    static func makeContainer(
+        inMemory: Bool = false,
+        storeDirectory: URL = URL.applicationSupportDirectory.appending(path: "Store", directoryHint: .isDirectory),
+        legacyDirectory: URL = .applicationSupportDirectory
+    ) throws -> ModelContainer {
+        let config: ModelConfiguration
+        if inMemory {
+            config = ModelConfiguration(isStoredInMemoryOnly: true)
+        } else {
+            do {
+                config = ModelConfiguration(url: try StoreLocation.prepare(in: storeDirectory, legacyDirectory: legacyDirectory))
+            } catch StoreLocation.MoveError.rolledBack(let legacyStore, _) {
+                // Move failed but was fully undone: the old location is still the one true store.
+                config = ModelConfiguration(url: legacyStore)
+            }
+        }
         return try ModelContainer(for: MemoryRecord.self, configurations: config)
     }
 

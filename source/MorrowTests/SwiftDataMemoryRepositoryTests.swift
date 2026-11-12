@@ -41,15 +41,21 @@ final class SwiftDataMemoryRepositoryTests: XCTestCase {
     func testSoftDeleteScrubsContentAndKeepsTombstone() throws {
         let repo = try makeRepository()
         let memory = Memory(kind: .photo, title: "Secret", body: "Private text", placeName: "Home",
-                            photoFileName: "x.jpg")
+                            coordinate: Coordinate(latitude: 1, longitude: 2), photoFileName: "x.jpg")
         try repo.add(memory)
+        let id = memory.id
+        let before = try XCTUnwrap(try repo.container.mainContext.fetch(
+            FetchDescriptor<MemoryRecord>(predicate: #Predicate { $0.id == id })).first).updatedAt
+        XCTAssertNotNil(try XCTUnwrap(try repo.container.mainContext.fetch(
+            FetchDescriptor<MemoryRecord>(predicate: #Predicate { $0.id == id })).first).latitude)
         try repo.delete(id: memory.id)
 
-        let id = memory.id
         let records = try repo.container.mainContext.fetch(
             FetchDescriptor<MemoryRecord>(predicate: #Predicate { $0.id == id }))
         let record = try XCTUnwrap(records.first)
         XCTAssertTrue(record.isSoftDeleted)
+        XCTAssertEqual(record.id, memory.id)
+        XCTAssertGreaterThan(record.updatedAt, before)
         XCTAssertEqual(record.title, "")
         XCTAssertNil(record.body)
         XCTAssertNil(record.placeName)

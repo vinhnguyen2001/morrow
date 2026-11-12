@@ -69,4 +69,22 @@ final class CaptureViewModelTests: XCTestCase {
         XCTAssertNil(model.photoData)
         XCTAssertNotNil(model.errorMessage)
     }
+
+    func testCancelledEarlierPickDoesNotOverwriteLaterPick() async throws {
+        let (model, _) = try makeModel()
+        func jpeg(side: CGFloat, color: UIColor) -> Data {
+            UIGraphicsImageRenderer(size: CGSize(width: side, height: side)).jpegData(withCompressionQuality: 1) { ctx in
+                color.setFill()
+                ctx.fill(CGRect(x: 0, y: 0, width: side, height: side))
+            }
+        }
+        let first = jpeg(side: 40, color: .red)
+        let second = jpeg(side: 60, color: .blue)
+        let firstTask = Task { await model.setPhoto(first) }
+        firstTask.cancel()
+        await firstTask.value
+        XCTAssertNil(model.photoData)
+        await model.setPhoto(second)
+        XCTAssertEqual(model.photoData, second)
+    }
 }

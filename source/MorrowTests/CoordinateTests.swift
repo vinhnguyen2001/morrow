@@ -23,6 +23,19 @@ final class CoordinateTests: XCTestCase {
         }
     }
 
+    func testDescriptionIsExactlyRedacted() throws {
+        let coordinate = try XCTUnwrap(Coordinate(latitude: 1, longitude: 2))
+        XCTAssertEqual(coordinate.description, "Coordinate(redacted)")
+    }
+
+    func testRecordWithOnlyLongitudeHasNoCoordinate() {
+        let record = MemoryRecord(Memory(kind: .note, title: "Half"))
+        record.latitude = nil
+        record.longitude = 2
+        XCTAssertNil(record.memory?.coordinate)
+        XCTAssertNotNil(record.memory)
+    }
+
     func testEqualityAndHashing() throws {
         let a = try XCTUnwrap(Coordinate(latitude: 1, longitude: 2))
         let b = try XCTUnwrap(Coordinate(latitude: 1, longitude: 2))

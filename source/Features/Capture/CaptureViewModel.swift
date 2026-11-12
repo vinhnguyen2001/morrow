@@ -30,10 +30,13 @@ final class CaptureViewModel {
         let store = photoStore
         do {
             let preview = try await Task.detached { try store.previewData(from: data) }.value
+            // Task.detached does not inherit cancellation: a newer pick must not be overwritten.
+            guard !Task.isCancelled else { return }
             photoData = data
             photoPreview = preview
             errorMessage = nil
         } catch {
+            guard !Task.isCancelled else { return }
             photoData = nil
             photoPreview = nil
             errorMessage = "That photo can't be used. Try another one."

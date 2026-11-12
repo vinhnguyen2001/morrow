@@ -14,6 +14,9 @@ struct MorrowApp: App {
             // Unrecoverable at launch: no store means nothing to show. Surfaces in crash logs.
             fatalError("Could not open the local store: \(error)")
         }
+        #if DEBUG
+        StoreLocation.logProtectionForDebug()
+        #endif
         model = HomeViewModel(repository: SwiftDataMemoryRepository(container: container), photoStore: PhotoStore())
     }
 

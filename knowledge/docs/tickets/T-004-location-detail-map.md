@@ -71,7 +71,8 @@ Capture photo and note with location; deny permission and still save; kill and r
 - PENDING (device only, not done): install-over migration. Install 4cde0ca on the iPhone, add memories, install this build over it, confirm old memories still show (covers both the new optional columns and the store move from step 0).
 
 ## Review outcome (Danny)
-(pending)
+- Round 1: CHANGES REQUESTED (S1-S4, N2, N5), fixed in "T-004 review round 1 fixes". S3 on-device check of the protection class is done by the orchestrator and user.
+- N3 accepted: delete writes the tombstone first, then removes the file; a kill in between leaves an orphan photo, covered by the orphan sweep in M6.
 
 ## Open issues
 - Pin uses the position at capture, not where a library photo was taken; reading photo GPS is a later, separate decision.
