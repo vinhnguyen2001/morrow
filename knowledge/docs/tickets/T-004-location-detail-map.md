@@ -68,10 +68,11 @@ Capture photo and note with location; deny permission and still save; kill and r
 ### Step 1 (done, 39 unit tests green on simulator iOS 26)
 - `Domain/Coordinate.swift` (failable, Sendable, Hashable, redacted descriptions); `Memory.coordinate`; `MemoryRecord.latitude/longitude: Double?` (`memory` builds a coordinate only when both are present and valid; `scrub()` clears them); `Memory.locatedSamples` under `#if DEBUG` (unused by app code).
 - Tests: validity, redaction, equality, add/all round trip, only-lat gives nil, invalid stored value gives nil, soft delete scrubs coordinates.
-- PENDING (device only, not done): install-over migration. Install 4cde0ca on the iPhone, add memories, install this build over it, confirm old memories still show (covers both the new optional columns and the store move from step 0).
+- DONE 2026-11-12 on the iPhone 11 Pro (iOS 17.4.1), build 93a66d7 installed over the 4cde0ca build: backed up the container first (devicectl, phone unlocked). Before: 3 rows (My school, Aircraft [soft-deleted], My niece) with an un-checkpointed 213 KB WAL, 2 photos. After first launch: store moved to `Store/` (old root files gone), same 3 rows, `pragma integrity_check` ok, new `ZLATITUDE` column present and null, photos untouched, app running. NOT verified: the actual protection class (the DEBUG log was not read; os.Logger is not captured by devicectl). Known gap: rows soft-deleted by the old build (Aircraft) were not scrubbed and still hold their title and photo name; consider a one-time scrub at migration.
 
 ## Review outcome (Danny)
 - Round 1: CHANGES REQUESTED (S1-S4, N2, N5), fixed in "T-004 review round 1 fixes". S3 on-device check of the protection class is done by the orchestrator and user.
+- Round 3 (93a66d7): APPROVED. Deferred, non-blocking: S1 (comment says "touching nothing" but reconcile may move a wal back before throwing; better to check "in both places" for all companions first), N1 (stale test counts above; now 48), N2 (`moved`/`names` declared before reconcile), N3 (permanent crash-loop on `rollbackFailed`, accepted: no common path leads there).
 - N3 accepted: delete writes the tombstone first, then removes the file; a kill in between leaves an orphan photo, covered by the orphan sweep in M6.
 - Round 2: CHANGES REQUESTED, B1 (skipping an existing wal/shm in the target could pair a wrong wal with main) + N1-N3, fixed in "T-004 review round 2: make store move all-or-nothing".
 
