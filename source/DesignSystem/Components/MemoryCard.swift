@@ -24,7 +24,7 @@ enum MemoryCardAccessibility {
     }
 }
 
-/// One card view, switching on kind. Exposed to accessibility as a single button.
+/// One card view, switching on kind. Exposed to accessibility as a single element (a button only when it has an action).
 struct MemoryCard: View {
     let memory: Memory
     var density: MemoryCardDensity = .compact
@@ -32,22 +32,36 @@ struct MemoryCard: View {
     var imageHeight: CGFloat?
     /// Formatted time of day, for the note's corner and the VoiceOver label.
     var timeText: String?
-    var action: () -> Void = {}
+    /// Nil when the card does nothing yet (no dead buttons, ADR 0010): it is then plain content with a label,
+    /// not a Button. With an action it is a button.
+    var action: (() -> Void)?
 
     @Environment(\.photoStore) private var photoStore
 
     private var style: MemoryKindStyle { .style(for: memory.kind) }
 
+    private var label: String { MemoryCardAccessibility.label(for: memory, timeText: timeText) }
+
+    private var card: some View {
+        content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(MorrowColor.card)
+            .clipShape(RoundedRectangle(cornerRadius: MorrowRadius.card, style: .continuous))
+    }
+
+    @ViewBuilder
     var body: some View {
-        Button(action: action) {
-            content
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(MorrowColor.card)
-                .clipShape(RoundedRectangle(cornerRadius: MorrowRadius.card, style: .continuous))
+        if let action {
+            Button(action: action) { card }
+                .buttonStyle(.plain)
+                .morrowCardShadow()
+                .accessibilityLabel(label)
+        } else {
+            card
+                .morrowCardShadow()
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(label)
         }
-        .buttonStyle(.plain)
-        .morrowCardShadow()
-        .accessibilityLabel(MemoryCardAccessibility.label(for: memory, timeText: timeText))
     }
 
     @ViewBuilder

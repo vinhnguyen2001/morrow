@@ -85,8 +85,17 @@ final class TimelineBuilderTests: XCTestCase {
         let before = items(build(old))
         let after = items(build(old + [memory(4, at: date(12, 9))]))
         for item in before {
-            let matching = after.first { $0.id == item.id }
-            XCTAssertEqual(matching?.stagger, item.stagger, "row \(item.id) moved")
+            XCTAssertEqual(after.first { $0.id == item.id }, item, "row \(item.id) changed")
+        }
+    }
+
+    func testAddingAMemoryOnAnExistingDayKeepsOneHeaderAndOlderRows() {
+        let old = [memory(1, at: date(10, 8)), memory(2, at: date(12, 9))]
+        let before = build(old)
+        let after = build(old + [memory(3, at: date(12, 15))])
+        XCTAssertEqual(days(after).map(\.id), ["day-2026-11-12", "day-2026-11-10"])
+        for item in items(before) {
+            XCTAssertEqual(items(after).first { $0.id == item.id }, item, "row \(item.id) changed")
         }
     }
 
@@ -141,6 +150,14 @@ final class TimelineBuilderTests: XCTestCase {
         XCTAssertEqual(Stagger(index: 1).imageHeight, 116)
         XCTAssertEqual(Stagger(index: 3).imageHeight, 150)
         XCTAssertEqual(Stagger(index: 1).leafFraction, 0.69, accuracy: 0.0001)
+        XCTAssertEqual(Stagger(index: 2).tilt, -2.2)
+        XCTAssertEqual(Stagger(index: 2).offset, 6)
+        XCTAssertEqual(Stagger(index: 2).imageHeight, 116)
+        XCTAssertEqual(Stagger(index: 2).leafFraction, 0.56, accuracy: 0.0001) // 52 + 34 % 30
+        XCTAssertEqual(Stagger(index: 0).leafRotation, 10)
+        XCTAssertEqual(Stagger(index: 1).leafRotation, 260)
+        XCTAssertFalse(Stagger(index: 0).leafIsLight)
+        XCTAssertTrue(Stagger(index: 1).leafIsLight)
     }
 
     func testSVGParserReadsRelativeAndImplicitCommands() {
@@ -148,5 +165,13 @@ final class TimelineBuilderTests: XCTestCase {
         XCTAssertEqual(box.maxX, 16.2, accuracy: 0.5)
         let rect = SVGPathParser.path("M0 0h10v10H0z").boundingRect
         XCTAssertEqual(rect, CGRect(x: 0, y: 0, width: 10, height: 10))
+    }
+
+    func testSVGParserReadsNegativeNumbersWithoutLeadingZero() {
+        // "-.8" is a negative number, not a minus sign followed by a number.
+        let box = SVGPathParser.path("M10 10l-.8-.8").boundingRect
+        XCTAssertEqual(box.minX, 9.2, accuracy: 0.0001)
+        XCTAssertEqual(box.minY, 9.2, accuracy: 0.0001)
+        XCTAssertEqual(box.maxX, 10, accuracy: 0.0001)
     }
 }

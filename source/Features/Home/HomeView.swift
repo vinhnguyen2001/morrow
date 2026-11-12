@@ -6,6 +6,7 @@ struct HomeView: View {
     @State private var showCapture = false
     @State private var showSettings = false
     @State private var toast: String?
+    @State private var toastTask: Task<Void, Never>?
     @State private var pendingDelete: Memory?
     @Environment(\.scenePhase) private var scenePhase
 
@@ -65,13 +66,18 @@ struct HomeView: View {
         }
     }
 
-    /// The bell is placeholder chrome: it says so instead of showing fake content.
+    /// PLACEHOLDER (release blocker, see MorrowPlaceholders): the bell says so instead of showing fake content.
     private func showNotificationsNotice() {
         let message = MorrowPlaceholders.notificationsMessage
-        AccessibilityNotification.Announcement(message).post()
+        var announcement = AttributedString(message)
+        // iOS 17: keep VoiceOver from cutting the announcement short. Needs a check on a real device.
+        announcement.accessibilitySpeechAnnouncementPriority = .high
+        AccessibilityNotification.Announcement(announcement).post()
         withAnimation(.easeOut(duration: 0.25)) { toast = message }
-        Task {
+        toastTask?.cancel() // a second tap restarts the timer instead of hiding the toast early
+        toastTask = Task {
             try? await Task.sleep(for: .seconds(2))
+            guard !Task.isCancelled else { return }
             withAnimation(.easeOut(duration: 0.25)) { toast = nil }
         }
     }

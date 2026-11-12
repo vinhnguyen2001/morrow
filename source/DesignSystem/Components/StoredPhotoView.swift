@@ -1,12 +1,13 @@
 import SwiftUI
 import UIKit
 
-/// Shows a stored thumbnail. File read and image decode happen off the main actor;
-/// the placeholder colour shows until the image is ready.
+/// Shows a stored thumbnail. A cache hit shows at once; a miss reads and decodes off the main actor
+/// and fills `ThumbnailCache`. The placeholder colour shows until the image is ready.
 struct StoredPhotoView: View {
     let fileName: String
     let store: PhotoStore
     let placeholder: Color
+    var cache: ThumbnailCache = .shared
     @State private var image: UIImage?
 
     var body: some View {
@@ -14,8 +15,8 @@ struct StoredPhotoView: View {
         // wider than their column); the placeholder colour takes the size the parent offers.
         placeholder
             .overlay {
-                if let image {
-                    Image(uiImage: image)
+                if let shown = cache.image(for: fileName) ?? image {
+                    Image(uiImage: shown)
                         .resizable()
                         .scaledToFill()
                 }
@@ -23,12 +24,16 @@ struct StoredPhotoView: View {
             .clipped()
         .accessibilityHidden(true)
         .task(id: fileName) {
+            if cache.image(for: fileName) != nil { return } // drawn straight from the cache
+            image = nil
             let store = store
             let name = fileName
-            image = await Task.detached(priority: .userInitiated) {
+            let decoded = await Task.detached(priority: .userInitiated) {
                 guard let data = store.thumbnailData(for: name) else { return nil as UIImage? }
                 return UIImage(data: data)?.preparingForDisplay()
             }.value
+            if let decoded { cache.insert(decoded, for: name) }
+            image = decoded
         }
     }
 }

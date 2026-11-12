@@ -7,5 +7,7 @@ enum MorrowPlaceholders {
     /// The red dot on the bell. Decorative: hidden from VoiceOver, the bell label states no count.
     static let showsNotificationDot = true
     /// Shown when the bell is tapped. There is no notification system yet.
+    /// VoiceOver hint on the bell.
+    static let notificationsHint = "Coming soon"
     static let notificationsMessage = "Notifications are coming soon"
 }

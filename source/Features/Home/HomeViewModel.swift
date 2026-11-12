@@ -45,7 +45,8 @@ final class HomeViewModel {
     }
 
     private func rebuildTimeline() {
-        timeline = TimelineBuilder.build(memories: memories, calendar: calendar, now: now())
+        let rebuilt = TimelineBuilder.build(memories: memories, calendar: calendar, now: now())
+        if rebuilt != timeline { timeline = rebuilt } // no needless re-render on scene activation
     }
 
     func makeCapture() -> CaptureViewModel {
@@ -64,6 +65,7 @@ final class HomeViewModel {
         }
         if let fileName = memory.photoFileName {
             let store = photoStore
+            ThumbnailCache.shared.remove(fileName: fileName)
             await Task.detached { store.remove(fileName: fileName) }.value
         }
     }

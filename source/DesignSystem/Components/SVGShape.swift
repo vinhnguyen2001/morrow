@@ -81,7 +81,8 @@ enum SVGPathParser {
                 current = start
                 command = " " // data after z needs its own command
             default:
-                return path // unsupported command: stop rather than draw garbage
+                assertionFailure("Unsupported SVG command \(command)") // design paths only use the commands above
+                return path // Release: stop rather than draw garbage
             }
         }
         return path

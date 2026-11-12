@@ -14,10 +14,6 @@ struct TimelineMemoryRow: View {
             case .singleColumn: singleColumn
             }
         }
-        .contextMenu {
-            Button("Delete", systemImage: "trash", role: .destructive) { onDelete(item.memory) }
-        }
-        .accessibilityAction(named: "Delete") { onDelete(item.memory) }
     }
 
     // Main.dc.html lines 112-137.
@@ -59,7 +55,13 @@ struct TimelineMemoryRow: View {
     }
 
     private var card: some View {
+        // Delete is attached to the card itself: it is the one combined accessibility element of the row
+        // (the card has no tap action yet, so it is not a Button; the tap arrives at step 7).
         MemoryCard(memory: item.memory, density: .compact, imageHeight: item.stagger.imageHeight, timeText: item.timeText)
+            .contextMenu {
+                Button("Delete", systemImage: "trash", role: .destructive) { onDelete(item.memory) }
+            }
+            .accessibilityAction(named: "Delete") { onDelete(item.memory) }
     }
 
     /// Time and day part. Hidden from VoiceOver: the card label already carries the time.

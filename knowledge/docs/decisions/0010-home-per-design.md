@@ -17,3 +17,11 @@ Home becomes the largest screen: more accessibility and performance surface; mea
 
 ## Known deviation from "no fake data"
 At the user's explicit request the notification button ("2 new", red dot) and the Map "nearby" badge are placeholders. They are gathered in one constant, are release blockers for TestFlight (M6), and must not be described to VoiceOver as real data.
+
+## Deviations from the design (T-005 steps 1-2)
+- Date badge is centred on the spine (the design's margin-left -23 made the spine run through the text).
+- The first memory row can be on the right: the left/right index counts from the OLDEST memory so adding a memory never moves old rows.
+- Header shadow is slightly darker than the design (the app's card shadow is reused).
+- Empty state drops the phrase "planted where you are".
+- The logo is off-centre exactly as in the design (space-between); rebalance at step 5 when Search fills the left slot.
+

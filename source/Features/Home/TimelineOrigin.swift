@@ -37,5 +37,6 @@ struct TimelineOrigin: View {
         Text("where it all began ·")
             .font(MorrowFont.sectionMeta)
             .foregroundStyle(MorrowColor.textSecondary)
+            .accessibilityLabel("Where it all began")
     }
 }

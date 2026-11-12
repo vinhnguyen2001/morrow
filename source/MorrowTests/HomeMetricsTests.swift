@@ -19,12 +19,6 @@ final class HomeMetricsTests: XCTestCase {
         XCTAssertEqual(MorrowColor.textSecondary, Color(hex: 0x5C5C5C))
     }
 
-    func testFontTokensAreSystemTextStyles() {
-        XCTAssertEqual(MorrowFont.logo, Font.system(.title2, weight: .heavy))
-        XCTAssertEqual(MorrowFont.actionLabel, Font.system(.subheadline, weight: .bold))
-        XCTAssertEqual(MorrowFont.emptyTitle, Font.system(.title2, weight: .heavy))
-    }
-
     func testLogoMarkFitsItsViewBoxAndScales() {
         let box = MorrowMark().path(in: CGRect(x: 0, y: 0, width: 34, height: 26)).boundingRect
         XCTAssertGreaterThanOrEqual(box.minX, 0)

@@ -19,7 +19,8 @@ struct MorrowHeader: View {
                     systemImage: "bell", label: "Notifications",
                     diameter: HomeMetrics.headerButton, action: onNotifications
                 )
-                .accessibilityHint("Coming soon")
+                .accessibilityHint(MorrowPlaceholders.notificationsHint)
+                // PLACEHOLDER (release blocker, see MorrowPlaceholders)
                 .overlay(alignment: .topTrailing) {
                     if MorrowPlaceholders.showsNotificationDot { notificationDot }
                 }
