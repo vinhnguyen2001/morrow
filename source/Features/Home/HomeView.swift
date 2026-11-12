@@ -40,6 +40,7 @@ struct HomeView: View {
         }
         .environment(\.photoStore, model.photoStore)
         .task { model.load() }
+        .onDisappear { toastTask?.cancel() }
         // "Today" and the day groups follow the clock, so refresh when the app comes back.
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { model.load() }

@@ -35,13 +35,15 @@ final class HomeViewModel {
         let interval = signposter.beginInterval("load memories")
         defer { signposter.endInterval("load memories", interval) }
         do {
-            memories = try repository.all()
-            errorMessage = nil
+            // iOS 17 @Observable notifies on every assignment, even of an equal value, so guard each one.
+            let loaded = try repository.all()
+            if loaded != memories { memories = loaded }
+            if errorMessage != nil { errorMessage = nil }
         } catch {
             errorMessage = "Couldn't load your memories."
         }
         rebuildTimeline()
-        hasLoaded = true
+        if !hasLoaded { hasLoaded = true }
     }
 
     private func rebuildTimeline() {

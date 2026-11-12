@@ -24,7 +24,11 @@ struct StoredPhotoView: View {
             .clipped()
         .accessibilityHidden(true)
         .task(id: fileName) {
-            if cache.image(for: fileName) != nil { return } // drawn straight from the cache
+            // Take the cached image into state now: if NSCache evicts it later, body must still have it.
+            if let cached = cache.image(for: fileName) {
+                image = cached
+                return
+            }
             image = nil
             let store = store
             let name = fileName

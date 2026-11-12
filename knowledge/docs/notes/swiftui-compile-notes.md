@@ -11,4 +11,11 @@ Patterns Danny verified as safe for iOS 17 during the T-001 review, so later ses
 - Non-inout `withUnsafeBytes(of:)` over a `uuid_t` tuple yields an `UnsafeRawBufferPointer`, which is a `Sequence` of `UInt8` and can feed a generic `Sequence<UInt8>` parameter.
 - `Color` is `Equatable`, so `XCTAssertEqual` on two `Color` values compiles.
 
+Learnings from T-005 review round 2 (2026-11-12):
+- `@Observable` on iOS 17 notifies observers on every assignment, even of an equal value. Guard assignments in `load()`-style methods (`if new != old { old = new }`); iOS 18 later added equality checks, do not rely on them.
+- In `.task(id:)`, a cache hit must be assigned to `@State` straight away and then return. If the body reads the cache directly and NSCache evicts the entry, the view goes blank until the next task run.
+- `AttributedString.accessibilitySpeechAnnouncementPriority` exists from iOS 17.0. Whether it really stops VoiceOver cutting an announcement short is NOT verified on a device.
+- Long press "Delete" (context menu) lives on the card only, not on the side text or the whole row; the card is the single VoiceOver element of a row.
+- `NSCache.countLimit` is not strict; tests may assert that some entries were evicted, never which ones.
+
 Still verify on a Mac: nothing here replaces the first real build.
