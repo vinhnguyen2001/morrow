@@ -65,6 +65,11 @@ Capture photo and note with location; deny permission and still save; kill and r
 - Nits taken: `HomeViewModel.makeCapture()`, photo files removed off-main in `delete` (now async), 100 MP pixel cap in `PhotoStore` (not unit tested: needs a huge image), error colour `MorrowColor.error` plus VoiceOver announcement, error message moved to the top of the Capture form. Tests added: HomeViewModel delete, concurrent double save, corrupt and oversized image, unknown `kindRaw` filtered.
 - Files: Domain/Memory.swift, DesignSystem/Tokens/MorrowColor.swift, DesignSystem/Components/{DeleteConfirmation,LimitedText}.swift, Persistence/{PhotoStore,MemoryRecord,SwiftDataMemoryRepository,StoreLocation}.swift, Features/Home/*, Features/Capture/*, tests.
 
+### Step 1 (done, 39 unit tests green on simulator iOS 26)
+- `Domain/Coordinate.swift` (failable, Sendable, Hashable, redacted descriptions); `Memory.coordinate`; `MemoryRecord.latitude/longitude: Double?` (`memory` builds a coordinate only when both are present and valid; `scrub()` clears them); `Memory.locatedSamples` under `#if DEBUG` (unused by app code).
+- Tests: validity, redaction, equality, add/all round trip, only-lat gives nil, invalid stored value gives nil, soft delete scrubs coordinates.
+- PENDING (device only, not done): install-over migration. Install 4cde0ca on the iPhone, add memories, install this build over it, confirm old memories still show (covers both the new optional columns and the store move from step 0).
+
 ## Review outcome (Danny)
 (pending)
 

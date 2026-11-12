@@ -9,6 +9,9 @@ final class MemoryRecord {
     var title: String
     var body: String?
     var placeName: String?
+    /// Both set or both nil. Optional columns migrate automatically (ADR 0008).
+    var latitude: Double?
+    var longitude: Double?
     var photoFileName: String?
     var createdAt: Date
     var updatedAt: Date
@@ -20,6 +23,8 @@ final class MemoryRecord {
         title = memory.title
         body = memory.body
         placeName = memory.placeName
+        latitude = memory.coordinate?.latitude
+        longitude = memory.coordinate?.longitude
         photoFileName = memory.photoFileName
         createdAt = memory.createdAt
         self.updatedAt = updatedAt
@@ -31,6 +36,8 @@ final class MemoryRecord {
         title = ""
         body = nil
         placeName = nil
+        latitude = nil
+        longitude = nil
         photoFileName = nil
         isSoftDeleted = true
         updatedAt = Date()
@@ -39,7 +46,11 @@ final class MemoryRecord {
     /// Nil when `kindRaw` is unknown (for example written by a newer app version).
     var memory: Memory? {
         guard let kind = MemoryKind(rawValue: kindRaw) else { return nil }
+        // A half-written pair or an invalid value means no coordinate, never a crash.
+        let coordinate = latitude.flatMap { lat in
+            longitude.flatMap { Coordinate(latitude: lat, longitude: $0) }
+        }
         return Memory(id: id, kind: kind, title: title, body: body, placeName: placeName,
-                      photoFileName: photoFileName, createdAt: createdAt)
+                      coordinate: coordinate, photoFileName: photoFileName, createdAt: createdAt)
     }
 }

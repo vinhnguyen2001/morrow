@@ -22,3 +22,19 @@ extension Memory {
                createdAt: Date(timeIntervalSince1970: 1_700_010_800)),
     ]
 }
+
+#if DEBUG
+extension Memory {
+    /// Samples with coordinates, for previews and tests (Map). Debug only: no app code uses them.
+    static let locatedSamples: [Memory] = [
+        Memory(id: UUID(uuidString: "00000000-0000-0000-0000-000000000011")!,
+               kind: .photo, title: "Sunrise over the old harbour", placeName: "Hoi An",
+               coordinate: Coordinate(latitude: 15.8801, longitude: 108.3380),
+               createdAt: Date(timeIntervalSince1970: 1_700_020_000)),
+        Memory(id: UUID(uuidString: "00000000-0000-0000-0000-000000000012")!,
+               kind: .note, title: "Best coffee so far", placeName: "Da Nang",
+               coordinate: Coordinate(latitude: 16.0544, longitude: 108.2022),
+               createdAt: Date(timeIntervalSince1970: 1_700_023_600)),
+    ]
+}
+#endif

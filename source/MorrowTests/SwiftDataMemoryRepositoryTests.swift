@@ -54,6 +54,44 @@ final class SwiftDataMemoryRepositoryTests: XCTestCase {
         XCTAssertNil(record.body)
         XCTAssertNil(record.placeName)
         XCTAssertNil(record.photoFileName)
+        XCTAssertNil(record.latitude)
+        XCTAssertNil(record.longitude)
+    }
+
+    func testCoordinateRoundTripsThroughAddAndAll() throws {
+        let repo = try makeRepository()
+        let coordinate = try XCTUnwrap(Coordinate(latitude: 16.05, longitude: 108.2))
+        try repo.add(Memory(kind: .note, title: "Pinned", coordinate: coordinate))
+        try repo.add(Memory(kind: .note, title: "Unpinned"))
+        let all = try repo.all()
+        XCTAssertEqual(all.first { $0.title == "Pinned" }?.coordinate, coordinate)
+        XCTAssertNil(all.first { $0.title == "Unpinned" }?.coordinate)
+    }
+
+    func testRecordWithOnlyLatitudeHasNoCoordinate() throws {
+        let record = MemoryRecord(Memory(kind: .note, title: "Half"))
+        record.latitude = 10
+        XCTAssertNil(record.memory?.coordinate)
+        XCTAssertNotNil(record.memory)
+    }
+
+    func testRecordWithInvalidStoredValuesHasNoCoordinate() throws {
+        let record = MemoryRecord(Memory(kind: .note, title: "Bad"))
+        record.latitude = 999
+        record.longitude = 10
+        XCTAssertNil(record.memory?.coordinate)
+    }
+
+    func testSoftDeleteScrubsCoordinate() throws {
+        let repo = try makeRepository()
+        let memory = Memory(kind: .note, title: "Pinned", coordinate: Coordinate(latitude: 1, longitude: 2))
+        try repo.add(memory)
+        try repo.delete(id: memory.id)
+        let id = memory.id
+        let record = try XCTUnwrap(try repo.container.mainContext.fetch(
+            FetchDescriptor<MemoryRecord>(predicate: #Predicate { $0.id == id })).first)
+        XCTAssertNil(record.latitude)
+        XCTAssertNil(record.longitude)
     }
 
     func testUnknownKindIsFilteredFromAll() throws {

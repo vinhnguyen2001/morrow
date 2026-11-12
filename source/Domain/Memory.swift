@@ -15,6 +15,8 @@ struct Memory: Identifiable, Hashable, Sendable {
     /// Text body, used by notes.
     var body: String?
     var placeName: String?
+    /// Where the memory was created, if the user allowed it. Full precision, local only (ADR 0007).
+    var coordinate: Coordinate?
     /// File name (not path) of the stored photo; see `PhotoStore`. Nil for notes and placeholders.
     var photoFileName: String?
     var createdAt: Date
@@ -25,6 +27,7 @@ struct Memory: Identifiable, Hashable, Sendable {
         title: String,
         body: String? = nil,
         placeName: String? = nil,
+        coordinate: Coordinate? = nil,
         photoFileName: String? = nil,
         createdAt: Date = Date()
     ) {
@@ -33,6 +36,7 @@ struct Memory: Identifiable, Hashable, Sendable {
         self.title = title
         self.body = body
         self.placeName = placeName
+        self.coordinate = coordinate
         self.photoFileName = photoFileName
         self.createdAt = createdAt
     }
