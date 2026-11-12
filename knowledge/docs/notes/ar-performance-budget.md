@@ -34,6 +34,8 @@ M1 is the decision gate: if "first memory" exceeds 3 s on a real device, stop ot
 - Fallbacks in order of cost: smoothing of GPS samples with an accuracy ring; manual nudge; per-place ARWorldMap; non-AR compass list mode.
 - Expectation to set: panels appear in the right direction at approximate distance, not metre-exact.
 
-## Open
-- Target region for first use (to check ARGeoTracking coverage).
-- Which real iPhone is used for measurements. A Mac with Xcode and a physical iPhone are required; this cannot run in the simulator.
+## Resolved
+- Region: Vietnam. ARGeoTracking unavailable; GPS + compass default, ARWorldMap per place as the precision option (see T-002).
+- Device: iPhone 11 Pro (A13), iOS 17. All budgets are measured on it. The user has a Mac with Xcode.
+- Rendering on iOS 17: RealityKit ARView in UIViewRepresentable (RealityView is iOS 18+).
+- Spec and measurement protocol: tickets/T-002-ar-spike.md (parked until the user starts AR).
