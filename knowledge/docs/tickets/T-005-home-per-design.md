@@ -1,9 +1,16 @@
 # T-005: Home per design (full Home, reopens ADR 0003 scope)
 
-- Status: Todo (spec by Danny 2026-11-12; waiting on user answers Q1-Q9, defaults below)
+- Status: Todo. User decisions applied 2026-11-12 (see "User decisions"); steps 1-2 first.
 - Author: Danny (spec). Mark implements. User rules: one screen/step = one commit, tests green; no dead buttons; no fake data shown as real.
 - Related: ADR 0001-0004, 0007-0009, new 0010 (Home scope), 0011 (Journey). Design: knowledge/design/canvas/Main.dc.html (HOME lines 18-209, JOURNEYS 991, rows/segs 1241-1290, TILTS/OFFS 1085-1086), MemoryCard.dc.html.
 - Nothing here is compiled; measurements are read from the HTML. Mark re-checks while building.
+
+## User decisions (2026-11-12, override the spec where they differ)
+- Font: SYSTEM SF Pro (not Inter). ADR 0004 stays. Still move every `.system(` into `MorrowFont`, choosing the nearest text styles to the design sizes (a small mismatch is accepted). No Inter files, no UIAppFonts.
+- Journeys: row HIDDEN. No `Journey` entity, no schema change, no journey marker cards, step 6 is dropped (ADR 0011 deferred). The first tab, which the design calls "Journey", is named "Moments" (orchestrator's assumption: the tab holds the timeline; tell the user) so the control is Moments / Notes / Places.
+- Notification button with "2 new" and the "N nearby" badge on the Map button: SHOWN like the design, as PLACEHOLDER chrome. The count and the red dot are not real data. Rules: all placeholders live behind one constant (`MorrowPlaceholders`) with a comment, tapping the notification button shows a small "Notifications are coming soon" message (no fake content), the gear opens a minimal real Settings sheet (app version, "Your memories are stored on this device"), the "nearby" count is a fixed placeholder. Release blocker for TestFlight (M6): remove or make real, and their VoiceOver labels must not claim data that does not exist.
+- Order: Home first (steps 1-2), then T-004 step 3-4, then T-005 step 3-5 and 7-8.
+- Q6-Q9 defaults apply: mood = computed day part, secondary text #5C5C5C, search on all tabs, Add colour #1E3B2F.
 
 ## Order
 T-005 step 1-2 (display only) -> T-004 step 3-4 (Detail, Map; adds `Route`) -> T-005 step 3-8. Map button and card taps are wired at step 7, hidden before (same rule as "View in AR").

@@ -1,6 +1,6 @@
 # ADR 0011: Journey
 
-- Status: Proposed
+- Status: Deferred (2026-11-12: the user chose to hide the Journeys row; revisit when Journeys are wanted)
 - Date: 2026-11-12
 - Deciders: Danny, user (Q3 pending)
 

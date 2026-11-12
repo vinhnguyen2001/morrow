@@ -1,6 +1,6 @@
 # ADR 0010: Full Home per design (reopens ADR 0003 for Home)
 
-- Status: Proposed (waiting on the user's answers to T-005 Q1-Q9)
+- Status: Accepted with the user's changes (2026-11-12): system font kept (ADR 0004 unchanged), Journeys row hidden (ADR 0011 deferred), notification button and "nearby" badge shown as placeholder chrome
 - Date: 2026-11-12
 - Deciders: user (asked for "full as the design"), Danny
 
@@ -14,3 +14,6 @@ Other ADRs: 0002 (icons are not SF-Symbols-only; leaves, sprout, empty illustrat
 
 ## Consequences
 Home becomes the largest screen: more accessibility and performance surface; measure FPS before optimising.
+
+## Known deviation from "no fake data"
+At the user's explicit request the notification button ("2 new", red dot) and the Map "nearby" badge are placeholders. They are gathered in one constant, are release blockers for TestFlight (M6), and must not be described to VoiceOver as real data.
