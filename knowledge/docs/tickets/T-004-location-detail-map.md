@@ -58,6 +58,8 @@ Nits to take if the code is touched: error colour with 4.5:1 contrast plus Voice
 ## Step 5: Manual acceptance on the iPhone 11 Pro
 Capture photo and note with location; deny permission and still save; kill and relaunch; open Detail, delete with confirmation; open Map, tap a pin, drag the peek up; VoiceOver through Home, Detail, Map; accessibility Dynamic Type; airplane mode; Instruments for Home scroll and Map pan FPS, numbers written here.
 
+Step 3 device-only checklist (add to step 5): swipe back from the left edge (also while scrolling, over the photo and over the note); tap a card twice fast; delete from Detail (empty flash, stuck toast); VoiceOver (reading order, "Delete" appears once on the card, Back reached early); push smoothness with a 2048 px photo; Allocations while opening Detail many times; card press feedback; accessibility Dynamic Type; taps near the leaf and dot are not blocked.
+
 ## Implementation summary
 ### Step 0 (done, 31 unit tests green on simulator iOS 26)
 - Items 1-7 done with tests: thumb-write failure removes the full file; `MemoryRecord.scrub()` on soft delete; `deleteConfirmation(for:)` modifier plus "Delete" accessibility action; 1 column at accessibility Dynamic Type; Cancel disabled while saving; `.task(id: pickerItem)` (cancelled loads do not clear the photo); `Memory.Limits` plus `limitedLength` modifier.
@@ -71,12 +73,15 @@ Capture photo and note with location; deny permission and still save; kill and r
 - DONE 2026-11-12 on the iPhone 11 Pro (iOS 17.4.1), build 93a66d7 installed over the 4cde0ca build: backed up the container first (devicectl, phone unlocked). Before: 3 rows (My school, Aircraft [soft-deleted], My niece) with an un-checkpointed 213 KB WAL, 2 photos. After first launch: store moved to `Store/` (old root files gone), same 3 rows, `pragma integrity_check` ok, new `ZLATITUDE` column present and null, photos untouched, app running. NOT verified: the actual protection class (the DEBUG log was not read; os.Logger is not captured by devicectl). Known gap: rows soft-deleted by the old build (Aircraft) were not scrubbed and still hold their title and photo name; consider a one-time scrub at migration.
 
 ## Review outcome (Danny)
+- Step 3 (923f812, 9df7828) round 1: CHANGES REQUESTED, no blocker. Fixed in "T-004 step 3 review round 1 fixes": S1 double-tap guard `open(_:)`; S2 toast reset in `onDisappear`; S3 last-shown copy in Detail plus path trimming in HomeView (ADR 0009 updated); S4 Detail shows `model.errorMessage` with a VoiceOver announcement; S5 small-image test added, ImageIO does NOT upscale, no PhotoStore change. Nits: N1 title Delete action removed, N2 photo label "Photo", N3 Back sort priority, N4 Delete `role: .destructive` and Back has its shadow again, N6 eviction test removed, N8 leaf and dot ignore hits. N5 and N7 below.
 - Round 1: CHANGES REQUESTED (S1-S4, N2, N5), fixed in "T-004 review round 1 fixes". S3 on-device check of the protection class is done by the orchestrator and user.
 - Round 3 (93a66d7): APPROVED. Deferred, non-blocking: S1 (comment says "touching nothing" but reconcile may move a wal back before throwing; better to check "in both places" for all companions first), N1 (stale test counts above; now 48), N2 (`moved`/`names` declared before reconcile), N3 (permanent crash-loop on `rollbackFailed`, accepted: no common path leads there).
 - N3 accepted: delete writes the tombstone first, then removes the file; a kill in between leaves an orphan photo, covered by the orphan sweep in M6.
 - Round 2: CHANGES REQUESTED, B1 (skipping an existing wal/shm in the target could pair a wrong wal with main) + N1-N3, fixed in "T-004 review round 2: make store move all-or-nothing".
 
 ## Open issues
+- The "Private" chip on Detail is a constant: bind it to real data or remove it when sync arrives. A 100-character place name may squeeze the chip: try a long string on a device, and if ugly use `lineLimit(2)` or a vertical layout.
+- Detail photo decode runs in `Task.detached`, which is not cancelled on pop: measure on a device. When file names come from a server, check UUID + ".jpg" before building a path.
 - Pin uses the position at capture, not where a library photo was taken; reading photo GPS is a later, separate decision.
 - Editing the place after saving is not in the MVP.
 - Marker clustering waits for measurements.

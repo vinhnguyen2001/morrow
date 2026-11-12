@@ -33,9 +33,9 @@ struct TimelineMemoryRow: View {
                 .frame(width: HomeMetrics.connectorWidth)
                 .accessibilityHidden(true)
         }
-        .overlay { leaf(stagger) }
+        .overlay { leaf(stagger).allowsHitTesting(false) }
         .overlay(alignment: .top) {
-            dot.padding(.top, HomeMetrics.rowDotTop)
+            dot.padding(.top, HomeMetrics.rowDotTop).allowsHitTesting(false)
         }
     }
 

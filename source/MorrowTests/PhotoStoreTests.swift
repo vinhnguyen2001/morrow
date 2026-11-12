@@ -15,7 +15,9 @@ final class PhotoStoreTests: XCTestCase {
     }
 
     private func jpeg(width: Int, height: Int) -> Data {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1 // pixels, not points: the screen scale would triple the size
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height), format: format)
         return renderer.jpegData(withCompressionQuality: 1) { ctx in
             UIColor.orange.setFill()
             ctx.fill(CGRect(x: 0, y: 0, width: width, height: height))
@@ -88,5 +90,19 @@ final class PhotoStoreTests: XCTestCase {
         let image = try XCTUnwrap(store.displayImage(for: name))
         XCTAssertEqual(max(image.width, image.height), PhotoStore.maxDisplayPixels)
         XCTAssertNil(store.displayImage(for: "missing.jpg"))
+    }
+
+    /// A small picture must never be enlarged by the size caps (ImageIO may scale up with CreateThumbnailFromImageAlways).
+    func testSmallImageIsNotUpscaled() throws {
+        let store = PhotoStore(directory: dir)
+        let name = try store.save(imageData: jpeg(width: 300, height: 200), id: UUID())
+        let full = try Data(contentsOf: dir.appending(path: name))
+        let thumb = try XCTUnwrap(store.thumbnailData(for: name))
+        let fullSize = try pixelSize(of: full)
+        let thumbSize = try pixelSize(of: thumb)
+        XCTAssertLessThanOrEqual(max(fullSize.0, fullSize.1), 300)
+        XCTAssertLessThanOrEqual(max(thumbSize.0, thumbSize.1), 300)
+        let display = try XCTUnwrap(store.displayImage(for: name))
+        XCTAssertLessThanOrEqual(max(display.width, display.height), 300)
     }
 }

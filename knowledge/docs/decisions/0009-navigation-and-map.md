@@ -10,3 +10,5 @@
 - Peek is a native `.sheet` with detents (`.height(168)`, `.large`); the large detent shows the same `MemoryDetailView` as Home.
 - Map does not request location permission. No embedded mini-map in Detail (a live Map view inside a scroll view hitches and fights gestures; use `MKMapSnapshotter` off-main if ever needed).
 - "View in AR" is hidden, not disabled, until T-002.
+
+Update (T-004 step 3 review round 1): `HomeView`, which owns the path, trims it with `.onChange(of: model.memories)` and drops `.memory(id)` routes whose memory is gone; Detail also keeps its last shown memory while popping. Pushes from a card are de-duplicated (`path.last != .memory(id)`).

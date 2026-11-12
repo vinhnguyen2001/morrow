@@ -28,6 +28,21 @@ struct HomeView: View {
                 }
         }
         .environment(\.photoStore, model.photoStore)
+        // The owner of the path trims it: a deleted memory must not leave a Detail on the stack (ADR 0009).
+        .onChange(of: model.memories) { _, memories in
+            let alive = Set(memories.map(\.id))
+            let kept = path.filter { route in
+                if case .memory(let id) = route { return alive.contains(id) }
+                return true
+            }
+            if kept != path { path = kept }
+        }
+    }
+
+    /// A quick double tap on a card must not push the same Detail twice.
+    private func open(_ id: UUID) {
+        guard path.last != .memory(id) else { return }
+        path.append(.memory(id))
     }
 
     private var home: some View {
@@ -59,7 +74,8 @@ struct HomeView: View {
             }
         }
         .task { model.load() }
-        .onDisappear { toastTask?.cancel() }
+        // Cancelling skips the cleanup after the sleep, so reset the toast here (no animation: the screen is leaving).
+        .onDisappear { toastTask?.cancel(); toast = nil }
         // "Today" and the day groups follow the clock, so refresh when the app comes back.
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { model.load() }
@@ -84,7 +100,7 @@ struct HomeView: View {
         } else {
             HomeTimeline(
                 timeline: model.timeline,
-                onOpen: { memory in path.append(.memory(memory.id)) },
+                onOpen: { memory in open(memory.id) },
                 onDelete: { memory in pendingDelete = memory }
             )
         }

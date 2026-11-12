@@ -7,6 +7,8 @@ struct MemoryDetailView: View {
     let id: UUID
     let model: HomeViewModel
     @State private var pendingDelete: Memory?
+    /// Last non-nil memory: once a delete removes it from the model, the screen keeps drawing this while it pops.
+    @State private var lastShown: Memory?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.photoStore) private var photoStore
@@ -16,7 +18,7 @@ struct MemoryDetailView: View {
     var body: some View {
         ZStack(alignment: .top) {
             GroundView()
-            if let memory {
+            if let memory = memory ?? lastShown {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         header(for: memory)
@@ -26,12 +28,18 @@ struct MemoryDetailView: View {
                 .scrollBounceBehavior(.basedOnSize)
                 .ignoresSafeArea(edges: .top) // the photo or colour runs under the status bar
             }
-            CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton, showsShadow: false) { dismiss() }
+            CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton, showsShadow: true) { dismiss() }
+                .accessibilitySortPriority(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, DetailMetrics.backSide)
                 .padding(.top, DetailMetrics.backTopBelowStatusBar)
         }
+        .accessibilityElement(children: .contain)
         .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: memory, initial: true) { _, new in if let new { lastShown = new } }
+        .onChange(of: model.errorMessage) { _, message in
+            if let message { AccessibilityNotification.Announcement(message).post() }
+        }
         // Fires on arrival and whenever the memory disappears (deleted here or elsewhere).
         .task(id: memory == nil) { if memory == nil { dismiss() } }
         .deleteConfirmation(for: $pendingDelete) { item in
@@ -55,7 +63,7 @@ struct MemoryDetailView: View {
         if let fileName = memory.photoFileName {
             StoredPhotoView(
                 fileName: fileName, store: photoStore, placeholder: MemoryKindStyle.style(for: memory.kind).background,
-                variant: .display, accessibilityText: MemoryDetailPresentation.photoLabel(for: memory)
+                variant: .display, accessibilityText: "Photo"
             )
             .frame(height: DetailMetrics.photoHeight)
             .clipShape(photoShape)
@@ -104,6 +112,9 @@ struct MemoryDetailView: View {
                     .foregroundStyle(MorrowColor.textBody)
                     .textSelection(.enabled)
             }
+            if let message = model.errorMessage {
+                Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.error)
+            }
             deleteButton(for: memory)
                 .padding(.top, DetailMetrics.contentGap)
         }
@@ -119,11 +130,10 @@ struct MemoryDetailView: View {
             .foregroundStyle(MorrowColor.ink)
             .multilineTextAlignment(.leading)
             .accessibilityAddTraits(.isHeader)
-            .accessibilityAction(named: "Delete") { pendingDelete = memory }
     }
 
     private func deleteButton(for memory: Memory) -> some View {
-        Button { pendingDelete = memory } label: {
+        Button(role: .destructive) { pendingDelete = memory } label: {
             Label("Delete memory", systemImage: "trash")
                 .font(MorrowFont.actionLabel)
                 .foregroundStyle(MorrowColor.error)

@@ -19,3 +19,10 @@ Learnings from T-005 review round 2 (2026-11-12):
 - `NSCache.countLimit` is not strict; tests may assert that some entries were evicted, never which ones.
 
 Still verify on a Mac: nothing here replaces the first real build.
+
+Learnings from T-004 step 3 review round 1 (2026-11-12):
+- `Task.cancel()` in `onDisappear` skips any cleanup after a `guard !Task.isCancelled`, so set the default state (for example `toast = nil`) inside `onDisappear` itself.
+- When Detail looks a memory up by id in a shared model, a delete makes it nil in the same render pass: keep a last-shown copy, or let the owner of the path trim it.
+- A push from a `Button` needs a duplicate guard (`path.last != route`), or a fast double tap pushes twice.
+- `NSCache.countLimit` is not a hard limit: do not unit test eviction.
+- ImageIO does not enlarge a small image when `kCGImageSourceThumbnailMaxPixelSize` is larger than the source (tested with 300x200: full, thumb and display stay at 300 or less). Test images must be made with renderer scale 1, or pixels triple.
