@@ -27,3 +27,6 @@
 - `fatalError` if the store cannot open: acceptable for now, revisit with a recovery screen before TestFlight.
 - Orphaned photo files if the app dies between photo write and DB insert: add a cleanup sweep at hardening (M6).
 - Simulator is iOS 26, device is iOS 17.4.1: always run the device after SwiftData changes.
+
+## Review outcome (Danny, 2026-11-12)
+CHANGES REQUESTED, no blockers. 8 should-fix and 9 nits; all scheduled as T-004 step 0. Verified OK: ModelContainer lifetime, write order (photo then DB, delete DB then file), double-save guard, iOS 17 API use, no coordinate logging.

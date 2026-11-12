@@ -20,3 +20,5 @@
 - Reduce Motion: disable tilt, rotating Add button and scan sweep animations.
 - Dynamic Type: fonts use text styles; two-column layouts collapse to one column at accessibility sizes.
 - Native sheets for VoiceOver; the "tap handle to toggle" gesture needs an accessible action.
+
+- Reverse geocoding sends the coordinate to Apple: declare it in the privacy nutrition label (M6). `Coordinate` redacts its value when printed.
