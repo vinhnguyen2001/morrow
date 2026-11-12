@@ -1,0 +1,22 @@
+# Privacy and accessibility checklist
+
+- Date: 2026-11-12
+- Topic: convention
+- Source: Danny's design review. Apply before TestFlight (M6).
+
+## Privacy
+- Info.plist: NSCameraUsageDescription, NSLocationWhenInUseUsageDescription (no Always). Microphone only if video is added.
+- Strip EXIF GPS from uploaded photos; location lives in the database column, not in the file.
+- Privacy manifest and App Store privacy nutrition label (location, photos, user content).
+- Sign in with Apple is mandatory if any other social login is offered.
+- If public content ever ships: report, block and content filtering are required by App Store guideline 1.2; "hide exact location" must be enforced server-side with fuzzed coordinates.
+- Settings minimum when accounts exist: sign out, delete account.
+
+## Accessibility
+- Every icon button has an accessibilityLabel (CircleIconButton requires it).
+- Cards are one combined element with a meaningful label (title, place, time).
+- Tap targets at least 44 pt (design's 17 pt checkbox and 30 pt badge are too small).
+- Contrast at least 4.5:1 for small text; secondary ink is #5C5C5C, not #7C7C7C or #9A9A9A.
+- Reduce Motion: disable tilt, rotating Add button and scan sweep animations.
+- Dynamic Type: fonts use text styles; two-column layouts collapse to one column at accessibility sizes.
+- Native sheets for VoiceOver; the "tap handle to toggle" gesture needs an accessible action.
