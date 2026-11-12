@@ -8,9 +8,29 @@ struct HomeView: View {
     @State private var toast: String?
     @State private var toastTask: Task<Void, Never>?
     @State private var pendingDelete: Memory?
+    @State private var path: [Route]
     @Environment(\.scenePhase) private var scenePhase
 
+    /// `initialPath` lets DEBUG fixtures open straight on a screen (screenshots); it is empty in normal use.
+    init(model: HomeViewModel, initialPath: [Route] = []) {
+        _model = State(initialValue: model)
+        _path = State(initialValue: initialPath)
+    }
+
     var body: some View {
+        NavigationStack(path: $path) {
+            home
+                .toolbar(.hidden, for: .navigationBar) // Home and Detail draw their own header and Back button
+                .navigationDestination(for: Route.self) { route in
+                    switch route {
+                    case .memory(let id): MemoryDetailView(id: id, model: model)
+                    }
+                }
+        }
+        .environment(\.photoStore, model.photoStore)
+    }
+
+    private var home: some View {
         ZStack {
             GroundView()
             ScrollView {
@@ -38,7 +58,6 @@ struct HomeView: View {
                     .allowsHitTesting(false)
             }
         }
-        .environment(\.photoStore, model.photoStore)
         .task { model.load() }
         .onDisappear { toastTask?.cancel() }
         // "Today" and the day groups follow the clock, so refresh when the app comes back.
@@ -63,7 +82,11 @@ struct HomeView: View {
         } else if model.timeline.rows.isEmpty {
             HomeEmptyState { showCapture = true }
         } else {
-            HomeTimeline(timeline: model.timeline) { memory in pendingDelete = memory }
+            HomeTimeline(
+                timeline: model.timeline,
+                onOpen: { memory in path.append(.memory(memory.id)) },
+                onDelete: { memory in pendingDelete = memory }
+            )
         }
     }
 

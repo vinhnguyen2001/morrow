@@ -81,4 +81,12 @@ final class PhotoStoreTests: XCTestCase {
         }
         XCTAssertThrowsError(try store.previewData(from: big))
     }
+
+    func testDisplayImageIsDownsampledAndMissingFileIsNil() throws {
+        let store = PhotoStore(directory: dir)
+        let name = try store.save(imageData: jpeg(width: 2400, height: 1200), id: UUID())
+        let image = try XCTUnwrap(store.displayImage(for: name))
+        XCTAssertEqual(max(image.width, image.height), PhotoStore.maxDisplayPixels)
+        XCTAssertNil(store.displayImage(for: "missing.jpg"))
+    }
 }

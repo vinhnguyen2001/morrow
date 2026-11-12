@@ -3,6 +3,9 @@ import SwiftUI
 /// Leaf on the timeline. Path from Main.dc.html line 114 (viewBox 24), vein in ground colour.
 struct LeafMark: View {
     var fill: Color = MorrowColor.leaf
+    var size: CGFloat = HomeMetrics.leafSize
+    /// The timeline leaf has a vein; the big decorative leaf on Detail does not.
+    var showsVein = true
 
     private static let box = CGSize(width: 24, height: 24)
     private static let leaf = SVGPathParser.path("M3 20C3 10 9 4 21 3c0 11-7 17-18 17z")
@@ -11,10 +14,12 @@ struct LeafMark: View {
     var body: some View {
         ZStack {
             SVGShape(source: Self.leaf, viewBox: Self.box).fill(fill)
-            SVGShape(source: Self.vein, viewBox: Self.box)
-                .stroke(MorrowColor.ground, lineWidth: 0.9)
+            if showsVein {
+                SVGShape(source: Self.vein, viewBox: Self.box)
+                    .stroke(MorrowColor.ground, lineWidth: 0.9)
+            }
         }
-        .frame(width: HomeMetrics.leafSize, height: HomeMetrics.leafSize)
+        .frame(width: size, height: size)
         .accessibilityHidden(true)
     }
 }

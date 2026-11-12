@@ -5,6 +5,7 @@ import SwiftUI
 struct TimelineMemoryRow: View {
     let item: TimelineItem
     let layout: TimelineLayout
+    let onOpen: (Memory) -> Void
     let onDelete: (Memory) -> Void
 
     var body: some View {
@@ -55,9 +56,9 @@ struct TimelineMemoryRow: View {
     }
 
     private var card: some View {
-        // Delete is attached to the card itself: it is the one combined accessibility element of the row
-        // (the card has no tap action yet, so it is not a Button; the tap arrives at step 7).
-        MemoryCard(memory: item.memory, density: .compact, imageHeight: item.stagger.imageHeight, timeText: item.timeText)
+        // Open and Delete are attached to the card itself: it is the one accessibility element of the row.
+        MemoryCard(memory: item.memory, density: .compact, imageHeight: item.stagger.imageHeight, timeText: item.timeText,
+                   action: { onOpen(item.memory) })
             .contextMenu {
                 Button("Delete", systemImage: "trash", role: .destructive) { onDelete(item.memory) }
             }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension View {
-    /// Confirmation before deleting a memory. Shared by Home and, later, Detail.
+    /// Confirmation before deleting a memory. Shared by Home and Detail.
     /// Setting `memory` to a value presents the dialog; confirming calls `onConfirm`.
     func deleteConfirmation(for memory: Binding<Memory?>, onConfirm: @escaping (Memory) -> Void) -> some View {
         confirmationDialog(

@@ -48,4 +48,17 @@ final class HomeViewModelTests: XCTestCase {
             "sprout", "day-2026-11-12", "m-B0000000-0000-0000-0000-000000000001", "origin",
         ])
     }
+
+    func testLookupByIdReturnsMemoryThenNilAfterDelete() async throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        let memory = Memory(kind: .note, title: "Gone soon")
+        try repo.add(memory)
+        let model = HomeViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory))
+        model.load()
+        XCTAssertEqual(model.memory(id: memory.id)?.title, "Gone soon")
+        XCTAssertNil(model.memory(id: UUID()))
+
+        await model.delete(memory)
+        XCTAssertNil(model.memory(id: memory.id))
+    }
 }

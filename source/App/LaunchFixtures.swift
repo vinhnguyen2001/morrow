@@ -21,6 +21,14 @@ enum LaunchFixtures {
         return args[index + 1] == "empty"
     }
 
+    /// `-MorrowFixtureOpen <n>` opens the detail of fixture memory n (1 to 8) on launch, for screenshots.
+    static var initialPath: [Route] {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "-MorrowFixtureOpen"), index + 1 < args.count,
+              let number = Int(args[index + 1]), (1...8).contains(number) else { return [] }
+        return [.memory(id(number))]
+    }
+
     @MainActor
     static func makeModel() -> HomeViewModel {
         // In-memory container: never touches Application Support. Failure is a programmer error in a debug tool.
@@ -63,7 +71,7 @@ enum LaunchFixtures {
             photo(4, "Lanterns on the river", "Hội An", hoursAgo: 27, colors: (0xE8C468, 0x8E5B3A)),
             note(5, "Remember to call Mom", nil, nil, hoursAgo: 30),
             photo(6, "Market morning", "Thu Bồn", hoursAgo: 61, colors: (0x8FCB9B, 0x2F6B4F)),
-            note(7, "Train to Huế leaves at nine, bring snacks and the blue charger", "Window seat on the left side for the sea view.", "Đà Nẵng", hoursAgo: 80),
+            note(7, "Train to Huế leaves at nine, bring snacks and the blue charger", "Window seat on the left side for the sea view. The ticket says platform four, but the board has been wrong before, so ask at the desk. Pack sandwiches, water and the small umbrella; the coast road floods after noon and the driver always waits for stragglers. Message Linh when we pass Lăng Cô, she wanted a photo of the bay from the tunnel exit.", "Đà Nẵng", hoursAgo: 80),
             photo(8, "First night in the city", "Hà Nội", hoursAgo: 240, colors: (0xB9A3E3, 0x5B3FB8)),
         ]
     }

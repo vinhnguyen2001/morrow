@@ -47,6 +47,12 @@ enum MorrowFont {
     static let cta = Font.system(.callout, weight: .heavy)
     /// Small transient messages (design has none; sized like section meta, 13/600).
     static let notice = Font.system(.footnote, weight: .semibold)
+    /// Memory title on Detail (design 28/800, `.title` is 28pt).
+    static let detailTitle = Font.system(.title, weight: .heavy)
+    /// "a note" above the title in the note header (design 14/600).
+    static let detailKicker = Font.system(.subheadline, weight: .semibold)
+    /// Note text on Detail (design 16, line height 1.65).
+    static let detailBody = Font.system(.callout)
     // Icons use fixed sizes: they sit in fixed-size containers and must not scale with Dynamic Type.
     static let icon = Font.system(size: 20, weight: .semibold)
     /// Glyph inside the 64pt Add button (design svg 30pt).

@@ -28,6 +28,10 @@ enum MorrowColor {
     static let leafLight = Color(hex: 0xA9DDB2)
     /// Dot on the notification bell (Main.dc.html line 26). Decorative, not text.
     static let notificationDot = Color(hex: 0xE8542F)
+    /// Place chip on Detail (Main.dc.html line 435), and the neutral "Private" chip beside it.
+    static let placeChipBackground = Color(hex: 0xE4F1FB)
+    static let placeChipText = Color(hex: 0x1F6FA8)
+    static let neutralChipBackground = Color(hex: 0xE9E9E9)
     /// Error text, about 6:1 on ground and white.
     static let error = Color(hex: 0xB00020)
 }

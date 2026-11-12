@@ -4,6 +4,7 @@ import SwiftUI
 @main
 struct MorrowApp: App {
     private let model: HomeViewModel
+    private let initialPath: [Route]
 
     /// Composition root (ADR 0001): the only place that picks concrete implementations.
     init() {
@@ -11,9 +12,11 @@ struct MorrowApp: App {
         // Screenshot fixtures: return before the real store is touched in any way.
         if LaunchFixtures.requested {
             model = LaunchFixtures.makeModel()
+            initialPath = LaunchFixtures.initialPath
             return
         }
         #endif
+        initialPath = []
         let container: ModelContainer
         do {
             container = try SwiftDataMemoryRepository.makeContainer()
@@ -29,7 +32,7 @@ struct MorrowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView(model: model)
+            HomeView(model: model, initialPath: initialPath)
         }
     }
 }

@@ -7,6 +7,8 @@ import UniformTypeIdentifiers
 struct PhotoStore: Sendable {
     static let maxFullPixels = 2048
     static let maxThumbPixels = 600
+    /// Longest side of the picture shown on Detail: sharp on a 3x screen without decoding the 2048 px file.
+    static let maxDisplayPixels = 1600
     static let maxInputBytes = 40 * 1024 * 1024
     /// Decoded size cap (about 100 MP) so a small file cannot expand into a huge bitmap.
     static let maxInputPixels = 100_000_000
@@ -54,6 +56,20 @@ struct PhotoStore: Sendable {
 
     func thumbnailData(for fileName: String) -> Data? {
         try? Data(contentsOf: directory.appending(path: Self.thumbName(for: fileName)))
+    }
+
+    /// Decoded, downsampled picture for Detail (longest side `maxDisplayPixels`). The decode happens here, so
+    /// call off the main actor. Nil when the file is missing or unreadable.
+    func displayImage(for fileName: String) -> CGImage? {
+        let url = directory.appending(path: fileName)
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceThumbnailMaxPixelSize: Self.maxDisplayPixels,
+        ]
+        return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
     }
 
     func remove(fileName: String) {

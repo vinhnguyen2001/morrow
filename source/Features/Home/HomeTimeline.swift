@@ -3,6 +3,7 @@ import SwiftUI
 /// "Recent moments" header and the lazy list of timeline rows.
 struct HomeTimeline: View {
     let timeline: Timeline
+    let onOpen: (Memory) -> Void
     let onDelete: (Memory) -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -22,7 +23,7 @@ struct HomeTimeline: View {
                     case .day(let day):
                         DateBadge(day: day, layout: layout)
                     case .memory(let item):
-                        TimelineMemoryRow(item: item, layout: layout, onDelete: onDelete)
+                        TimelineMemoryRow(item: item, layout: layout, onOpen: onOpen, onDelete: onDelete)
                     case .origin:
                         TimelineOrigin(layout: layout)
                     }

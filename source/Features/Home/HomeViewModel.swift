@@ -14,7 +14,8 @@ final class HomeViewModel {
 
     let repository: MemoryRepository
     let photoStore: PhotoStore
-    private let calendar: Calendar
+    /// Also used by Detail to format dates in the same calendar and time zone as the timeline.
+    let calendar: Calendar
     private let now: () -> Date
     private let signposter = OSSignposter(subsystem: "com.morrow.app", category: "home")
 
@@ -49,6 +50,11 @@ final class HomeViewModel {
     private func rebuildTimeline() {
         let rebuilt = TimelineBuilder.build(memories: memories, calendar: calendar, now: now())
         if rebuilt != timeline { timeline = rebuilt } // no needless re-render on scene activation
+    }
+
+    /// Current state of one memory, or nil once it is deleted. Detail looks itself up here (ADR 0009), so it is never stale.
+    func memory(id: UUID) -> Memory? {
+        memories.first { $0.id == id }
     }
 
     func makeCapture() -> CaptureViewModel {

@@ -116,3 +116,7 @@ Measurements still owed on the iPhone 11 Pro: scroll FPS with 200 memories with 
 Process note: do not bump MARKETING_VERSION inside a feature commit (next time only).
 New screenshot after round 1 (scratchpad, not committed): r1.png (iPhone 16e 390pt, cards, shadow, corners, tilt unchanged).
 
+### Review round 2 and card taps (Mark, 2026-11-12)
+- Round 2 nits done: cache hit assigned to state, guarded `@Observable` assignments in `HomeViewModel.load()`, `toastTask` cancelled on disappear, eviction test; learnings in notes/swiftui-compile-notes.md.
+- The tap-a-card part of step 7 was done early with T-004 step 3 (cards push `.memory(id)`; see T-004 "Step 3"). Home screenshot re-checked on the iPhone 16e after the change: header, timeline and Add button unchanged. Map button, `.journey` and `.place` routes still pending.
+
