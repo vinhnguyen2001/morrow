@@ -4,8 +4,14 @@ import os
 /// Where the SwiftData store lives. Its own directory carries `.completeUnlessOpen`
 /// file protection (security-checklist); files created inside inherit it.
 /// The 4cde0ca build kept `default.store` directly in Application Support, so existing
-/// data is moved once, with the main file last so an interrupted move is retried.
+/// data is moved once. wal/shm always travel with the main file: while main is still in the
+/// legacy folder, legacy is the source of truth, and the move is all-or-nothing (see `prepare`).
 enum StoreLocation {
+    /// `Application Support/Store`, the protected directory holding the store.
+    static var defaultDirectory: URL {
+        URL.applicationSupportDirectory.appending(path: "Store", directoryHint: .isDirectory)
+    }
+
     static let storeFileName = "default.store"
     private static let companionSuffixes = ["-wal", "-shm"]
 
@@ -18,10 +24,12 @@ enum StoreLocation {
     }
 
     /// Creates the protected directory, moves a legacy store into it if needed, and returns the store file URL.
-    /// Order: wal/shm first, main file last, so an interrupted move is retried on the next launch.
-    /// On a failed step the files moved so far are moved back in reverse order, then `MoveError` is thrown.
+    /// Before moving, wal/shm left in the target by an interrupted run are returned to legacy; wal/shm
+    /// present in both places is abnormal and stops with `rollbackFailed` (nothing is merged or deleted).
+    /// Then order: wal, shm, main file last. Every step is recorded; on a failed step all of them are
+    /// moved back in reverse order, then `MoveError` is thrown.
     static func prepare(
-        in directory: URL = URL.applicationSupportDirectory.appending(path: "Store", directoryHint: .isDirectory),
+        in directory: URL = defaultDirectory,
         legacyDirectory: URL = .applicationSupportDirectory
     ) throws -> URL {
         let fileManager = FileManager.default
@@ -34,14 +42,15 @@ enum StoreLocation {
             var moved: [(from: URL, to: URL)] = []
             let names = companionSuffixes.map { storeFileName + $0 } + [storeFileName]
             do {
+                try reconcileCompanions(in: directory, legacyDirectory: legacyDirectory, fileManager: fileManager)
+            } catch {
+                throw MoveError.rollbackFailed(cause: error)
+            }
+            do {
                 for name in names {
                     let from = legacyDirectory.appending(path: name)
                     let to = directory.appending(path: name)
                     guard fileManager.fileExists(atPath: from.path) else { continue }
-                    // Already moved by an interrupted earlier run: keep it, it is the newer copy.
-                    var isDirectory: ObjCBool = false
-                    if name != storeFileName, fileManager.fileExists(atPath: to.path, isDirectory: &isDirectory),
-                       !isDirectory.boolValue { continue }
                     try fileManager.moveItem(at: from, to: to)
                     moved.append((from, to))
                 }
@@ -56,6 +65,20 @@ enum StoreLocation {
         }
         applyProtection(to: directory)
         return target
+    }
+
+    /// Main is still in legacy, so legacy is the truth. A wal/shm only in the target is a leftover of an
+    /// interrupted run: move it back. One in both places cannot be trusted: throw, touching nothing.
+    private static func reconcileCompanions(in directory: URL, legacyDirectory: URL, fileManager: FileManager) throws {
+        for suffix in companionSuffixes {
+            let name = storeFileName + suffix
+            let inLegacy = legacyDirectory.appending(path: name)
+            let inTarget = directory.appending(path: name)
+            let legacyHas = fileManager.fileExists(atPath: inLegacy.path)
+            let targetHas = fileManager.fileExists(atPath: inTarget.path)
+            if targetHas && legacyHas { throw CocoaError(.fileWriteFileExists) }
+            if targetHas { try fileManager.moveItem(at: inTarget, to: inLegacy) }
+        }
     }
 
     /// Sets the class on the directory (for new files) and on every file already inside (moved ones).
@@ -74,7 +97,7 @@ enum StoreLocation {
     /// Debug-only: logs the file protection class of the store directory and file so it can be read on a device.
     /// Logs the class name only, never paths or content.
     static func logProtectionForDebug(
-        in directory: URL = URL.applicationSupportDirectory.appending(path: "Store", directoryHint: .isDirectory)
+        in directory: URL = defaultDirectory
     ) {
         let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Morrow", category: "store")
         for (label, url) in [("directory", directory), ("file", directory.appending(path: storeFileName))] {

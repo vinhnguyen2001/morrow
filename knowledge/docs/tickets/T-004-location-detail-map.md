@@ -73,6 +73,7 @@ Capture photo and note with location; deny permission and still save; kill and r
 ## Review outcome (Danny)
 - Round 1: CHANGES REQUESTED (S1-S4, N2, N5), fixed in "T-004 review round 1 fixes". S3 on-device check of the protection class is done by the orchestrator and user.
 - N3 accepted: delete writes the tombstone first, then removes the file; a kill in between leaves an orphan photo, covered by the orphan sweep in M6.
+- Round 2: CHANGES REQUESTED, B1 (skipping an existing wal/shm in the target could pair a wrong wal with main) + N1-N3, fixed in "T-004 review round 2: make store move all-or-nothing".
 
 ## Open issues
 - Pin uses the position at capture, not where a library photo was taken; reading photo GPS is a later, separate decision.

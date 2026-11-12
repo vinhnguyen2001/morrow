@@ -46,25 +46,65 @@ final class StoreLocationTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: root.appending(path: "default.store"), encoding: .utf8), "old")
     }
 
-    func testInterruptedMoveIsCompletedAndKeepsAlreadyMovedFile() throws {
+    func testInterruptedMoveReturnsLeftoverWalToLegacyThenMovesAllTogether() throws {
         try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
         try Data("main".utf8).write(to: root.appending(path: "default.store"))
         try Data("shm".utf8).write(to: root.appending(path: "default.store-shm"))
-        try Data("wal-new".utf8).write(to: storeDir.appending(path: "default.store-wal"))
+        try Data("wal-old".utf8).write(to: storeDir.appending(path: "default.store-wal"))
         let url = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
         XCTAssertEqual(try String(contentsOf: url, encoding: .utf8), "main")
         XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-shm"), encoding: .utf8), "shm")
-        XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-wal"), encoding: .utf8), "wal-new")
-        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appending(path: "default.store").path))
+        XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-wal"), encoding: .utf8), "wal-old")
+        for name in ["default.store", "default.store-wal", "default.store-shm"] {
+            XCTAssertFalse(FileManager.default.fileExists(atPath: root.appending(path: name).path))
+        }
+    }
+
+    func testCompanionInBothPlacesStopsWithRollbackFailedAndTouchesNothing() throws {
+        try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
+        try Data("main".utf8).write(to: root.appending(path: "default.store"))
+        try Data("wal-legacy".utf8).write(to: root.appending(path: "default.store-wal"))
+        try Data("wal-target".utf8).write(to: storeDir.appending(path: "default.store-wal"))
+        do {
+            _ = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
+            XCTFail("expected failure")
+        } catch StoreLocation.MoveError.rollbackFailed {
+        }
+        XCTAssertEqual(try String(contentsOf: root.appending(path: "default.store"), encoding: .utf8), "main")
+        XCTAssertEqual(try String(contentsOf: root.appending(path: "default.store-wal"), encoding: .utf8), "wal-legacy")
+        XCTAssertEqual(try String(contentsOf: storeDir.appending(path: "default.store-wal"), encoding: .utf8), "wal-target")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeDir.appending(path: "default.store").path))
+    }
+
+    func testResumeThenMainFailureRestoresEverythingToLegacy() throws {
+        try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
+        try Data("main".utf8).write(to: root.appending(path: "default.store"))
+        try Data("shm".utf8).write(to: root.appending(path: "default.store-shm"))
+        try Data("wal".utf8).write(to: storeDir.appending(path: "default.store-wal"))
+        // A dangling symlink squats on the main destination: fileExists is false, moveItem fails.
+        try FileManager.default.createSymbolicLink(
+            atPath: storeDir.appending(path: "default.store").path, withDestinationPath: "/nonexistent-morrow")
+        do {
+            _ = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
+            XCTFail("expected failure")
+        } catch StoreLocation.MoveError.rolledBack {
+        }
+        let expected = ["default.store": "main", "default.store-wal": "wal", "default.store-shm": "shm"]
+        for (name, content) in expected {
+            XCTAssertEqual(try String(contentsOf: root.appending(path: name), encoding: .utf8), content)
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeDir.appending(path: "default.store-wal").path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: storeDir.appending(path: "default.store-shm").path))
     }
 
     func testFailedMoveRollsBackToLegacyLocation() throws {
         for name in ["default.store", "default.store-wal", "default.store-shm"] {
             try Data(name.utf8).write(to: root.appending(path: name))
         }
-        // A directory squats on the shm destination, so that step fails after wal was moved.
-        try FileManager.default.createDirectory(
-            at: storeDir.appending(path: "default.store-shm"), withIntermediateDirectories: true)
+        // A dangling symlink squats on the shm destination, so that step fails after wal was moved.
+        try FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true)
+        try FileManager.default.createSymbolicLink(
+            atPath: storeDir.appending(path: "default.store-shm").path, withDestinationPath: "/nonexistent-morrow")
         do {
             _ = try StoreLocation.prepare(in: storeDir, legacyDirectory: root)
             XCTFail("expected failure")

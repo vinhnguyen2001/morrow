@@ -87,4 +87,13 @@ final class CaptureViewModelTests: XCTestCase {
         await model.setPhoto(second)
         XCTAssertEqual(model.photoData, second)
     }
+
+    func testCancelledCorruptPickSetsNoErrorMessage() async throws {
+        let (model, _) = try makeModel()
+        let task = Task { await model.setPhoto(Data("junk".utf8)) }
+        task.cancel()
+        await task.value
+        XCTAssertNil(model.photoData)
+        XCTAssertNil(model.errorMessage)
+    }
 }

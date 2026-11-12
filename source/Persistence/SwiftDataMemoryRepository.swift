@@ -13,7 +13,7 @@ final class SwiftDataMemoryRepository: MemoryRepository {
 
     static func makeContainer(
         inMemory: Bool = false,
-        storeDirectory: URL = URL.applicationSupportDirectory.appending(path: "Store", directoryHint: .isDirectory),
+        storeDirectory: URL = StoreLocation.defaultDirectory,
         legacyDirectory: URL = .applicationSupportDirectory
     ) throws -> ModelContainer {
         let config: ModelConfiguration
