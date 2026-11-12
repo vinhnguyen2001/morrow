@@ -17,6 +17,7 @@ targets:
       - DesignSystem
       - Domain
       - Features
+      - Persistence
     scheme:
       testTargets:
         - MorrowTests

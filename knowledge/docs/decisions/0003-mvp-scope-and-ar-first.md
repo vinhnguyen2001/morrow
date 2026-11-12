@@ -19,7 +19,7 @@ Deferred: journeys, place detail, Notes/Places tabs, search, detailed settings (
 
 Milestones (reordered 2026-11-12 by the user: screens first, AR later. Danny's concern is recorded: AR is the riskiest part and may force a change to Capture, for example an optional scan step when planting; Home, Capture, Detail and Map are needed under any AR approach so the waste is small):
 - M0 skeleton, tokens, MemoryCard (done, built and tested on Mac; see T-001).
-- M2 local persistence (SwiftData) + Capture + Home with real data (next).
+- M2 local persistence (SwiftData) + Capture + Home with real data (slice 1 done, see T-003; location auto-fill next).
 - M3 Memory detail, Map.
 - M1 AR spike on the iPhone 11 Pro with fake data (parked; spec in T-002). Decision gate: if "time to first memory" is above 3 s, fix or change approach before M4.
 - M4 AR complete.

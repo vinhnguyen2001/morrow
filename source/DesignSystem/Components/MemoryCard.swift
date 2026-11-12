@@ -26,6 +26,8 @@ struct MemoryCard: View {
     var density: MemoryCardDensity = .compact
     var action: () -> Void = {}
 
+    @Environment(\.photoStore) private var photoStore
+
     private var style: MemoryKindStyle { .style(for: memory.kind) }
 
     var body: some View {
@@ -50,17 +52,12 @@ struct MemoryCard: View {
         }
     }
 
-    // M0: photos render a placeholder; real images arrive with persistence.
+    // Stored photo when there is one, otherwise the kind placeholder (samples, failed loads).
     private var photoContent: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RoundedRectangle(cornerRadius: MorrowRadius.cardImage, style: .continuous)
-                .fill(style.background)
+            photoArea
                 .frame(height: density.imageHeight)
-                .overlay {
-                    Image(systemName: style.symbolName)
-                        .font(MorrowFont.glyph)
-                        .foregroundStyle(MorrowColor.textSecondary)
-                }
+                .clipShape(RoundedRectangle(cornerRadius: MorrowRadius.cardImage, style: .continuous))
                 .padding(7)
             VStack(alignment: .leading, spacing: 3) {
                 titleText
@@ -69,6 +66,19 @@ struct MemoryCard: View {
             .padding(.horizontal, 13)
             .padding(.top, 3)
             .padding(.bottom, 13)
+        }
+    }
+
+    @ViewBuilder
+    private var photoArea: some View {
+        if let fileName = memory.photoFileName {
+            StoredPhotoView(fileName: fileName, store: photoStore, placeholder: style.background)
+        } else {
+            style.background.overlay {
+                Image(systemName: style.symbolName)
+                    .font(MorrowFont.glyph)
+                    .foregroundStyle(MorrowColor.textSecondary)
+            }
         }
     }
 

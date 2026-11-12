@@ -4,6 +4,8 @@ import SwiftUI
 struct CircleIconButton: View {
     let systemImage: String
     let label: String
+    /// Filled with the action colour (Add button) instead of white.
+    var prominent = false
     /// Requested size. Promoted to `MorrowLayout.minHitSize` (44pt) if smaller.
     var diameter: CGFloat = MorrowLayout.minHitSize
     let action: () -> Void
@@ -13,9 +15,9 @@ struct CircleIconButton: View {
         Button(action: action) {
             Image(systemName: systemImage)
                 .font(MorrowFont.icon)
-                .foregroundStyle(MorrowColor.ink)
+                .foregroundStyle(prominent ? Color.white : MorrowColor.ink)
                 .frame(width: side, height: side)
-                .background(Circle().fill(MorrowColor.card))
+                .background(Circle().fill(prominent ? MorrowColor.action : MorrowColor.card))
                 .morrowCardShadow()
         }
         .buttonStyle(.plain)

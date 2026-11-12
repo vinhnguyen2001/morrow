@@ -15,6 +15,8 @@ struct Memory: Identifiable, Hashable, Sendable {
     /// Text body, used by notes.
     var body: String?
     var placeName: String?
+    /// File name (not path) of the stored photo; see `PhotoStore`. Nil for notes and placeholders.
+    var photoFileName: String?
     var createdAt: Date
 
     init(
@@ -23,6 +25,7 @@ struct Memory: Identifiable, Hashable, Sendable {
         title: String,
         body: String? = nil,
         placeName: String? = nil,
+        photoFileName: String? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -30,6 +33,7 @@ struct Memory: Identifiable, Hashable, Sendable {
         self.title = title
         self.body = body
         self.placeName = placeName
+        self.photoFileName = photoFileName
         self.createdAt = createdAt
     }
 }
