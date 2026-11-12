@@ -1,0 +1,269 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AREmpty.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "AR · nothing nearby",
+      "w": 390,
+      "x": 1880,
+      "y": 1244
+    },
+    "ARLive.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "AR discovery",
+      "w": 390,
+      "x": 470,
+      "y": 1244
+    },
+    "ARPermission.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "AR · camera permission",
+      "w": 390,
+      "x": 940,
+      "y": 1244
+    },
+    "ARScan.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "AR · scanning the spot",
+      "w": 390,
+      "x": 1410,
+      "y": 1244
+    },
+    "CaptureSheet.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Capture sheet",
+      "w": 390,
+      "x": 0,
+      "y": 2488
+    },
+    "CreateList.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Create · list",
+      "w": 390,
+      "x": 1880,
+      "y": 2488
+    },
+    "CreateLocation.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Create · place & visibility",
+      "w": 390,
+      "x": 940,
+      "y": 2488
+    },
+    "CreatePhoto.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Create · photo",
+      "w": 390,
+      "x": 470,
+      "y": 2488
+    },
+    "CreatePreview.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Create · preview",
+      "w": 390,
+      "x": 1410,
+      "y": 2488
+    },
+    "DesignSystem.dc.html": {
+      "h": 820,
+      "title": "Design system",
+      "w": 1180,
+      "x": 480,
+      "y": 3732
+    },
+    "EmptyHome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Home · first launch (empty)",
+      "w": 390,
+      "x": 2820,
+      "y": 1244
+    },
+    "HomeNotes.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Home · Notes",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "HomePlaces.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Home · Places",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "JourneyDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Journey detail",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Home · timeline + map button",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Map.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Map page · memory sheet",
+      "w": 390,
+      "x": 0,
+      "y": 1244
+    },
+    "MemoryCard.dc.html": {
+      "h": 820,
+      "title": "MemoryCard variants",
+      "w": 400,
+      "x": 0,
+      "y": 3732
+    },
+    "MemoryDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Memory detail",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "NoteEdit.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Edit note",
+      "w": 390,
+      "x": 2350,
+      "y": 2488
+    },
+    "PlaceDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Place detail",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "Settings.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Settings",
+      "w": 390,
+      "x": 2350,
+      "y": 1244
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-12T03:12:05Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "t1",
+    "t2",
+    "s3",
+    "t3",
+    "t4",
+    "s1",
+    "s2"
+  ],
+  "notes": {
+    "s1": {
+      "fill": "green",
+      "text": "Look v2 — 'Chronicle' direction: graph-paper ground, white tilted cards with big glyphs, bold numbers, round black Add button and round white Map button (no tab bar; Settings via the gear). Logo: the M swoosh in deep green #1E3B2F, which is also the action colour. Inter replaces Nunito + Caveat.\n\nEvery screen is one working prototype (Main); press Play. Map and AR are simulated; photos are illustrated placeholders.",
+      "w": 320,
+      "x": 2820,
+      "y": 0
+    },
+    "s2": {
+      "fill": "blue",
+      "text": "AR = anchored to real coordinates.\n\nOpen AR → camera turns on → the spot is scanned (feature points + sweep) → position is matched to lat/long → memories left at these coordinates appear as floating glass panels with a ground anchor ring, like spatial windows. Compass strip shows which direction each one is in.\n\n'Plant here' anchors a new memory at the exact coordinates you are standing on.",
+      "w": 320,
+      "x": 3290,
+      "y": 1244
+    },
+    "s3": {
+      "fill": "orange",
+      "text": "Map is its own page (floating 'Map · nearby' button on Home). Tap a pin → a small sheet peeks up with the memory. Drag the sheet up → the full memory detail (photo, story, AR, save, share) unfolds in place; drag it down → it closes and the pin is deselected. Tap the handle to toggle. Bottom nav is Home · + · Settings.",
+      "w": 320,
+      "x": 2820,
+      "y": 400
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Morrow — Home & browsing",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Map view, AR & Settings",
+      "w": 240,
+      "x": 0,
+      "y": 984
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Capture flow",
+      "w": 240,
+      "x": 0,
+      "y": 2228
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 1660,
+      "text": "Components & design system",
+      "w": 240,
+      "x": 0,
+      "y": 3472
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "HomeNotes.dc.html",
+    "HomePlaces.dc.html",
+    "JourneyDetail.dc.html",
+    "MemoryDetail.dc.html",
+    "PlaceDetail.dc.html",
+    "Map.dc.html",
+    "ARLive.dc.html",
+    "ARPermission.dc.html",
+    "ARScan.dc.html",
+    "AREmpty.dc.html",
+    "Settings.dc.html",
+    "EmptyHome.dc.html",
+    "CaptureSheet.dc.html",
+    "CreatePhoto.dc.html",
+    "CreateLocation.dc.html",
+    "CreatePreview.dc.html",
+    "CreateList.dc.html",
+    "NoteEdit.dc.html",
+    "MemoryCard.dc.html",
+    "DesignSystem.dc.html"
+  ],
+  "pages": [],
+  "title": "Morrow"
+}

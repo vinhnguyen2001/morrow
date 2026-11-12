@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Morrow</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background-color: #F4F4F1; background-image: radial-gradient(rgba(30,59,47,0.13) 1.2px, transparent 1.2px); background-size: 18px 18px; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #121212">
+
+<div style="position: absolute; inset: 0; opacity: {{fxO}}; transform: translateY({{fxY}}px); transition: opacity 0.28s ease, transform 0.34s ease">
+
+<!-- ============ HOME ============ -->
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; box-sizing: border-box; padding: 54px 16px 130px">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 48px">
+<button type="button" aria-label="Search memories" onClick="{{toggleSearch}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 20px -12px rgba(0,0,0,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg></button>
+<div style="display: flex; align-items: center; gap: 6px"><svg width="34" height="26" viewBox="0 0 34 26" aria-hidden="true"><path d="M3 22C6 14 9 9 12 8c2.4-.8 2.6 3.6 4.2 5.4C18.6 12 21 6 25 4c2.8-1.4 4.6 2 6 6" fill="none" stroke="#1E3B2F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #1E3B2F">Morrow</span></div>
+<div style="display: flex; gap: 8px">
+<button type="button" aria-label="Notifications, 2 new" onClick="{{notify}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 20px -12px rgba(0,0,0,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20.5a2 2 0 0 0 4 0"></path></svg><span style="position: absolute; top: 11px; right: 12px; width: 8px; height: 8px; border-radius: 4px; background: #E8542F; box-shadow: 0 0 0 2px #FFFFFF"></span></button>
+<button type="button" aria-label="Settings" onClick="{{goSettings}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 20px -12px rgba(0,0,0,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+</div>
+</header>
+
+<sc-if value="{{s.searchOpen}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; background: #FFFFFF; border-radius: 18px; padding: 0 14px; height: 46px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 6px 18px -10px rgba(0,0,0,0.3)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+<label for="mq" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search memories</label>
+<input id="mq" type="search" value="{{s.query}}" onChange="{{onQuery}}" placeholder="Search places, notes, moments" style="flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 15px; color: #121212; outline: none">
+</div>
+</sc-if>
+
+<div role="tablist" aria-label="Show" style="margin-top: 12px; display: flex; gap: 4px; padding: 4px; background: #E9E9E9; border-radius: 999px">
+<sc-for list="{{segs}}" as="g" hint-placeholder-count="3">
+<button type="button" role="tab" aria-selected="{{g.on}}" onClick="{{g.pick}}" style="flex: 1; height: 40px; border: 0; border-radius: 999px; font-family: inherit; font-size: 14.5px; font-weight: {{g.weight}}; color: {{g.color}}; background: {{g.bg}}; box-shadow: {{g.shadow}}; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s ease, color 0.2s ease">{{g.label}}</button>
+</sc-for>
+</div>
+
+<!-- Journey tab -->
+<sc-if value="{{tabJourney}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 36px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding: 0 18px">
+<svg width="190" height="170" viewBox="0 0 190 170" aria-hidden="true"><ellipse cx="95" cy="150" rx="70" ry="10" fill="#E9E9E9"></ellipse><path d="M62 104h66l-8 44H70z" fill="#FFF1E6" stroke="#D9B996" stroke-width="1.5"></path><path d="M58 98h74v10H58z" fill="#F0DCC4"></path><path d="M95 100C95 82 94 70 95 58" stroke="#1E3B2F" stroke-width="2.4" fill="none" stroke-linecap="round"></path><path d="M95 72C82 72 74 63 73 50c12 0 22 8 22 22z" fill="#7CC48A"></path><path d="M95 64c11 0 20-7 21-19-11 0-20 7-21 19z" fill="#1E3B2F"></path><path d="M40 40c.6 3.6 2 5 5.6 5.6-3.6.6-5 2-5.6 5.6-.6-3.6-2-5-5.6-5.6 3.6-.6 5-2 5.6-5.6z" fill="#E2B64F"></path><path d="M146 26c.5 3 1.7 4.2 4.7 4.7-3 .5-4.2 1.7-4.7 4.7-.5-3-1.7-4.2-4.7-4.7 3-.5 4.2-1.7 4.7-4.7z" fill="#C9B8E3"></path><path d="M28 120c6-10 14-12 22-8" stroke="#7CC48A" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-dasharray="3 5"></path><path d="M162 112c-4-10-12-14-20-10" stroke="#7CC48A" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-dasharray="3 5"></path></svg>
+<h2 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.3px">Your garden is waiting</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #7C7C7C">Leave your first moment — a photo, a note or a list. Each one is planted where you are, and they grow into a timeline here.</p>
+<span style="font-weight: 600; font-size: 14px; color: #1E3B2F">Leave a moment. Discover a story.</span>
+<button type="button" onClick="{{openCapture}}" style="margin-top: 6px; height: 52px; padding: 0 26px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 22px -10px rgba(0,0,0,0.7)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Plant your first memory</button>
+<button type="button" onClick="{{goMap}}" style="height: 44px; padding: 0 16px; border: 0; background: transparent; color: #1E3B2F; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 4px">Or see what travelers left nearby</button>
+</div>
+</sc-if>
+
+<sc-if value="{{notEmpty}}" hint-placeholder-val="{{ true }}">
+<div style="margin-top: 22px; display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Journeys</h2>
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F">{{journeyCountLabel}}</span>
+</div>
+<div style="margin: 10px -16px 0; padding: 4px 16px 14px; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none">
+<sc-for list="{{journeys}}" as="j" hint-placeholder-count="3">
+<button type="button" onClick="{{j.open}}" aria-label="Open journey {{j.title}}" style="flex: none; width: 186px; border: 0; padding: 6px; text-align: left; background: #FFFFFF; border-radius: 22px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 10px 22px -14px rgba(0,0,0,0.35); cursor: pointer; font-family: inherit; color: #121212">
+<div style="position: relative; height: 118px; overflow: hidden; border-radius: 17px">
+<sc-for list="{{j.fan}}" as="ph" hint-placeholder-count="3"><img src="{{ph.img}}" alt="" style="position: absolute; left: 50%; top: 50%; width: 112px; height: 86px; object-fit: cover; border-radius: 14px; border: 2px solid #FFFFFF; box-shadow: 0 8px 18px -8px rgba(0,0,0,0.45); transform: translate(-50%, -50%) translateX({{ph.dx}}px) rotate({{ph.rot}}deg); z-index: {{ph.z}}"></sc-for>
+<sc-if value="{{j.now}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 8px; left: 8px; background: #FFF3C4; color: #1E3B2F; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px">Travelling now</span></sc-if>
+</div>
+<div style="padding: 9px 6px 5px; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 14px; font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{j.title}}</span>
+<span style="font-size: 12px; font-weight: 600; color: #7C7C7C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{j.dates}}</span>
+<span style="font-size: 11.5px; font-weight: 700; color: #1E3B2F">{{j.summary}}</span>
+</div>
+</button>
+</sc-for>
+</div>
+
+<div style="margin-top: 8px; display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Recent moments</h2>
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F">since Sep 1</span>
+</div>
+
+<div style="position: relative; margin-top: 4px">
+<div style="position: relative; height: 46px; display: flex; justify-content: center; align-items: flex-end">
+<div style="position: absolute; left: 50%; bottom: 0; width: 1.6px; height: 16px; margin-left: -0.8px; background: #7CC48A"></div>
+<svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true" style="margin-bottom: 12px"><path d="M16 30V18" stroke="#7CC48A" stroke-width="1.6" stroke-linecap="round"></path><path d="M16 20c-6 0-9.5-4-9.6-9.4 5.6 0 9.6 3.6 9.6 9.4z" fill="#A9DDB2"></path><path d="M16 18c5 0 8.6-3.4 8.8-8.6-5.2 0-8.8 3.4-8.8 8.6z" fill="#7CC48A"></path></svg>
+</div>
+
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+<sc-if value="{{r.isDate}}" hint-placeholder-val="{{ false }}">
+<div style="position: relative; display: flex; align-items: center; padding: 16px 0 12px">
+<div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1.6px; margin-left: -0.8px; background: #7CC48A"></div>
+<div style="flex: 1"></div>
+<div style="position: relative; display: flex; align-items: center; gap: 10px; margin-left: -23px">
+<span style="width: 46px; height: 46px; border-radius: 23px; background: #1E3B2F; color: #FFFFFF; font-size: 19px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px #F4F4F1, 0 8px 18px -8px rgba(30,59,47,0.6)">{{r.dayNum}}</span>
+<span style="display: flex; flex-direction: column; line-height: 1.15"><span style="font-size: 14px; font-weight: 800; color: #121212">{{r.dayName}}</span><span style="font-size: 12px; font-weight: 600; color: #7C7C7C">{{r.monthYear}}</span></span>
+</div>
+<div style="flex: 1"></div>
+</div>
+</sc-if>
+<sc-if value="{{r.isStart}}" hint-placeholder-val="{{ false }}">
+<div style="position: relative; display: flex; justify-content: center; padding: 10px 0 14px">
+<div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1.6px; margin-left: -0.8px; background: #7CC48A"></div>
+<div style="position: relative; width: 270px; display: flex; align-items: center; gap: 12px; background: {{r.bg}}; color: #FFFFFF; border-radius: 24px; padding: 10px 14px 10px 10px; box-shadow: 0 0 0 5px #F4F4F1, 0 14px 28px -12px rgba(30,59,47,0.7); transform: rotate({{r.rot}}deg)">
+<span style="width: 44px; height: 44px; border-radius: 15px; background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center; flex: none; transform: rotate(-10deg)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.icon}}"></path></svg></span>
+<span style="display: flex; flex-direction: column; min-width: 0; gap: 1px"><span style="font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7)">{{r.kicker}}</span><span style="font-size: 15px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</span><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.dest}}</span></span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{r.isMem}}" hint-placeholder-val="{{ true }}">
+<div style="position: relative; display: flex; align-items: flex-start; padding: 6px 0 10px">
+<svg aria-hidden="true" viewBox="0 0 44 100" preserveAspectRatio="none" style="position: absolute; left: 50%; top: 0; width: 44px; height: 100%; margin-left: -22px; overflow: visible"><path d="{{r.path}}" stroke="#7CC48A" stroke-width="1.6" fill="none" vector-effect="non-scaling-stroke" stroke-linecap="round"></path></svg>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" style="position: absolute; left: {{r.leafLeft}}; top: {{r.leafTop}}; transform: rotate({{r.leafRot}}deg)"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="{{r.leafFill}}"></path><path d="M4 19C9 13 13 9 18 6" stroke="#F4F4F1" stroke-width="1.2" fill="none"></path></svg>
+<div style="position: absolute; left: 50%; top: 40px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: #F4F4F1; border: 2px solid #7CC48A; box-sizing: border-box"></div>
+<div style="flex: 1; min-width: 0; display: flex; justify-content: flex-end">
+<sc-if value="{{r.left}}" hint-placeholder-val="{{ true }}">
+<div style="width: 100%; margin-top: {{r.offset}}px; transform: rotate({{r.tilt}}deg)"><dc-import name="MemoryCard" item="{{r.item}}" on-open="{{r.open}}" hint-size="100%,190px"></dc-import></div>
+</sc-if>
+<sc-if value="{{r.right}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 38px 16px 0 0; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right">
+<span style="font-size: 14px; font-weight: 800; color: #121212; line-height: 1">{{r.time}}</span>
+<span style="font-size: 12.5px; font-weight: 600; color: #5C5C5C">{{r.mood}}</span>
+</div>
+</sc-if>
+</div>
+<div style="width: 44px; flex: none"></div>
+<div style="flex: 1; min-width: 0; display: flex; justify-content: flex-start">
+<sc-if value="{{r.right}}" hint-placeholder-val="{{ false }}">
+<div style="width: 100%; margin-top: {{r.offset}}px; transform: rotate({{r.tilt}}deg)"><dc-import name="MemoryCard" item="{{r.item}}" on-open="{{r.open}}" hint-size="100%,190px"></dc-import></div>
+</sc-if>
+<sc-if value="{{r.left}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 38px 0 0 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px">
+<span style="font-size: 14px; font-weight: 800; color: #121212; line-height: 1">{{r.time}}</span>
+<span style="font-size: 12.5px; font-weight: 600; color: #5C5C5C">{{r.mood}}</span>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+</sc-for>
+
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+<p style="text-align: center; margin: 24px 0; font-size: 14.5px; color: #7C7C7C">Nothing in your garden matches “{{s.query}}”.</p>
+</sc-if>
+
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 8px">
+<div style="width: 1.6px; height: 18px; background: #7CC48A"></div>
+<div style="width: 10px; height: 10px; border-radius: 5px; background: #7CC48A"></div>
+<span style="font-weight: 600; font-size: 13px; color: #7C7C7C">where it all began ·</span>
+</div>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- Notes tab -->
+<sc-if value="{{tabNotes}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 22px; display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Notes &amp; lists</h2>
+<button type="button" onClick="{{newNote}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: #F0ECFF; color: #5B3FB8; font-family: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New note</button>
+</div>
+<sc-if value="{{notesEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 40px; text-align: center; color: #7C7C7C; font-size: 15px; line-height: 1.55; padding: 0 30px"><span style="display: block; font-weight: 600; font-size: 14px; color: #1E3B2F">a blank page</span>Thoughts, lists and little details you write on the road will live here.</div>
+</sc-if>
+<div style="margin-top: 14px; display: flex; gap: 12px; align-items: flex-start">
+<sc-for list="{{noteCols}}" as="col" hint-placeholder-count="2">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding-top: {{col.pad}}px">
+<sc-for list="{{col.items}}" as="n" hint-placeholder-count="2">
+<button type="button" onClick="{{n.open}}" aria-label="Open {{n.title}}" style="display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; border: 0; padding: 15px 15px 14px; border-radius: 24px; background: {{n.bg}}; color: #121212; font-family: inherit; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 10px 22px -14px rgba(0,0,0,0.35); transform: rotate({{n.tilt}}deg)">
+<span style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: {{n.kickColor}}">{{n.kicker}}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{n.kickColor}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg></span>
+<span style="font-size: 15.5px; font-weight: 800; line-height: 1.25">{{n.title}}</span>
+<span style="font-size: 13px; line-height: 1.5; color: #5C5C5C; display: -webkit-box; -webkit-line-clamp: {{n.clamp}}; -webkit-box-orient: vertical; overflow: hidden">{{n.preview}}</span>
+<span style="display: flex; flex-direction: column; gap: 1px; padding-top: 2px"><span style="font-weight: 600; font-size: 13px; color: #1E3B2F; line-height: 1.1">{{n.dateShort}}</span><span style="font-size: 11.5px; font-weight: 700; color: #7C7C7C">{{n.placeName}}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Places tab -->
+<sc-if value="{{tabPlaces}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 22px; display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Places you’ve been</h2>
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F">{{placeCountLabel}}</span>
+</div>
+<sc-if value="{{placesEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 40px; text-align: center; color: #7C7C7C; font-size: 15px; line-height: 1.55; padding: 0 30px"><span style="display: block; font-weight: 600; font-size: 14px; color: #1E3B2F">no pins yet</span>Every place you leave a memory becomes a little landmark here.</div>
+</sc-if>
+<div style="margin-top: 14px; display: flex; gap: 12px; align-items: flex-start">
+<sc-for list="{{placeCols}}" as="col" hint-placeholder-count="2">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding-top: {{col.pad}}px">
+<sc-for list="{{col.items}}" as="p" hint-placeholder-count="2">
+<button type="button" onClick="{{p.open}}" aria-label="Open {{p.name}}" style="display: block; width: 100%; text-align: left; border: 0; padding: 6px; border-radius: 24px; background: #FFFFFF; color: #121212; font-family: inherit; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 10px 22px -14px rgba(0,0,0,0.35)">
+<span style="display: block; position: relative"><img src="{{p.img}}" alt="" style="display: block; width: 100%; height: {{p.h}}px; object-fit: cover; border-radius: 19px"><span style="position: absolute; left: 8px; bottom: 8px; background: rgba(255,255,255,0.94); color: #1E3B2F; font-size: 11.5px; font-weight: 800; padding: 4px 9px; border-radius: 999px; display: flex; align-items: center; gap: 4px"><svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>{{p.countLabel}}</span></span>
+<span style="display: flex; flex-direction: column; gap: 2px; padding: 9px 6px 6px"><span style="font-size: 14.5px; font-weight: 800; line-height: 1.25">{{p.name}}</span><span style="font-size: 12px; font-weight: 600; color: #7C7C7C">{{p.region}}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+</div>
+
+<!-- floating buttons (Map · Add) -->
+<button type="button" onClick="{{goMap}}" aria-label="Open the map, {{nearbyCount}} memories nearby" style="position: absolute; left: 20px; bottom: 30px; width: 56px; height: 56px; border-radius: 28px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 12px 26px -10px rgba(0,0,0,0.4)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14"></path></svg><span style="position: absolute; top: -3px; right: -3px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #1E3B2F; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF">{{nearbyCount}}</span></button>
+<button type="button" aria-label="Add to Morrow" onClick="{{openCapture}}" style="position: absolute; right: 20px; bottom: 30px; width: 64px; height: 64px; border-radius: 32px; border: 0; background: #1E3B2F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 16px 30px -10px rgba(30,59,47,0.6); transform: rotate({{plusRot}}deg); transition: transform 0.3s ease"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</sc-if>
+
+<!-- ============ MAP (own page) ============ -->
+<sc-if value="{{isMap}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow: hidden; background: #EDEDED">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 844px; transform: translateY({{mapOff}}px); transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)">
+<svg width="390" height="844" viewBox="0 0 390 844" aria-hidden="true" style="position: absolute; inset: 0"><rect width="390" height="844" fill="#EDEDED"></rect>
+<g fill="#E3E3E3" transform="rotate(-8 195 300)"><rect x="20" y="120" width="70" height="52" rx="10"></rect><rect x="104" y="120" width="86" height="52" rx="10"></rect><rect x="204" y="120" width="60" height="52" rx="10"></rect><rect x="278" y="120" width="96" height="52" rx="10"></rect><rect x="20" y="186" width="110" height="60" rx="10"></rect><rect x="144" y="186" width="70" height="60" rx="10"></rect><rect x="228" y="186" width="140" height="60" rx="10"></rect><rect x="20" y="260" width="80" height="70" rx="10"></rect><rect x="114" y="260" width="120" height="70" rx="10"></rect><rect x="248" y="260" width="120" height="70" rx="10"></rect><rect x="20" y="344" width="140" height="56" rx="10"></rect><rect x="174" y="344" width="80" height="56" rx="10"></rect><rect x="268" y="344" width="100" height="56" rx="10"></rect><rect x="20" y="414" width="70" height="50" rx="10"></rect><rect x="104" y="414" width="150" height="50" rx="10"></rect><rect x="268" y="414" width="100" height="50" rx="10"></rect></g>
+<path d="M300 40c40 10 70 40 76 80-30 16-70 10-92-16-14-20-8-50 16-64z" fill="#DCEDD9"></path><path d="M10 640c30-20 80-16 96 10-10 30-60 40-90 26z" fill="#DCEDD9"></path>
+<path d="M-20 520C60 488 130 540 210 512S340 470 410 500L410 600C340 572 270 612 200 620S60 600-20 626z" fill="#D6E8F3"></path>
+<path d="M-20 548C60 520 130 568 210 542S340 500 410 528" stroke="#E8F3F9" stroke-width="3" fill="none"></path>
+<path d="M-10 300C80 290 160 330 240 300S360 250 400 262" stroke="#FFFFFF" stroke-width="10" fill="none" stroke-linecap="round"></path>
+<path d="M120 -10C130 120 100 240 140 360S150 480 130 540" stroke="#FFFFFF" stroke-width="9" fill="none" stroke-linecap="round"></path>
+<path d="M260 -10C250 100 290 200 270 300S300 420 290 500" stroke="#FFFFFF" stroke-width="7" fill="none" stroke-linecap="round"></path>
+<path d="M-10 440C100 430 200 460 400 420" stroke="#FFFFFF" stroke-width="7" fill="none" stroke-linecap="round"></path>
+<text x="250" y="566" fill="#6F8E9C" font-size="13" font-style="italic" font-weight="700" transform="rotate(-6 250 566)">Thu Bồn River</text>
+<text x="160" y="406" fill="#9A9A9A" font-size="11" font-weight="800" letter-spacing="2">OLD TOWN</text>
+<text x="300" y="100" fill="#7F946A" font-size="11" font-weight="800" letter-spacing="1">PARK</text>
+<circle cx="196" cy="300" r="64" fill="#9CC3DA" opacity="0.18"></circle></svg>
+<div style="position: absolute; left: 196px; top: 300px; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 9px; background: #5E95BC; box-shadow: 0 0 0 4px #FFFFFF, 0 4px 10px rgba(0,0,0,0.3)" aria-label="You are here" role="img"></div>
+
+<sc-for list="{{pins}}" as="pn" hint-placeholder-count="5">
+<button type="button" onClick="{{pn.pick}}" aria-label="{{pn.aria}}" aria-pressed="{{pn.sel}}" style="position: absolute; left: {{pn.x}}px; top: {{pn.y}}px; transform: translate(-50%, -100%) scale({{pn.scale}}); transform-origin: 50% 100%; border: 0; background: transparent; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: transform 0.2s ease">
+<span style="width: {{pn.size}}px; height: {{pn.size}}px; border-radius: 50%; background: {{pn.bg}}; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 {{pn.ring}}px {{pn.ringColor}}, 0 6px 14px -4px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; overflow: hidden; color: {{pn.fg}}; font-weight: 800; font-size: 14px">
+<sc-if value="{{pn.hasImg}}" hint-placeholder-val="{{ false }}"><img src="{{pn.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover"></sc-if>
+<sc-if value="{{pn.hasInitial}}" hint-placeholder-val="{{ true }}">{{pn.initial}}</sc-if>
+<sc-if value="{{pn.hasIcon}}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{pn.icon}}"></path></svg></sc-if>
+</span>
+<span style="width: 2.5px; height: 9px; background: {{pn.stem}}; border-radius: 2px"></span>
+</button>
+</sc-for>
+</div>
+
+<div style="position: absolute; top: 54px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between">
+<button type="button" aria-label="Back" onClick="{{back}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: rgba(255,255,255,0.96); color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.45)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<span style="display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.96); border-radius: 999px; padding: 6px 18px; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.45)"><span style="font-size: 14.5px; font-weight: 800; color: #121212; line-height: 1.1">Around you</span><span style="font-weight: 600; font-size: 13px; color: #1E3B2F; line-height: 1.1">Hội An Ancient Town</span></span>
+<button type="button" aria-label="Check in here" onClick="{{openCheckin}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #FFF3C4; color: #1E3B2F; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.45)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><path d="M9.5 10.5l2 2 3.5-3.5"></path></svg></button>
+</div>
+<div style="position: absolute; top: 110px; left: 0; right: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 4px 16px 8px">
+<sc-for list="{{mapFilters}}" as="f" hint-placeholder-count="4">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: {{f.bg}}; color: {{f.fg}}; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px -8px rgba(0,0,0,0.5)"><span style="width: 9px; height: 9px; border-radius: 5px; background: {{f.dot}}"></span>{{f.label}}</button>
+</sc-for>
+</div>
+<span style="position: absolute; left: 16px; bottom: {{msLabelB}}px; font-size: 10.5px; font-weight: 800; color: #5C5C5C; background: rgba(255,255,255,0.9); padding: 3px 8px; border-radius: 999px; transition: bottom 0.35s ease">Simulated map · Hội An</span>
+<div style="position: absolute; right: 16px; bottom: {{msBtnB}}px; display: flex; flex-direction: column; gap: 8px; transition: bottom 0.35s ease, opacity 0.25s ease; opacity: {{msBtnO}}">
+<button type="button" aria-label="Open AR discovery" onClick="{{openARDefault}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #1E3B2F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 18px -8px rgba(0,0,0,0.7)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3"></path><path d="M12 8l4 2v4l-4 2-4-2v-4z"></path></svg></button>
+<button type="button" aria-label="Center on my location" onClick="{{recenter}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: rgba(255,255,255,0.96); color: #1E3B2F; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.45)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="7"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg></button>
+</div>
+
+<!-- memory sheet: tap a pin → peek; drag up → full detail; drag down → close -->
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: {{msH}}px; background: #F4F4F1; border-top-left-radius: 30px; border-top-right-radius: 30px; box-shadow: 0 -14px 40px -18px rgba(0,0,0,0.45); transition: {{msTr}}; overflow: hidden; touch-action: none">
+<div onPointerDown="{{msDown}}" onPointerMove="{{msMove}}" onPointerUp="{{msUp}}" onPointerCancel="{{msUp}}" style="position: absolute; left: 0; right: 0; top: 0; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none">
+<button type="button" aria-label="{{msToggleLabel}}" onClick="{{msToggle}}" style="position: absolute; left: 0; right: 0; top: 0; height: 24px; border: 0; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2"><span style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6"></span></button>
+
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; left: 16px; right: 16px; top: 26px; display: flex; gap: 12px; align-items: center; background: #FFFFFF; border-radius: 22px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 10px 22px -14px rgba(0,0,0,0.35); opacity: {{msPeekO}}; transition: opacity 0.2s ease; pointer-events: {{msPeekPE}}">
+<span style="width: 60px; height: 60px; border-radius: 16px; flex: none; overflow: hidden; background: {{sel.bg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{sel.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{sel.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover"></sc-if>
+<sc-if value="{{sel.noImg}}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{{sel.iconColor}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{sel.icon}}"></path></svg></sc-if>
+</span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 11px; font-weight: 800; color: {{sel.kickColor}}">{{sel.kicker}}</span>
+<span style="font-size: 14.5px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{sel.title}}</span>
+<span style="font-size: 12px; font-weight: 600; color: #7C7C7C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{sel.meta}}</span>
+</div>
+<button type="button" onClick="{{sel.ar}}" aria-label="Find in AR" style="width: 42px; height: 42px; border-radius: 21px; border: 0; background: #FFF3C4; color: #1E3B2F; flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3"></path><path d="M12 8l4 2v4l-4 2-4-2v-4z"></path></svg></button>
+<button type="button" onClick="{{msExpand}}" aria-label="Read the whole memory" style="width: 42px; height: 42px; border-radius: 21px; border: 0; background: #1E3B2F; color: #FFFFFF; flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg></button>
+</div>
+<span style="position: absolute; left: 16px; right: 16px; top: 112px; font-weight: 600; font-size: 13px; color: #7C7C7C; text-align: center; opacity: {{msPeekO}}; transition: opacity 0.2s ease">pull up to read · pull down to close</span>
+
+<div style="position: absolute; left: 0; right: 0; top: 24px; bottom: 0; overflow-y: {{msScroll}}; scrollbar-width: none; opacity: {{msFullO}}; transition: opacity 0.25s ease; pointer-events: {{msFullPE}}">
+<sc-if value="{{sm.isMemory}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{sm.hasImg}}" hint-placeholder-val="{{ true }}">
+<div style="margin: 0 8px; height: 260px; border-radius: 24px; overflow: hidden"><img src="{{sm.img}}" alt="{{sm.title}}" style="display: block; width: 100%; height: 100%; object-fit: cover"></div>
+</sc-if>
+<sc-if value="{{sm.noImg}}" hint-placeholder-val="{{ false }}">
+<div style="margin: 0 8px; background: {{sm.bg}}; border-radius: 24px; padding: 26px 20px 20px"><span style="font-weight: 600; font-size: 14px; color: {{sm.kickColor}}">{{sm.kicker}}</span></div>
+</sc-if>
+<div style="padding: 16px 20px 40px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="display: flex; align-items: center; gap: 5px; background: #E4F1FB; color: #1F6FA8; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{sm.placeLine}}</span>
+<span style="background: #E9E9E9; color: #5C5C5C; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px">{{sm.visLabel}}</span>
+</div>
+<h1 style="margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; letter-spacing: -0.3px">{{sm.title}}</h1>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 19px; background: {{sm.avatarBg}}; color: #121212; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; flex: none">{{sm.initial}}</span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14.5px; font-weight: 800">{{sm.authorLine}}</span><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">{{sm.dateFull}} · {{sm.time}}</span></span>
+</div>
+<sc-if value="{{sm.hasText}}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 16px; line-height: 1.65; color: #2B2B2B; text-wrap: pretty">{{sm.text}}</p></sc-if>
+<sc-if value="{{sm.isList}}" hint-placeholder-val="{{ false }}">
+<div style="background: #E8F7EC; border-radius: 22px; padding: 8px 14px; display: flex; flex-direction: column">
+<sc-for list="{{sm.items}}" as="it" hint-placeholder-count="3">
+<button type="button" onClick="{{it.toggle}}" aria-pressed="{{it.done}}" style="display: flex; align-items: center; gap: 12px; min-height: 46px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 15px; font-weight: 700; color: {{it.color}}; text-decoration: {{it.deco}}; text-align: left; cursor: pointer"><span style="width: 22px; height: 22px; border-radius: 11px; flex: none; box-sizing: border-box; border: 2px solid #7CC48A; background: {{it.box}}; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>{{it.t}}</button>
+</sc-for>
+</div>
+</sc-if>
+<span style="font-size: 12.5px; font-weight: 700; color: #1E3B2F; display: flex; align-items: center; gap: 5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path></svg>{{sm.distLine}}</span>
+<button type="button" onClick="{{sm.ar}}" style="height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 22px -12px rgba(0,0,0,0.8)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3"></path><path d="M12 8l4 2v4l-4 2-4-2v-4z"></path></svg>Discover in AR</button>
+<div style="display: flex; gap: 10px">
+<button type="button" onClick="{{sm.toggleSave}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="17" height="17" viewBox="0 0 24 24" fill="{{sm.saveFill}}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-3.5L7 20z"></path></svg>{{sm.saveText}}</button>
+<button type="button" onClick="{{sm.share}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #F0ECFF; color: #5B3FB8; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4"></path><path d="M5 12v7h14v-7"></path></svg>Share</button>
+</div>
+<sc-if value="{{sm.canReport}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{report}}" style="align-self: center; height: 44px; border: 0; background: transparent; color: #7C7C7C; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer">Report this memory</button></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{sm.isPlace}}" hint-placeholder-val="{{ false }}">
+<div style="margin: 0 8px; height: 220px; border-radius: 24px; overflow: hidden"><img src="{{sm.img}}" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover"></div>
+<div style="padding: 16px 20px 40px; display: flex; flex-direction: column; gap: 12px">
+<span style="align-self: flex-start; background: #FFF3C4; color: #1E3B2F; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px">Saved place</span>
+<h1 style="margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; letter-spacing: -0.3px">{{sm.title}}</h1>
+<span style="font-size: 14px; font-weight: 600; color: #7C7C7C">{{sm.meta}}</span>
+<button type="button" onClick="{{sm.open}}" style="height: 52px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 15.5px; font-weight: 800; cursor: pointer">Open place</button>
+<button type="button" onClick="{{openCheckin}}" style="height: 48px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Check in here</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ JOURNEY DETAIL ============ -->
+<sc-if value="{{isJourney}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none">
+<div style="position: relative; height: 330px">
+<img src="{{jd.cover}}" alt="Cover of {{jd.title}}" style="display: block; width: 100%; height: 100%; object-fit: cover; border-bottom-left-radius: 34px; border-bottom-right-radius: 34px">
+<button type="button" aria-label="Back" onClick="{{back}}" style="position: absolute; top: 54px; left: 16px; width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.94); color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+</div>
+<div style="position: relative; margin: -46px 16px 0; background: #FFFFFF; border-radius: 28px; padding: 20px 20px 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 16px 32px -18px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F; line-height: 1">{{jd.dates}}</span>
+<h1 style="margin: 0; font-size: 25px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.15">{{jd.title}}</h1>
+<span style="display: flex; align-items: center; gap: 5px; font-size: 13.5px; font-weight: 700; color: #7C7C7C"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{jd.dest}}</span>
+<div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px">
+<span style="background: #FFF1E6; color: #B4541E; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.photos}} photos</span>
+<span style="background: #F0ECFF; color: #5B3FB8; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.notes}} notes</span>
+<span style="background: #E4F1FB; color: #1F6FA8; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.places}} places</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding-top: 14px; border-top: 1px dashed #E2E2E2">
+<div style="display: flex; align-items: center; gap: 8px; min-width: 0">
+<div style="display: flex">
+<sc-for list="{{jd.members}}" as="mb" hint-placeholder-count="2"><span style="width: 30px; height: 30px; border-radius: 15px; background: {{mb.bg}}; color: #121212; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF; margin-left: {{mb.ml}}px">{{mb.initial}}</span></sc-for>
+</div>
+<span style="font-size: 12.5px; font-weight: 700; color: #7C7C7C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{jd.memberLine}}</span>
+</div>
+<sc-if value="{{jd.now}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{askEndJourney}}" style="height: 40px; padding: 0 14px; border: 1.5px solid #D6D6D6; border-radius: 999px; background: transparent; color: #121212; font-family: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer; flex: none">End</button></sc-if>
+<button type="button" onClick="{{shareJourney}}" style="height: 40px; padding: 0 14px 0 11px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; flex: none; margin-left: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5a3 3 0 1 0 0 .01M6 12a3 3 0 1 0 0 .01M16 19a3 3 0 1 0 0 .01M8.7 10.7l4.6-2.6M8.7 13.3l4.6 2.6"></path></svg>Invite</button>
+</div>
+</div>
+
+<div style="margin: 18px 16px 0; border-radius: 26px; overflow: hidden; background: #EDEDED; position: relative; height: 170px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08)">
+<svg width="358" height="170" viewBox="0 0 358 170" aria-hidden="true" style="display: block"><rect width="358" height="170" fill="#EDEDED"></rect><path d="M0 128C70 112 120 150 200 132S320 100 358 112V170H0z" fill="#D6E8F3"></path><path d="M-10 40C60 60 110 20 190 44S300 70 370 40" stroke="#FFFFFF" stroke-width="7" fill="none"></path><path d="M40 -10C60 40 40 90 70 180" stroke="#FFFFFF" stroke-width="6" fill="none"></path><ellipse cx="270" cy="70" rx="40" ry="24" fill="#DCEDD9"></ellipse><ellipse cx="96" cy="96" rx="26" ry="16" fill="#DCEDD9"></ellipse><path d="{{jd.routePath}}" stroke="#1E3B2F" stroke-width="2" stroke-dasharray="5 6" fill="none" stroke-linecap="round"></path></svg>
+<sc-for list="{{jd.stops}}" as="st" hint-placeholder-count="3">
+<div style="position: absolute; left: {{st.x}}px; top: {{st.y}}px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px">
+<span style="width: 22px; height: 22px; border-radius: 11px; background: #1E3B2F; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #F4F4F1">{{st.n}}</span>
+<span style="font-size: 11px; font-weight: 800; color: #121212; background: rgba(255,255,255,0.9); padding: 1px 6px; border-radius: 6px; white-space: nowrap">{{st.name}}</span>
+</div>
+</sc-for>
+<span style="position: absolute; right: 10px; top: 10px; font-size: 10.5px; font-weight: 800; color: #7C7C7C; background: rgba(255,255,255,0.9); padding: 3px 8px; border-radius: 999px">Simulated map</span>
+</div>
+
+<h2 style="margin: 24px 16px 6px; font-size: 18px; font-weight: 800">The journey, moment by moment</h2>
+<div style="padding: 0 16px 48px">
+<sc-for list="{{jRows}}" as="r" hint-placeholder-count="3">
+<div style="position: relative; display: flex; gap: 10px">
+<div style="position: relative; width: 34px; flex: none">
+<svg aria-hidden="true" viewBox="0 0 34 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 34px; height: 100%; overflow: visible"><path d="{{r.path}}" stroke="#7CC48A" stroke-width="1.6" fill="none" vector-effect="non-scaling-stroke" stroke-linecap="round"></path></svg>
+<div style="position: absolute; left: 11px; top: 28px; width: 12px; height: 12px; border-radius: 6px; background: #F4F4F1; border: 2px solid #7CC48A; box-sizing: border-box"></div>
+</div>
+<div style="flex: 1; min-width: 0; padding: 12px 0 12px {{r.indent}}px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F; line-height: 1">{{r.when}}</span>
+<div style="transform: rotate({{r.tilt}}deg)"><dc-import name="MemoryCard" item="{{r.item}}" on-open="{{r.open}}" wide="yes" hint-size="100%,240px"></dc-import></div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ PLACE DETAIL ============ -->
+<sc-if value="{{isPlace}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none">
+<div style="position: relative; height: 300px">
+<img src="{{pd.img}}" alt="{{pd.name}}" style="display: block; width: 100%; height: 100%; object-fit: cover; border-bottom-left-radius: 34px; border-bottom-right-radius: 34px">
+<button type="button" aria-label="Back" onClick="{{back}}" style="position: absolute; top: 54px; left: 16px; width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.94); color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+</div>
+<div style="padding: 20px 20px 0; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 5px; background: #E4F1FB; color: #1F6FA8; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{pd.region}}</span>
+<h1 style="margin: 4px 0 0; font-size: 27px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.15">{{pd.name}}</h1>
+<span style="font-weight: 600; font-size: 14px; color: #1E3B2F">{{pd.countLabel}} planted here</span>
+<div style="display: flex; gap: 10px; margin-top: 8px">
+<button type="button" onClick="{{goMap}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14"></path></svg>Open in map</button>
+<button type="button" onClick="{{openCheckin}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><path d="M9.5 10.5l2 2 3.5-3.5"></path></svg>Check in</button>
+</div>
+</div>
+<div style="padding: 22px 16px 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start">
+<sc-for list="{{pdMems}}" as="r" hint-placeholder-count="2">
+<div style="transform: rotate({{r.tilt}}deg)"><dc-import name="MemoryCard" item="{{r.item}}" on-open="{{r.open}}" hint-size="100%,190px"></dc-import></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ MEMORY DETAIL ============ -->
+<sc-if value="{{isMemory}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none">
+<sc-if value="{{md.hasImg}}" hint-placeholder-val="{{ true }}">
+<div style="height: 400px"><img src="{{md.img}}" alt="{{md.title}}" style="display: block; width: 100%; height: 100%; object-fit: cover; border-bottom-left-radius: 34px; border-bottom-right-radius: 34px"></div>
+</sc-if>
+<sc-if value="{{md.noImg}}" hint-placeholder-val="{{ false }}">
+<div style="background: {{md.bg}}; border-bottom-left-radius: 34px; border-bottom-right-radius: 34px; padding: 118px 24px 30px; position: relative; overflow: hidden">
+<svg width="120" height="120" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: -18px; top: 60px; opacity: 0.35"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>
+<span style="font-weight: 600; font-size: 14px; color: {{md.kickColor}}">{{md.kicker}}</span>
+<h1 style="margin: 4px 0 0; font-size: 28px; font-weight: 800; line-height: 1.15; letter-spacing: -0.3px; position: relative">{{md.title}}</h1>
+</div>
+</sc-if>
+<div style="position: absolute; top: 54px; left: 16px; right: 16px; display: flex; justify-content: space-between">
+<button type="button" aria-label="Back" onClick="{{back}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.94); color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<div style="display: flex; gap: 8px">
+<button type="button" aria-label="Share this memory" onClick="{{shareMemory}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.94); color: #1E3B2F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4"></path><path d="M5 12v7h14v-7"></path></svg></button>
+<button type="button" aria-label="{{md.saveLabel}}" aria-pressed="{{md.saved}}" onClick="{{md.toggleSave}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.94); color: #1E3B2F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{md.saveFill}}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-3.5L7 20z"></path></svg></button>
+</div>
+</div>
+
+<div style="padding: 20px 20px 40px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="display: flex; align-items: center; gap: 5px; background: #E4F1FB; color: #1F6FA8; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{md.placeLine}}</span>
+<span style="display: flex; align-items: center; gap: 4px; background: #E9E9E9; color: #5C5C5C; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px">{{md.visLabel}}</span>
+</div>
+<sc-if value="{{md.hasImg}}" hint-placeholder-val="{{ true }}">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; line-height: 1.15; letter-spacing: -0.3px">{{md.title}}</h1>
+</sc-if>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 19px; background: {{md.avatarBg}}; color: #121212; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; flex: none">{{md.initial}}</span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14.5px; font-weight: 800">{{md.authorLine}}</span><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">{{md.dateFull}} · {{md.time}}</span></span>
+</div>
+<sc-if value="{{md.hasText}}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-size: 16px; line-height: 1.65; color: #2B2B2B; text-wrap: pretty">{{md.text}}</p>
+</sc-if>
+<sc-if value="{{md.isList}}" hint-placeholder-val="{{ false }}">
+<div style="background: #E8F7EC; border-radius: 22px; padding: 8px 14px; display: flex; flex-direction: column">
+<sc-for list="{{md.items}}" as="it" hint-placeholder-count="3">
+<button type="button" onClick="{{it.toggle}}" aria-pressed="{{it.done}}" style="display: flex; align-items: center; gap: 12px; min-height: 46px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 15px; font-weight: 700; color: {{it.color}}; text-decoration: {{it.deco}}; text-align: left; cursor: pointer">
+<span style="width: 22px; height: 22px; border-radius: 11px; flex: none; box-sizing: border-box; border: 2px solid #7CC48A; background: {{it.box}}; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>{{it.t}}</button>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="border-radius: 24px; overflow: hidden; position: relative; height: 150px; background: #EDEDED; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08)">
+<svg width="350" height="150" viewBox="0 0 350 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="display: block; width: 100%; height: 100%"><rect width="350" height="150" fill="#EDEDED"></rect><path d="M0 110C80 96 140 130 220 116S320 88 350 96V150H0z" fill="#D6E8F3"></path><path d="M-10 30C60 50 120 10 190 34S300 60 360 30" stroke="#FFFFFF" stroke-width="7" fill="none"></path><path d="M120 -10C140 40 120 90 150 160" stroke="#FFFFFF" stroke-width="6" fill="none"></path><ellipse cx="260" cy="60" rx="36" ry="20" fill="#DCEDD9"></ellipse><circle cx="175" cy="70" r="30" fill="#7CC48A" opacity="0.18"></circle></svg>
+<div style="position: absolute; left: 50%; top: 70px; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center"><span style="width: 34px; height: 34px; border-radius: 17px; background: #1E3B2F; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px #F4F4F1"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#A9DDB2"></path></svg></span><span style="width: 2px; height: 8px; background: #1E3B2F"></span></div>
+<span style="position: absolute; left: 12px; bottom: 10px; font-size: 12px; font-weight: 800; color: #121212; background: rgba(255,255,255,0.94); padding: 5px 10px; border-radius: 999px">{{md.distLine}}</span>
+</div>
+
+<button type="button" onClick="{{md.ar}}" style="height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 22px -12px rgba(0,0,0,0.8)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3"></path><path d="M12 8l4 2v4l-4 2-4-2v-4z"></path></svg>Discover in AR</button>
+<div style="display: flex; gap: 10px">
+<button type="button" onClick="{{md.toggleSave}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="17" height="17" viewBox="0 0 24 24" fill="{{md.saveFill}}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-3.5L7 20z"></path></svg>{{md.saveText}}</button>
+<sc-if value="{{md.canEdit}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{md.edit}}" style="flex: 1; height: 48px; border: 0; border-radius: 999px; background: #F0ECFF; color: #5B3FB8; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Edit note</button>
+</sc-if>
+</div>
+<sc-if value="{{md.canReport}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{report}}" style="align-self: center; height: 44px; border: 0; background: transparent; color: #7C7C7C; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"></path></svg>Report this memory</button>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ AR ============ -->
+<sc-if value="{{isAR}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: #1E2420; overflow: hidden">
+<sc-if value="{{arPermission}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: #F4F4F1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 34px; gap: 14px">
+<span style="width: 108px; height: 108px; border-radius: 54px; background: #E4F1FB; display: flex; align-items: center; justify-content: center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F6FA8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></span>
+<h1 style="margin: 6px 0 0; font-size: 24px; font-weight: 800; line-height: 1.2">See memories where they were left</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #7C7C7C">Morrow uses your camera to float nearby memories over the real world. Nothing is recorded or shared.</p>
+<button type="button" onClick="{{allowCamera}}" style="margin-top: 10px; width: 100%; height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer">Allow camera</button>
+<button type="button" onClick="{{back}}" style="width: 100%; height: 48px; border: 0; border-radius: 999px; background: transparent; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Not now</button>
+</div>
+</sc-if>
+
+<sc-if value="{{arCamera}}" hint-placeholder-val="{{ true }}">
+<img src="{{camImg}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; filter: saturate(1.05) brightness(0.72)">
+
+<sc-if value="{{arScanning}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; pointer-events: none" aria-hidden="true">
+<sc-for list="{{scanDots}}" as="sd" hint-placeholder-count="30">
+<span style="position: absolute; left: {{sd.x}}px; top: {{sd.y}}px; width: {{sd.s}}px; height: {{sd.s}}px; border-radius: 50%; background: rgba(240,239,207,0.95); opacity: {{sd.o}}; box-shadow: 0 0 8px rgba(240,239,207,0.9); transition: opacity 0.35s ease"></span>
+</sc-for>
+<div style="position: absolute; left: 50%; top: 44%; width: 170px; height: 170px; transform: translate(-50%, -50%); border-radius: 40px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.6)"></div>
+<div style="position: absolute; left: 50%; top: 44%; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 5px; background: rgba(255,255,255,0.9)"></div>
+<div style="position: absolute; left: 0; right: 0; top: {{scanY}}px; height: 2px; background: linear-gradient(90deg, transparent, rgba(240,239,207,0.95), transparent); transition: top 0.1s linear"></div>
+</div>
+<div role="status" aria-live="polite" style="position: absolute; left: 24px; right: 24px; bottom: 150px; background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1)); backdrop-filter: blur(30px) saturate(1.6); -webkit-backdrop-filter: blur(30px) saturate(1.6); border: 1px solid rgba(255,255,255,0.28); border-radius: 30px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 24px 50px -22px rgba(0,0,0,0.7); color: #FFFFFF">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.25)" stroke-width="2.5" fill="none"></circle><path d="M12 3a9 9 0 0 1 9 9" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"></animateTransform></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 16px; font-weight: 800; letter-spacing: -0.2px">{{scanTitle}}</span><span style="font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.72)">{{scanSub}}</span></span>
+</div>
+<div style="height: 5px; border-radius: 3px; background: rgba(255,255,255,0.2); overflow: hidden"><div style="height: 100%; width: {{arScan}}%; border-radius: 3px; background: #FFFFFF; transition: width 0.1s linear"></div></div>
+<div style="font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.72); text-align: center">Hội An Ancient Town · ±4 m</div>
+</div>
+</sc-if>
+
+<sc-if value="{{arLive}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{arPins}}" as="a" hint-placeholder-count="3">
+<button type="button" onClick="{{a.pick}}" aria-label="{{a.aria}}" aria-pressed="{{a.sel}}" style="position: absolute; left: {{a.x}}px; top: {{a.y}}px; transform: translate(-50%, -100%) perspective(700px) rotateY({{a.rot}}deg) scale({{a.scale}}); transform-origin: 50% 100%; border: 0; background: transparent; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; opacity: {{a.opacity}}; transition: transform 0.3s ease, opacity 0.7s ease; z-index: {{a.z}}">
+<span style="display: flex; flex-direction: column; gap: 8px; width: {{a.w}}px; box-sizing: border-box; background: linear-gradient(180deg, rgba(255,255,255,{{a.alpha}}), rgba(255,255,255,0.08)); backdrop-filter: blur(30px) saturate(1.6); -webkit-backdrop-filter: blur(30px) saturate(1.6); border: 1px solid rgba(255,255,255,{{a.border}}); border-radius: 28px; padding: 6px 6px 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 0 0 {{a.glow}}px rgba(255,255,255,0.12), 0 30px 60px -24px rgba(0,0,0,0.75); text-align: left; color: #FFFFFF">
+<sc-if value="{{a.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{a.img}}" alt="" style="display: block; width: 100%; height: {{a.imgH}}px; object-fit: cover; border-radius: 23px"></sc-if>
+<sc-if value="{{a.noImg}}" hint-placeholder-val="{{ false }}"><span style="display: block; padding: 14px 12px 4px; font-weight: 600; font-size: 13px; line-height: 1.25; color: #FFFFFF; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden">“{{a.quote}}”</span></sc-if>
+<span style="display: flex; align-items: center; gap: 9px; padding: 0 8px">
+<span style="display: flex; flex-direction: column; min-width: 0; padding: 0 4px"><span style="font-size: 13.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Inter', sans-serif; letter-spacing: -0.1px">{{a.title}}</span><span style="font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.75); font-family: 'Inter', sans-serif; white-space: nowrap">{{a.sub}}</span></span>
+
+</span>
+</span>
+<span style="width: 1px; height: {{a.stem}}px; background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.15))"></span>
+<span style="width: 60px; height: 20px; border-radius: 50%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.75); background: radial-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.05)); box-shadow: 0 0 18px rgba(255,255,255,0.35)"></span>
+</button>
+</sc-for>
+
+
+
+
+
+
+<!-- in-place memory sheet: tap a window → peek; drag up → full story; drag down → hide -->
+<div style="position: absolute; left: 12px; right: 12px; bottom: 16px; height: {{asH}}px; border-radius: 32px; background: linear-gradient(180deg, rgba(24,28,26,0.62), rgba(24,28,26,0.78)); backdrop-filter: blur(34px) saturate(1.5); -webkit-backdrop-filter: blur(34px) saturate(1.5); border: 1px solid rgba(255,255,255,0.22); box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 30px 60px -22px rgba(0,0,0,0.85); overflow: hidden; color: #FFFFFF; transition: {{asTr}}; opacity: {{asO}}; touch-action: none">
+<div onPointerDown="{{asDown}}" onPointerMove="{{asMove}}" onPointerUp="{{asUp}}" onPointerCancel="{{asUp}}" style="position: absolute; inset: 0; touch-action: none; user-select: none; -webkit-user-select: none">
+<button type="button" aria-label="{{asToggleLabel}}" onClick="{{asToggle}}" style="position: absolute; left: 0; right: 0; top: 0; height: 22px; border: 0; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2"><span style="width: 36px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.45)"></span></button>
+
+<div style="position: absolute; top: 24px; left: 14px; right: 14px; display: flex; gap: 12px; align-items: center">
+<span style="width: 64px; height: 64px; border-radius: 20px; overflow: hidden; flex: none; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center">
+<sc-if value="{{ad.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{ad.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover"></sc-if>
+<sc-if value="{{ad.noImg}}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19h4L19 9l-4-4L5 15z"></path></svg></sc-if>
+</span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 17px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ad.title}}</span>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="width: 18px; height: 18px; border-radius: 9px; background: {{ad.avatarBg}}; color: #121212; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none">{{ad.initial}}</span>{{ad.who}} · {{ad.dist}}</span>
+</div>
+<button type="button" onClick="{{asToggle}}" aria-label="{{asToggleLabel}}" style="width: 42px; height: 42px; border-radius: 21px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.14); color: #FFFFFF; flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{asChev}}deg); transition: transform 0.3s ease"><path d="M6 15l6-6 6 6"></path></svg></button>
+</div>
+
+<div style="position: absolute; top: 104px; left: 14px; right: 14px; display: flex; gap: 8px">
+<button type="button" onClick="{{ad.toggleSave}}" aria-pressed="{{ad.saved}}" style="flex: 1; height: 40px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); border: 1px solid rgba(255,255,255,0.3); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="{{ad.saveFill}}" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-3.5L7 20z"></path></svg>{{ad.saveText}}</button>
+<button type="button" onClick="{{ad.share}}" style="flex: 1; height: 40px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); border: 1px solid rgba(255,255,255,0.3); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4"></path><path d="M5 12v7h14v-7"></path></svg>Share</button>
+<button type="button" onClick="{{asToggle}}" style="flex: 1.3; height: 40px; border-radius: 20px; border: 0; background: #FFFFFF; color: #121212; font-family: inherit; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer">{{asReadLabel}}</button>
+</div>
+
+<div style="position: absolute; top: 158px; left: 0; right: 0; bottom: 0; overflow-y: {{asScroll}}; scrollbar-width: none; opacity: {{asFullO}}; transition: opacity 0.25s ease; pointer-events: {{asFullPE}}; padding: 4px 16px 22px; box-sizing: border-box">
+<sc-if value="{{ad.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{ad.img}}" alt="{{ad.title}}" style="display: block; width: 100%; height: 190px; object-fit: cover; border-radius: 22px; border: 1px solid rgba(255,255,255,0.18)"></sc-if>
+<sc-if value="{{ad.hasText}}" hint-placeholder-val="{{ true }}"><p style="margin: 14px 0 0; font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.92); text-wrap: pretty">{{ad.text}}</p></sc-if>
+<sc-if value="{{ad.isList}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 14px; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{ad.items}}" as="it" hint-placeholder-count="3">
+<button type="button" onClick="{{it.toggle}}" aria-pressed="{{it.done}}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 15px; font-weight: 600; color: {{it.color}}; text-decoration: {{it.deco}}; text-align: left; cursor: pointer"><span style="width: 22px; height: 22px; border-radius: 11px; flex: none; box-sizing: border-box; border: 2px solid rgba(255,255,255,0.7); background: {{it.box}}; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>{{it.t}}</button>
+</sc-for>
+</div>
+</sc-if>
+<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.65)">
+<span style="display: flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{ad.placeLine}}</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg>{{ad.dateFull}} · {{ad.time}}</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path></svg>{{ad.anchor}}</span>
+</div>
+<sc-if value="{{ad.canReport}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{report}}" style="margin-top: 10px; height: 40px; border: 0; background: transparent; color: rgba(255,255,255,0.55); font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0">Report this memory</button></sc-if>
+</div>
+</div>
+</div>
+
+</sc-if>
+
+<sc-if value="{{arEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; left: 24px; right: 24px; top: 50%; transform: translateY(-46%); background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1)); backdrop-filter: blur(30px) saturate(1.6); -webkit-backdrop-filter: blur(30px) saturate(1.6); border: 1px solid rgba(255,255,255,0.28); border-radius: 34px; padding: 28px 22px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 30px 60px -24px rgba(0,0,0,0.75); color: #FFFFFF">
+<svg width="64" height="64" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)"></circle><path d="M16 26V17" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"></path><path d="M16 19c-5 0-7.6-3.2-7.6-7.4 4.6 0 7.6 3 7.6 7.4z" fill="#A9DDB2"></path><path d="M16 17.2c4 0 6.8-2.6 7-6.8-4.2 0-7 2.6-7 6.8z" fill="#FFFFFF"></path></svg>
+<h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px">No memories here yet</h2>
+<p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.78)">Nobody has left a moment within 500 m of this spot. Be the first — someone standing here will find it later.</p>
+
+<button type="button" onClick="{{openCapture}}" style="margin-top: 8px; width: 100%; height: 52px; border: 1px solid rgba(255,255,255,0.4); border-radius: 999px; background: rgba(255,255,255,0.3); color: #FFFFFF; font-family: inherit; font-size: 15.5px; font-weight: 800; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.5)">Leave a memory here</button>
+<button type="button" onClick="{{goMap}}" style="width: 100%; height: 44px; border: 0; background: transparent; color: rgba(255,255,255,0.85); font-family: inherit; font-size: 14.5px; font-weight: 800; cursor: pointer">Look on the map instead</button>
+</div>
+</sc-if>
+
+<div style="position: absolute; top: 54px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between">
+
+<button type="button" aria-label="Close AR" onClick="{{back}}" style="width: 46px; height: 46px; border-radius: 23px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 12px; font-weight: 800; color: #FFFFFF; background: rgba(0,0,0,0.35); padding: 6px 12px; border-radius: 999px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px)">{{arCount}}</span>
+<button type="button" aria-label="Plant a memory here" onClick="{{openCapture}}" style="height: 46px; padding: 0 16px 0 12px; border-radius: 23px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #FFFFFF; font-family: inherit; font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Plant</button>
+</div>
+
+
+
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ SETTINGS ============ -->
+<sc-if value="{{isSettings}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; box-sizing: border-box; padding: 54px 16px 60px">
+<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 16px"><button type="button" aria-label="Back" onClick="{{back}}" style="width: 46px; height: 46px; border-radius: 23px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 20px -12px rgba(0,0,0,0.35)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button><h1 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.4px">Settings</h1></div>
+<div style="display: flex; align-items: center; gap: 14px; background: #FFF1E6; border-radius: 26px; padding: 16px; position: relative; overflow: hidden">
+<svg width="90" height="90" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: -16px; bottom: -22px; opacity: 0.35"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>
+<span style="width: 58px; height: 58px; border-radius: 29px; background: #7CC48A; color: #FFFFFF; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; color: #121212">V</span>
+<span style="display: flex; flex-direction: column; gap: 2px; position: relative"><span style="font-size: 18px; font-weight: 800">Vinh</span><span style="font-size: 13px; font-weight: 600; color: #6E6E6E">@vinh.wanders</span><span style="font-weight: 600; font-size: 13px; color: #1E3B2F">{{gardenLine}}</span></span>
+</div>
+<sc-for list="{{settingGroups}}" as="grp" hint-placeholder-count="4">
+<h2 style="margin: 22px 6px 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">{{grp.title}}</h2>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 4px 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 8px 20px -14px rgba(0,0,0,0.3)">
+<sc-for list="{{grp.rows}}" as="row" hint-placeholder-count="2">
+<button type="button" onClick="{{row.act}}" role="{{row.role}}" aria-checked="{{row.on}}" style="width: 100%; min-height: 56px; display: flex; align-items: center; gap: 12px; border: 0; border-bottom: {{row.border}}; background: transparent; padding: 8px 0; font-family: inherit; text-align: left; cursor: pointer; color: #121212">
+<span style="width: 34px; height: 34px; border-radius: 12px; background: {{grp.tint}}; display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E3B2F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{row.icon}}"></path></svg></span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 700">{{row.label}}</span><sc-if value="{{row.hasSub}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">{{row.sub}}</span></sc-if></span>
+<sc-if value="{{row.isToggle}}" hint-placeholder-val="{{ false }}"><span style="width: 48px; height: 28px; border-radius: 14px; background: {{row.track}}; position: relative; flex: none; transition: background 0.2s ease"><span style="position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 11px; background: #FFFFFF; transform: translateX({{row.knob}}px); transition: transform 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2)"></span></span></sc-if>
+<sc-if value="{{row.isLink}}" hint-placeholder-val="{{ true }}"><span style="font-size: 13.5px; font-weight: 700; color: #7C7C7C">{{row.value}}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A9A9A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></sc-if>
+</button>
+</sc-for>
+</div>
+</sc-for>
+<button type="button" onClick="{{signOut}}" style="margin-top: 22px; width: 100%; height: 52px; border: 1.5px solid #D6D6D6; border-radius: 999px; background: transparent; color: #C8372D; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Sign out</button>
+<p style="margin: 14px 0 0; text-align: center; font-weight: 600; font-size: 13px; color: #7C7C7C">Morrow 0.1 · a little garden of memories</p>
+</div>
+</sc-if>
+
+<!-- ============ CREATE FLOW ============ -->
+<sc-if value="{{isCreate}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column">
+<sc-if value="{{cNotDone}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 54px 16px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 8px">
+<button type="button" aria-label="Back" onClick="{{cPrev}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #E9E9E9; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<div style="flex: 1; text-align: center; display: flex; flex-direction: column"><span style="font-size: 16.5px; font-weight: 800">{{c.heading}}</span><span style="font-size: 12px; font-weight: 700; color: #7C7C7C">{{c.stepLabel}}</span></div>
+<button type="button" aria-label="Discard and close" onClick="{{cClose}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: transparent; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<div style="display: flex; gap: 6px" aria-hidden="true">
+<sc-for list="{{c.bars}}" as="b" hint-placeholder-count="3"><span style="flex: 1; height: 5px; border-radius: 3px; background: {{b.bg}}; transition: background 0.3s ease"></span></sc-for>
+</div>
+</div>
+</sc-if>
+
+<div style="flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 18px 16px 120px; box-sizing: border-box">
+
+<!-- step 0: compose -->
+<sc-if value="{{c.s0}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{c.isPhoto}}" hint-placeholder-val="{{ true }}">
+<div style="position: relative; height: 230px; border-radius: 26px; overflow: hidden; background: #FFF1E6; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1.5px {{c.photoRing}}">
+<sc-if value="{{c.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{c.img}}" alt="Selected photo" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover"></sc-if>
+<sc-if value="{{c.noImg}}" hint-placeholder-val="{{ false }}"><span style="display: flex; flex-direction: column; align-items: center; gap: 8px; color: #B4541E; font-size: 14.5px; font-weight: 800"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="m4 17 5-4 4 3 3-2 4 3"></path></svg>Choose a photo below</span></sc-if>
+</div>
+<div style="margin-top: 12px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<button type="button" onClick="{{cCamera}}" aria-label="Take a photo (simulated camera)" style="aspect-ratio: 1; border: 0; border-radius: 14px; background: #1E3B2F; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; font-family: inherit; font-size: 10.5px; font-weight: 800"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Camera</button>
+<sc-for list="{{c.photos}}" as="ph" hint-placeholder-count="8">
+<button type="button" onClick="{{ph.pick}}" aria-label="{{ph.aria}}" aria-pressed="{{ph.on}}" style="aspect-ratio: 1; border: 0; padding: 0; border-radius: 14px; overflow: hidden; cursor: pointer; box-shadow: 0 0 0 {{ph.ring}}px #1E3B2F; background: #E9E9E9"><img src="{{ph.img}}" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover"></button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{c.isList}}" hint-placeholder-val="{{ false }}">
+<div style="background: #E8F7EC; border-radius: 24px; padding: 14px 14px 12px">
+<span style="font-weight: 600; font-size: 13px; color: #1E3B2F">the list</span>
+<sc-for list="{{c.items}}" as="it" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 4px; min-height: 46px; border-bottom: 1px dashed #CAD3AA">
+<button type="button" onClick="{{it.toggle}}" aria-pressed="{{it.done}}" aria-label="Mark {{it.t}} done" style="width: 44px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none"><span style="width: 22px; height: 22px; border-radius: 11px; box-sizing: border-box; border: 2px solid #7CC48A; background: {{it.box}}; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></button>
+<span style="flex: 1; font-size: 15px; font-weight: 700; color: {{it.color}}; text-decoration: {{it.deco}}">{{it.t}}</span>
+<button type="button" onClick="{{it.remove}}" aria-label="Remove {{it.t}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: #7C7C7C; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+</sc-for>
+<div style="display: flex; gap: 8px; margin-top: 10px">
+<label for="cnew" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">New list item</label>
+<input id="cnew" value="{{c.newItem}}" onChange="{{cNewItem}}" onKeyDown="{{cNewKey}}" placeholder="Add an item" style="flex: 1; min-width: 0; height: 46px; border: 0; border-radius: 14px; background: #FFFFFF; padding: 0 14px; font-family: inherit; font-size: 15px; color: #121212; outline: none">
+<button type="button" onClick="{{cAddItem}}" style="height: 46px; padding: 0 16px; border: 0; border-radius: 14px; background: #7CC48A; color: #121212; font-family: inherit; font-size: 14.5px; font-weight: 800; cursor: pointer">Add</button>
+</div>
+</div>
+</sc-if>
+
+<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 6px">
+<label for="ctitle" style="font-size: 12.5px; font-weight: 800; color: #5C5C5C; padding-left: 4px">Title</label>
+<input id="ctitle" value="{{c.title}}" onChange="{{cTitle}}" placeholder="{{c.titlePh}}" style="height: 52px; border: 0; border-radius: 18px; background: {{c.fieldBg}}; padding: 0 16px; font-family: inherit; font-size: 17px; font-weight: 800; color: #121212; outline: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1)">
+</div>
+<sc-if value="{{c.hasDesc}}" hint-placeholder-val="{{ true }}">
+<div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px">
+<label for="cdesc" style="font-size: 12.5px; font-weight: 800; color: #5C5C5C; padding-left: 4px">{{c.descLabel}}</label>
+<textarea id="cdesc" value="{{c.desc}}" onChange="{{cDesc}}" placeholder="{{c.descPh}}" rows="{{c.rows}}" style="border: 0; border-radius: 18px; background: {{c.fieldBg}}; padding: 14px 16px; font-family: inherit; font-size: 15.5px; line-height: 1.55; color: #121212; outline: none; resize: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1)"></textarea>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- step 1: place & visibility -->
+<sc-if value="{{c.s1}}" hint-placeholder-val="{{ false }}">
+<div style="border-radius: 26px; overflow: hidden; position: relative; height: 170px; background: #EDEDED; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08)">
+<svg width="358" height="170" viewBox="0 0 358 170" aria-hidden="true" style="display: block"><rect width="358" height="170" fill="#EDEDED"></rect><g fill="#E3E3E3"><rect x="20" y="20" width="80" height="44" rx="9"></rect><rect x="112" y="20" width="110" height="44" rx="9"></rect><rect x="234" y="20" width="100" height="44" rx="9"></rect><rect x="20" y="76" width="120" height="40" rx="9"></rect><rect x="232" y="76" width="110" height="40" rx="9"></rect></g><path d="M0 140C80 124 150 156 230 140S330 118 358 126V170H0z" fill="#D6E8F3"></path><path d="M-10 70C80 66 160 74 370 68" stroke="#FFFFFF" stroke-width="8" fill="none"></path><path d="M180 -10C184 60 172 110 188 180" stroke="#FFFFFF" stroke-width="7" fill="none"></path><circle cx="{{c.pinX}}" cy="72" r="34" fill="#7CC48A" opacity="0.2"></circle></svg>
+<div style="position: absolute; left: {{c.pinX}}px; top: 72px; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; transition: left 0.3s ease"><span style="width: 36px; height: 36px; border-radius: 18px; background: #1E3B2F; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px #F4F4F1"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#A9DDB2"></path></svg></span><span style="width: 2px; height: 8px; background: #1E3B2F"></span></div>
+<span style="position: absolute; right: 10px; top: 10px; font-size: 10.5px; font-weight: 800; color: #5C5C5C; background: rgba(255,255,255,0.9); padding: 3px 8px; border-radius: 999px">Simulated location</span>
+</div>
+<h2 style="margin: 18px 4px 8px; font-size: 16px; font-weight: 800">Where did this happen?</h2>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{c.locs}}" as="l" hint-placeholder-count="3">
+<button type="button" onClick="{{l.pick}}" role="radio" aria-checked="{{l.on}}" style="display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 14px; border: 0; border-radius: 20px; background: {{l.bg}}; box-shadow: inset 0 0 0 1.5px {{l.ring}}; font-family: inherit; text-align: left; cursor: pointer; color: #121212">
+<span style="width: 22px; height: 22px; border-radius: 11px; box-sizing: border-box; border: 2px solid #1E3B2F; display: flex; align-items: center; justify-content: center; flex: none"><span style="width: 10px; height: 10px; border-radius: 5px; background: {{l.dot}}"></span></span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 800">{{l.name}}</span><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">{{l.sub}}</span></span>
+</button>
+</sc-for>
+</div>
+<button type="button" onClick="{{cLocOk}}" role="checkbox" aria-checked="{{c.locOk}}" style="margin-top: 10px; width: 100%; display: flex; align-items: center; gap: 12px; min-height: 52px; border: 0; background: transparent; padding: 0 4px; font-family: inherit; font-size: 14.5px; font-weight: 700; color: #121212; cursor: pointer; text-align: left">
+<span style="width: 24px; height: 24px; border-radius: 8px; box-sizing: border-box; border: 2px solid #1E3B2F; background: {{c.locOkBg}}; display: flex; align-items: center; justify-content: center; flex: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>The pin is in the right place</button>
+<h2 style="margin: 14px 4px 8px; font-size: 16px; font-weight: 800">Who can find it?</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{c.vis}}" as="v" hint-placeholder-count="2">
+<button type="button" onClick="{{v.pick}}" role="radio" aria-checked="{{v.on}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border: 0; border-radius: 22px; background: {{v.bg}}; box-shadow: inset 0 0 0 1.5px {{v.ring}}; font-family: inherit; text-align: left; cursor: pointer; color: #121212">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E3B2F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{v.icon}}"></path></svg>
+<span style="font-size: 15px; font-weight: 800">{{v.label}}</span>
+<span style="font-size: 12.5px; font-weight: 600; line-height: 1.4; color: #7C7C7C">{{v.sub}}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- step 2: preview -->
+<sc-if value="{{c.s2}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 4px">
+<span style="font-weight: 600; font-size: 14px; color: #1E3B2F">how it will look in your garden</span>
+<div style="position: relative; width: 236px; margin-top: 8px; transform: rotate(-1.4deg)">
+<dc-import name="MemoryCard" item="{{c.previewItem}}" hint-size="100%,260px"></dc-import>
+</div>
+<svg width="80" height="28" viewBox="0 0 80 28" aria-hidden="true" style="margin-top: 4px"><path d="M4 14C20 4 36 24 52 14S72 6 78 12" stroke="#7CC48A" stroke-width="1.6" fill="none" stroke-linecap="round"></path><path d="M40 16c-4 0-6-3-6-7 4 0 6 3 6 7z" fill="#A9DDB2"></path></svg>
+</div>
+<div style="margin-top: 10px; background: #FFFFFF; border-radius: 22px; padding: 4px 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 8px 20px -14px rgba(0,0,0,0.3)">
+<sc-for list="{{c.summary}}" as="sm" hint-placeholder-count="3">
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: {{sm.border}}; font-size: 14px"><span style="font-weight: 700; color: #7C7C7C">{{sm.k}}</span><span style="font-weight: 800; text-align: right">{{sm.v}}</span></div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- step 3: done -->
+<sc-if value="{{c.s3}}" hint-placeholder-val="{{ false }}">
+<div style="padding-top: 90px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px">
+<svg width="170" height="150" viewBox="0 0 170 150" aria-hidden="true"><circle cx="85" cy="78" r="60" fill="#FFF3C4"></circle><path d="M85 128V70" stroke="#1E3B2F" stroke-width="2.6" stroke-linecap="round"></path><path d="M85 86C68 86 58 74 57 58c15 0 28 11 28 28z" fill="#7CC48A"></path><path d="M85 76c14 0 25-10 26-25-14 0-25 10-26 25z" fill="#1E3B2F"></path><ellipse cx="85" cy="130" rx="34" ry="7" fill="#E3DCC6"></ellipse><path d="M28 34c.6 3.6 2 5 5.6 5.6-3.6.6-5 2-5.6 5.6-.6-3.6-2-5-5.6-5.6 3.6-.6 5-2 5.6-5.6z" fill="#E2B64F"></path><path d="M140 22c.5 3 1.7 4.2 4.7 4.7-3 .5-4.2 1.7-4.7 4.7-.5-3-1.7-4.2-4.7-4.7 3-.5 4.2-1.7 4.7-4.7z" fill="#C9B8E3"></path><path d="M146 100c.5 3 1.7 4.2 4.7 4.7-3 .5-4.2 1.7-4.7 4.7-.5-3-1.7-4.2-4.7-4.7 3-.5 4.2-1.7 4.7-4.7z" fill="#7CC48A"></path></svg>
+<h1 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.4px">Planted.</h1>
+<p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: #7C7C7C; padding: 0 20px">“{{c.title}}” is now growing in <strong style="color: #121212">Central Vietnam, slowly</strong>.</p>
+<span style="font-weight: 600; font-size: 14px; color: #1E3B2F">{{c.doneLine}}</span>
+<button type="button" onClick="{{cSeeTimeline}}" style="margin-top: 14px; width: 100%; height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer">See it on your timeline</button>
+<button type="button" onClick="{{openCapture}}" style="width: 100%; height: 48px; border: 0; border-radius: 999px; background: #FFF3C4; color: #1E3B2F; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Leave another moment</button>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{cNotDone}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 16px 30px; background: #F4F4F1; box-shadow: 0 -10px 20px -14px rgba(0,0,0,0.3)">
+<button type="button" onClick="{{cNext}}" aria-disabled="{{c.blocked}}" style="width: 100%; height: 54px; border: 0; border-radius: 999px; background: {{c.nextBg}}; color: {{c.nextFg}}; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; transition: background 0.2s ease">{{c.nextLabel}}</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ NOTE EDIT ============ -->
+<sc-if value="{{isNoteEdit}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; box-sizing: border-box; padding: 54px 16px 40px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button type="button" aria-label="Back" onClick="{{back}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #E9E9E9; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<span style="font-size: 16.5px; font-weight: 800">Edit note</span>
+<button type="button" onClick="{{saveNote}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Save</button>
+</div>
+<div style="margin-top: 18px; background: #F0ECFF; border-radius: 28px; padding: 20px 18px 18px; position: relative; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 14px 30px -18px rgba(0,0,0,0.45)">
+<svg width="110" height="110" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: -24px; top: -20px; opacity: 0.3"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>
+<span style="font-weight: 600; font-size: 13px; color: #5B3FB8">{{ne.dateFull}}</span>
+<label for="netitle" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Note title</label>
+<input id="netitle" value="{{ne.title}}" onChange="{{neTitle}}" style="display: block; width: 100%; box-sizing: border-box; margin-top: 4px; border: 0; background: transparent; font-family: inherit; font-size: 24px; font-weight: 800; color: #121212; outline: none; padding: 4px 0; position: relative">
+<label for="nebody" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Note</label>
+<textarea id="nebody" value="{{ne.body}}" onChange="{{neBody}}" rows="11" style="display: block; width: 100%; box-sizing: border-box; margin-top: 8px; border: 0; background-color: transparent; background-image: repeating-linear-gradient(transparent 0, transparent 27px, rgba(92,72,128,0.16) 27px, rgba(92,72,128,0.16) 28px); line-height: 28px; font-family: inherit; font-size: 16px; color: #2B2B2B; outline: none; resize: none; padding: 0"></textarea>
+<div style="margin-top: 12px; display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 800; color: #5B3FB8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>{{ne.placeName}} · Private</div>
+</div>
+<button type="button" onClick="{{deleteNote}}" style="margin: 18px auto 0; height: 44px; padding: 0 16px; border: 0; background: transparent; color: #C8372D; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13"></path></svg>Delete note</button>
+</div>
+</sc-if>
+
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<sc-if value="{{showNav}}" hint-placeholder-val="{{ true }}">
+<nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 90px; background: #FFFFFF; border-top-left-radius: 28px; border-top-right-radius: 28px; box-shadow: 0 -8px 26px -14px rgba(0,0,0,0.3); display: grid; grid-template-columns: 1fr 88px 1fr; align-items: start; padding: 8px 10px 0; box-sizing: border-box">
+<sc-for list="{{navLeft}}" as="nv" hint-placeholder-count="1">
+<div style="display: flex; justify-content: center">
+<button type="button" onClick="{{nv.go}}" aria-current="{{nv.current}}" style="width: 80px; height: 56px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: {{nv.color}}; font-family: inherit; font-size: 11.5px; font-weight: 800; cursor: pointer">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="{{nv.fill}}" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{nv.icon}}"></path></svg>{{nv.label}}</button>
+</div>
+</sc-for>
+<div style="display: flex; justify-content: center">
+<button type="button" aria-label="Capture a memory" onClick="{{openCapture}}" style="width: 66px; height: 66px; margin-top: -30px; border-radius: 33px; border: 5px solid #F4F4F1; background: #1E3B2F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 12px 22px -8px rgba(0,0,0,0.65); box-sizing: content-box; transform: rotate({{plusRot}}deg); transition: transform 0.3s ease"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="display: flex; justify-content: center">
+<button type="button" onClick="{{navSettings.go}}" aria-current="{{navSettings.current}}" style="width: 80px; height: 56px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: {{navSettings.color}}; font-family: inherit; font-size: 11.5px; font-weight: 800; cursor: pointer">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2.2"></circle><circle cx="10" cy="17" r="2.2"></circle></svg>Settings</button>
+</div>
+</nav>
+</sc-if>
+
+<!-- ============ CAPTURE SHEET ============ -->
+<div aria-hidden="{{capHidden}}" style="position: absolute; inset: 0; pointer-events: {{capPE}}">
+<button type="button" aria-label="Close" tabindex="-1" onClick="{{closeCapture}}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0,0,0,0.36); opacity: {{capO}}; transition: opacity 0.3s ease; cursor: pointer"></button>
+<div role="dialog" aria-label="Leave a moment" style="position: absolute; left: 0; right: 0; bottom: 0; background: #F4F4F1; border-top-left-radius: 34px; border-top-right-radius: 34px; padding: 12px 18px 36px; transform: translateY({{capY}}%); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 -12px 40px -20px rgba(0,0,0,0.5); overflow: hidden">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6; margin: 0 auto 16px"></div>
+<svg width="130" height="130" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: -30px; top: -26px; opacity: 0.22"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>
+<div style="display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px">Add to Morrow</h2><span style="font-weight: 600; font-size: 13px; color: #7C7C7C">at Hội An Ancient Town</span></div>
+<button type="button" aria-label="Close" onClick="{{closeCapture}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #E9E9E9; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<div style="margin-top: 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 10px">
+<sc-for list="{{capOpts}}" as="o" hint-placeholder-count="6">
+<button type="button" onClick="{{o.go}}" style="display: flex; flex-direction: column; align-items: center; gap: 8px; border: 0; background: transparent; padding: 0; cursor: pointer; font-family: inherit; color: #121212">
+<span style="width: 74px; height: 74px; border-radius: 24px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 10px 24px -12px rgba(0,0,0,0.35)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{o.icon}}"></path></svg></span>
+<span style="font-size: 13px; font-weight: 700">{{o.label}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<!-- ============ END JOURNEY SHEET ============ -->
+<div aria-hidden="{{ejHidden}}" style="position: absolute; inset: 0; pointer-events: {{ejPE}}">
+<button type="button" aria-label="Close" tabindex="-1" onClick="{{closeEndJourney}}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0,0,0,0.36); opacity: {{ejO}}; transition: opacity 0.3s ease; cursor: pointer"></button>
+<div role="dialog" aria-label="End journey" style="position: absolute; left: 0; right: 0; bottom: 0; background: #F4F4F1; border-top-left-radius: 34px; border-top-right-radius: 34px; padding: 12px 18px 34px; transform: translateY({{ejY}}%); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 -12px 40px -20px rgba(0,0,0,0.5)">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6; margin: 0 auto 16px"></div>
+<div style="display: flex; gap: 12px; align-items: center; background: #FFFFFF; border-radius: 24px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 10px 24px -14px rgba(0,0,0,0.35)">
+<img src="{{jd.cover}}" alt="" style="width: 72px; height: 72px; border-radius: 18px; object-fit: cover; flex: none">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{jd.title}}</span><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">{{jd.dates}} · {{jd.dest}}</span></div>
+</div>
+<h2 style="margin: 20px 0 6px; font-size: 22px; font-weight: 800; letter-spacing: -0.3px">End this journey?</h2>
+<p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #7C7C7C">It closes today, Nov 12. You can still open it, add to it later, and share it — new memories just won’t land in it automatically.</p>
+<div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap">
+<span style="background: #FFF1E6; color: #B4541E; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.photos}} photos</span>
+<span style="background: #F0ECFF; color: #5B3FB8; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.notes}} notes</span>
+<span style="background: #E4F1FB; color: #1F6FA8; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.places}} places</span>
+<span style="background: #E8F7EC; color: #2E6B4A; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 999px">{{jd.dayCount}}</span>
+</div>
+<button type="button" onClick="{{endJourney}}" style="margin-top: 18px; width: 100%; height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>End journey · I’m home</button>
+<button type="button" onClick="{{closeEndJourney}}" style="margin-top: 8px; width: 100%; height: 46px; border: 0; border-radius: 999px; background: transparent; color: #121212; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Keep going</button>
+</div>
+</div>
+
+<!-- ============ NEW JOURNEY SHEET ============ -->
+<div aria-hidden="{{njHidden}}" style="position: absolute; inset: 0; pointer-events: {{njPE}}">
+<button type="button" aria-label="Close" tabindex="-1" onClick="{{closeNewJourney}}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0,0,0,0.36); opacity: {{njO}}; transition: opacity 0.3s ease; cursor: pointer"></button>
+<div role="dialog" aria-label="New journey" style="position: absolute; left: 0; right: 0; bottom: 0; background: #F4F4F1; border-top-left-radius: 34px; border-top-right-radius: 34px; padding: 12px 18px 34px; transform: translateY({{njY}}%); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 -12px 40px -20px rgba(0,0,0,0.5); overflow: hidden">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6; margin: 0 auto 14px"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 52px; height: 52px; border-radius: 18px; background: #1E3B2F; display: flex; align-items: center; justify-content: center; transform: rotate(-8deg)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 13.5 4 11l1.5-1.5 6 1 5-5a1.8 1.8 0 0 1 2.5 2.5l-5 5 1 6L13.5 20l-2.5-6.5z"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 1px"><h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px">New journey</h2><span style="font-size: 13px; font-weight: 600; color: #7C7C7C">Starts today · Nov 12</span></div>
+</div>
+<button type="button" aria-label="Close" onClick="{{closeNewJourney}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #FFFFFF; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 20px -12px rgba(0,0,0,0.35)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+
+<label for="njtitle" style="display: block; margin: 18px 0 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">Name it</label>
+<input id="njtitle" value="{{nj.title}}" onChange="{{njTitle}}" placeholder="e.g. Central Vietnam, slowly" style="width: 100%; box-sizing: border-box; height: 54px; border: 0; border-radius: 18px; background: #FFFFFF; padding: 0 16px; font-family: inherit; font-size: 17px; font-weight: 800; color: #121212; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -12px rgba(0,0,0,0.3)">
+<label for="njdest" style="display: block; margin: 14px 0 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">Where to</label>
+<div style="display: flex; align-items: center; gap: 10px; height: 50px; border-radius: 18px; background: #FFFFFF; padding: 0 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -12px rgba(0,0,0,0.3)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E3B2F" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>
+<input id="njdest" value="{{nj.dest}}" onChange="{{njDest}}" placeholder="Hội An · Đà Nẵng · Huế" style="flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 15px; font-weight: 600; color: #121212; outline: none">
+</div>
+
+<span style="display: block; margin: 14px 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">Cover</span>
+<div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 2px 18px 4px">
+<sc-for list="{{nj.covers}}" as="cv" hint-placeholder-count="5">
+<button type="button" onClick="{{cv.pick}}" aria-pressed="{{cv.on}}" aria-label="{{cv.aria}}" style="flex: none; width: 92px; height: 68px; border: 0; padding: 0; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 0 0 {{cv.ring}}px #1E3B2F, 0 6px 14px -8px rgba(0,0,0,0.4); background: #E9E9E9"><img src="{{cv.img}}" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover"></button>
+</sc-for>
+</div>
+
+<button type="button" onClick="{{startJourney}}" aria-disabled="{{nj.blocked}}" style="margin-top: 16px; width: 100%; height: 54px; border: 0; border-radius: 999px; background: {{nj.btnBg}}; color: {{nj.btnFg}}; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s ease; box-shadow: 0 10px 22px -12px rgba(30,59,47,0.8)">{{nj.btnLabel}}</button>
+<p style="margin: 12px 0 0; text-align: center; font-size: 12px; font-weight: 600; color: #7C7C7C; line-height: 1.5">Everything you add from now on lands in this journey, until you end it from the journey page.</p>
+</div>
+</div>
+
+<!-- ============ CHECK-IN SHEET ============ -->
+<div aria-hidden="{{ciHidden}}" style="position: absolute; inset: 0; pointer-events: {{ciPE}}">
+<button type="button" aria-label="Close" tabindex="-1" onClick="{{closeCheckin}}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0,0,0,0.36); opacity: {{ciO}}; transition: opacity 0.3s ease; cursor: pointer"></button>
+<div role="dialog" aria-label="Check in" style="position: absolute; left: 0; right: 0; bottom: 0; background: #F4F4F1; border-top-left-radius: 34px; border-top-right-radius: 34px; padding: 12px 18px 34px; transform: translateY({{ciY}}%); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 -12px 40px -20px rgba(0,0,0,0.5); overflow: hidden">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6; margin: 0 auto 14px"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 52px; height: 52px; border-radius: 26px; background: #FFF3C4; display: flex; align-items: center; justify-content: center; transform: rotate(-8deg)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E3B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"></path><path d="M9.5 10.5l2 2 3.5-3.5"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 1px"><h2 style="margin: 0; font-size: 23px; font-weight: 800; letter-spacing: -0.3px">I’m here</h2><span style="font-weight: 600; font-size: 13px; color: #1E3B2F; line-height: 1">{{ci.placeName}} · {{ci.time}}</span></div>
+</div>
+<button type="button" aria-label="Close" onClick="{{closeCheckin}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #E9E9E9; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+
+<h3 style="margin: 18px 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">How does it feel?</h3>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 6px">
+<sc-for list="{{ci.moods}}" as="mo" hint-placeholder-count="8">
+<button type="button" onClick="{{mo.pick}}" aria-pressed="{{mo.on}}" style="display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: transparent; padding: 6px 0; border-radius: 18px; box-shadow: {{mo.ring}}; cursor: pointer; font-family: inherit; color: #121212; transition: box-shadow 0.2s ease">
+<svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="{{mo.color}}"></circle><path d="{{mo.face}}" fill="none" stroke="#1C1C1C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="18" cy="21" r="2.4" fill="#1C1C1C"></circle><circle cx="34" cy="21" r="2.4" fill="#1C1C1C"></circle></svg>
+<span style="font-size: 12.5px; font-weight: 700">{{mo.label}}</span>
+</button>
+</sc-for>
+</div>
+
+<label for="cinote" style="display: block; margin: 16px 0 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">One line, optional</label>
+<input id="cinote" value="{{ci.note}}" onChange="{{ciNote}}" placeholder="What’s happening right now?" style="width: 100%; box-sizing: border-box; height: 50px; border: 0; border-radius: 18px; background: #FFFFFF; padding: 0 16px; font-family: inherit; font-size: 15.5px; color: #121212; outline: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1)">
+
+<div style="margin-top: 14px; display: flex; gap: 4px; padding: 4px; background: #E9E9E9; border-radius: 999px">
+<sc-for list="{{ci.vis}}" as="v" hint-placeholder-count="3">
+<button type="button" onClick="{{v.pick}}" aria-pressed="{{v.on}}" style="flex: 1; height: 38px; border: 0; border-radius: 999px; background: {{v.bg}}; color: {{v.fg}}; box-shadow: {{v.shadow}}; font-family: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer">{{v.label}}</button>
+</sc-for>
+</div>
+
+<button type="button" onClick="{{doCheckin}}" style="margin-top: 14px; width: 100%; height: 54px; border: 0; border-radius: 999px; background: #1E3B2F; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 22px -12px rgba(0,0,0,0.8)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Check in</button>
+<p style="margin: 12px 0 0; text-align: center; font-size: 12px; font-weight: 600; color: #7C7C7C; line-height: 1.5">{{ci.footnote}}</p>
+</div>
+</div>
+
+<!-- ============ SHARE SHEET ============ -->
+<div aria-hidden="{{shHidden}}" style="position: absolute; inset: 0; pointer-events: {{shPE}}">
+<button type="button" aria-label="Close" tabindex="-1" onClick="{{closeShare}}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0,0,0,0.36); opacity: {{shO}}; transition: opacity 0.3s ease; cursor: pointer"></button>
+<div role="dialog" aria-label="{{sh.title}}" style="position: absolute; left: 0; right: 0; bottom: 0; background: #F4F4F1; border-top-left-radius: 34px; border-top-right-radius: 34px; padding: 12px 18px 34px; transform: translateY({{shY}}%); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 -12px 40px -20px rgba(0,0,0,0.5); overflow: hidden">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #D6D6D6; margin: 0 auto 14px"></div>
+<svg width="130" height="130" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; right: -30px; top: -26px; opacity: 0.2"><path d="M3 20C3 10 9 4 21 3c0 11-7 17-18 17z" fill="#7CC48A"></path></svg>
+<div style="display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 2px; position: relative"><h2 style="margin: 0; font-size: 23px; font-weight: 800; letter-spacing: -0.3px">{{sh.title}}</h2><span style="font-weight: 600; font-size: 13px; color: #1E3B2F">{{sh.sub}}</span></div>
+<button type="button" aria-label="Close" onClick="{{closeShare}}" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #E9E9E9; color: #121212; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+
+<div style="margin-top: 14px; display: flex; gap: 12px; align-items: center; background: {{sh.bg}}; border-radius: 22px; padding: 8px">
+<span style="width: 56px; height: 56px; border-radius: 16px; flex: none; overflow: hidden; background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center">
+<sc-if value="{{sh.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{sh.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover"></sc-if>
+<sc-if value="{{sh.noImg}}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B3FB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19h4L19 9l-4-4L5 15z"></path></svg></sc-if>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{sh.name}}</span><span style="font-size: 12.5px; font-weight: 600; color: #5C5C5C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{sh.meta}}</span></span>
+</div>
+
+<h3 style="margin: 18px 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #7C7C7C">{{sh.friendsTitle}}</h3>
+<div style="display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 4px 18px 6px">
+<sc-for list="{{friends}}" as="fr" hint-placeholder-count="5">
+<button type="button" onClick="{{fr.pick}}" aria-pressed="{{fr.on}}" aria-label="{{fr.aria}}" style="flex: none; width: 66px; border: 0; background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; font-family: inherit">
+<span style="position: relative; width: 54px; height: 54px; border-radius: 27px; background: {{fr.bg}}; color: #121212; font-size: 19px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 {{fr.ring}}px #1E3B2F; transition: box-shadow 0.2s ease">{{fr.initial}}<sc-if value="{{fr.on}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; right: -3px; bottom: -3px; width: 20px; height: 20px; border-radius: 10px; background: #1E3B2F; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #F4F4F1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></sc-if><sc-if value="{{fr.near}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; left: -2px; top: -2px; width: 12px; height: 12px; border-radius: 6px; background: #5E95BC; box-shadow: 0 0 0 2px #F4F4F1"></span></sc-if></span>
+<span style="font-size: 11.5px; font-weight: 700; color: {{fr.color}}; white-space: nowrap">{{fr.name}}</span>
+</button>
+</sc-for>
+</div>
+
+<sc-if value="{{sh.isJourney}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{toggleCollab}}" role="switch" aria-checked="{{sh.collab}}" style="margin-top: 10px; width: 100%; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 4px; border: 0; background: transparent; font-family: inherit; text-align: left; cursor: pointer; color: #121212">
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 700">Friends can add to this journey</span><span style="font-size: 12.5px; font-weight: 600; color: #7C7C7C">Their photos and notes join your timeline</span></span>
+<span style="width: 48px; height: 28px; border-radius: 14px; background: {{sh.track}}; position: relative; flex: none; transition: background 0.2s ease"><span style="position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 11px; background: #FFFFFF; transform: translateX({{sh.knob}}px); transition: transform 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2)"></span></span>
+</button>
+</sc-if>
+
+<button type="button" onClick="{{sendShare}}" aria-disabled="{{sh.blocked}}" style="margin-top: 12px; width: 100%; height: 52px; border: 0; border-radius: 999px; background: {{sh.sendBg}}; color: {{sh.sendFg}}; font-family: inherit; font-size: 15.5px; font-weight: 800; cursor: pointer; transition: background 0.2s ease">{{sh.sendLabel}}</button>
+<div style="margin-top: 10px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button type="button" onClick="{{copyLink}}" style="height: 48px; border: 0; border-radius: 999px; background: #E9E9E9; color: #121212; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>{{sh.copyLabel}}</button>
+<button type="button" onClick="{{shareOut}}" style="height: 48px; border: 0; border-radius: 999px; background: #E9E9E9; color: #121212; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4"></path><path d="M5 12v7h14v-7"></path></svg>Share to…</button>
+</div>
+<p style="margin: 12px 0 0; text-align: center; font-size: 12px; font-weight: 600; color: #7C7C7C; line-height: 1.5">{{sh.footnote}}</p>
+</div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div role="status" aria-live="polite" style="position: absolute; left: 50%; top: 58px; transform: translate(-50%, {{toastY}}px); opacity: {{toastO}}; transition: opacity 0.25s ease, transform 0.3s ease; background: #121212; color: #F4F4F1; font-size: 14px; font-weight: 700; padding: 11px 18px; border-radius: 999px; white-space: nowrap; pointer-events: none; box-shadow: 0 10px 24px -12px rgba(0,0,0,0.5)">{{toastText}}</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startScreen":{"editor":"enum","options":["home","map","ar","settings","memory","journey","place","create","noteEdit"],"default":"home"},"startTab":{"editor":"enum","options":["journey","notes","places"],"default":"journey"},"empty":{"editor":"boolean","default":false},"arScenario":{"editor":"enum","options":["live","scanning","permission","empty"],"default":"live"},"startCapture":{"editor":null},"startId":{"editor":null},"createType":{"editor":null},"createStep":{"editor":null},"$preview":{"width":390,"height":844}}'>
+const IMG = {
+  hoian: '/_blob/e7dd55dd61b31f5771c51a8483b3e6fd',
+  kyoto: '/_blob/fcf69b4c60480491ac844a7f0ae84ad5',
+  halong: '/_blob/58f4b24bcff9acfaebf24cd78be8b5cd',
+  lisbon: '/_blob/9cee7cd838ad561ad0595a69ad4ddcba',
+  coast: '/_blob/76d1a8a47576caa62a6ce78788d5dd32',
+  sapa: '/_blob/382ae3878fad392723e1e2a4c5081f8a',
+  dalat: '/_blob/49cc06d961defe20a285d078b0689084',
+  hue: '/_blob/67dec99c2f6ae4808f86a171f4df9914'
+};
+
+const PLACES = {
+  p1: { id: 'p1', name: 'Hội An Ancient Town', region: 'Hội An · Quảng Nam', img: IMG.hoian, h: 170 },
+  p3: { id: 'p3', name: 'Hải Vân Pass', region: 'Đà Nẵng · Thừa Thiên Huế', img: IMG.coast, h: 130 },
+  p5: { id: 'p5', name: 'Imperial City', region: 'Huế · Vietnam', img: IMG.hue, h: 140 },
+  p2: { id: 'p2', name: 'Xuân Hương Lake', region: 'Đà Lạt · Lâm Đồng', img: IMG.dalat, h: 175 },
+  p4: { id: 'p4', name: 'Fushimi Inari Taisha', region: 'Kyoto · Japan', img: IMG.kyoto, h: 160 },
+  p6: { id: 'p6', name: 'Mường Hoa Valley', region: 'Sa Pa · Lào Cai', img: IMG.sapa, h: 135 },
+  p7: { id: 'p7', name: 'Hạ Long Bay', region: 'Quảng Ninh · Vietnam', img: IMG.halong, h: 150 },
+  p8: { id: 'p8', name: 'Alfama', region: 'Lisbon · Portugal', img: IMG.lisbon, h: 165 },
+  p9: { id: 'p9', name: 'Old Quarter', region: 'Hà Nội · Vietnam', img: null }
+};
+
+const JOURNEYS = [
+  { id: 'j1', title: 'Central Vietnam, slowly', dest: 'Huế · Đà Nẵng · Hội An', dates: 'Nov 9 – now', cover: IMG.hoian, photos: 14, notes: 5, places: 6, now: true,
+    stops: [{ n: 1, name: 'Huế', x: 60, y: 46 }, { n: 2, name: 'Hải Vân Pass', x: 150, y: 76 }, { n: 3, name: 'Đà Nẵng', x: 236, y: 58 }, { n: 4, name: 'Hội An', x: 300, y: 118 }] },
+  { id: 'j2', title: 'A weekend in the pines', dest: 'Đà Lạt · Lâm Đồng', dates: 'Nov 6 – 8, 2026', cover: IMG.dalat, photos: 9, notes: 2, places: 3,
+    stops: [{ n: 1, name: 'Liên Khương', x: 70, y: 120 }, { n: 2, name: 'Xuân Hương Lake', x: 190, y: 70 }, { n: 3, name: 'Langbiang', x: 290, y: 40 }] },
+  { id: 'j3', title: 'Autumn in Kyoto', dest: 'Kyoto · Japan', dates: 'Oct 14 – 20, 2026', cover: IMG.kyoto, photos: 22, notes: 4, places: 7,
+    stops: [{ n: 1, name: 'Gion', x: 80, y: 60 }, { n: 2, name: 'Arashiyama', x: 170, y: 110 }, { n: 3, name: 'Fushimi Inari', x: 290, y: 70 }] },
+  { id: 'j4', title: 'Northern loops', dest: 'Sa Pa · Hạ Long', dates: 'Sep 1 – 9, 2026', cover: IMG.sapa, photos: 18, notes: 3, places: 5,
+    stops: [{ n: 1, name: 'Hà Nội', x: 170, y: 100 }, { n: 2, name: 'Sa Pa', x: 60, y: 46 }, { n: 3, name: 'Hạ Long', x: 300, y: 70 }] },
+  { id: 'j5', title: 'Lisbon in pastel', dest: 'Lisbon · Portugal', dates: 'May 18 – 24, 2026', cover: IMG.lisbon, photos: 26, notes: 2, places: 8,
+    stops: [{ n: 1, name: 'Alfama', x: 210, y: 70 }, { n: 2, name: 'Belém', x: 70, y: 110 }, { n: 3, name: 'Sintra', x: 60, y: 40 }] }
+];
+
+const MEMS = [
+  { id: 'm1', type: 'photo', title: 'Lanterns over the Thu Bồn', img: IMG.hoian, tall: true, place: 'p1', date: 'd1112', dateLabel: 'Today · Nov 12', dateFull: 'Thu, Nov 12, 2026', time: '6:42 pm', mood: 'golden hour', j: 'j1', author: 'You', vis: 'public',
+    desc: 'The whole river turned amber at dusk. An old man sold us a paper lantern for 20,000₫ and told us to make a wish before letting it go. I didn’t tell anyone what I wished for.' },
+  { id: 'm0', type: 'checkin', title: 'Checked in at Hội An Ancient Town', body: 'Back on Trần Phú for the third evening in a row.', place: 'p1', date: 'd1112', dateLabel: 'Today · Nov 12', dateFull: 'Thu, Nov 12, 2026', time: '5:58 pm', mood: 'calm', j: 'j1', author: 'You', vis: 'friends' },
+  { id: 'm2', type: 'note', title: 'Small things to keep', place: 'p1', date: 'd1112', dateLabel: 'Today · Nov 12', dateFull: 'Thu, Nov 12, 2026', time: '2:15 pm', mood: 'after the rain', j: 'j1', author: 'You', vis: 'private',
+    body: 'The tailor on Trần Phú who measured me twice and laughed both times. Cao lầu at 7 am, still steaming. Incense drifting out of the Phúc Kiến assembly hall. Bicycle bells, everywhere.' },
+  { id: 'm3', type: 'discovery', title: 'Lotus season at the Imperial City', img: IMG.hue, place: 'p5', date: 'd1110', dateLabel: 'Nov 10, 2026', dateFull: 'Tue, Nov 10, 2026', time: '9:20 am', mood: 'found on the way', j: 'j1', author: 'Linh Trần', vis: 'public',
+    desc: 'Come early — by 8 am the pond is full of pink and nobody else is here yet. Walk past the Noon Gate and keep left; there is a bench under the frangipani.' },
+  { id: 'm4', type: 'list', title: 'Hải Vân Pass, by scooter', place: 'p3', date: 'd1110', dateLabel: 'Nov 10, 2026', dateFull: 'Tue, Nov 10, 2026', time: '7:05 am', mood: 'before sunrise', j: 'j1', author: 'You', vis: 'private',
+    items: [{ t: 'Rain jacket', done: true }, { t: 'Cash for the summit café', done: true }, { t: 'Fuel up in Đà Nẵng', done: false }, { t: 'Leave before 8 am', done: false }] },
+  { id: 'm5', type: 'photo', title: 'Clouds below the pass', img: IMG.coast, place: 'p3', date: 'd1110', dateLabel: 'Nov 10, 2026', dateFull: 'Tue, Nov 10, 2026', time: '10:30 am', mood: 'windy', j: 'j1', author: 'You', vis: 'public',
+    desc: 'Halfway up, the cloud came in under us. We sat at the summit café with salty coffee and watched Đà Nẵng appear and disappear.' },
+  { id: 'm6', type: 'photo', title: 'Morning fog on Xuân Hương', img: IMG.dalat, tall: true, place: 'p2', date: 'd1107', dateLabel: 'Nov 7, 2026', dateFull: 'Sat, Nov 7, 2026', time: '6:10 am', mood: 'quiet morning', j: 'j2', author: 'You', vis: 'public',
+    desc: 'Six in the morning, fourteen degrees. The lake was so still the pines looked doubled. A man rowed a tiny boat across, slowly, like he had all day.' },
+  { id: 'm7', type: 'note', title: 'On travelling slowly', place: 'p2', date: 'd1107', dateLabel: 'Nov 7, 2026', dateFull: 'Sat, Nov 7, 2026', time: '9:40 pm', mood: 'by candlelight', j: 'j2', author: 'You', vis: 'private',
+    body: 'I keep wanting to see everything. Today I saw one lake, one market and one sunset, and it was more than enough. Note to self: fewer plans, longer mornings.' },
+  { id: 'm8', type: 'photo', title: 'A thousand gates, one breath', img: IMG.kyoto, tall: true, place: 'p4', date: 'd1018', dateLabel: 'Oct 18, 2026', dateFull: 'Sun, Oct 18, 2026', time: '7:30 am', mood: 'early climb', j: 'j3', author: 'You', vis: 'public',
+    desc: 'Climbed until the crowds thinned out. Somewhere past the fourth shrine it was only the sound of my steps and the crows.' },
+  { id: 'm9', type: 'note', title: 'Words I learned in Kyoto', place: 'p4', date: 'd1018', dateLabel: 'Oct 18, 2026', dateFull: 'Sun, Oct 18, 2026', time: '11:55 pm', mood: 'can’t sleep', j: 'j3', author: 'You', vis: 'private',
+    body: 'Komorebi — sunlight filtering through leaves. Ichigo ichie — this moment will not come again. Otsukaresama — said by everyone, to everyone, at the end of the day.' },
+  { id: 'm10', type: 'photo', title: 'Mist over Hạ Long Bay', img: IMG.halong, place: 'p7', date: 'd0907', dateLabel: 'Sep 7, 2026', dateFull: 'Mon, Sep 7, 2026', time: '5:50 am', mood: 'first light', j: 'j4', author: 'You', vis: 'public',
+    desc: 'Woke up on the boat before anyone else. The karsts came out of the mist one by one, like someone was slowly drawing them.' },
+  { id: 'm11', type: 'photo', title: 'Terraces after harvest', img: IMG.sapa, place: 'p6', date: 'd0904', dateLabel: 'Sep 4, 2026', dateFull: 'Fri, Sep 4, 2026', time: '3:20 pm', mood: 'golden fields', j: 'j4', author: 'You', vis: 'public',
+    desc: 'The rice was already cut and the terraces were gold and quiet. A girl named Mỷ walked us down to her family’s house for tea.' },
+  { id: 'm12', type: 'list', title: 'Packing for the north', place: 'p9', date: 'd0901', dateLabel: 'Sep 1, 2026', dateFull: 'Tue, Sep 1, 2026', time: '10:00 pm', mood: 'night before', j: 'j4', author: 'You', vis: 'private',
+    items: [{ t: 'Warm layers', done: true }, { t: 'Rain poncho', done: true }, { t: 'Motion sickness tablets', done: true }, { t: 'Gifts for the homestay', done: false }, { t: 'Offline maps', done: true }] }
+];
+
+const PUBLIC = [
+  { id: 'pm1', type: 'photo', title: 'The lantern maker’s daughter', img: IMG.hoian, placeName: 'Nguyễn Thái Học St.', city: 'Hội An', author: 'Mai Phương', dist: '120 m', dateFull: 'Wed, Nov 11, 2026', time: '7:10 pm', vis: 'public',
+    desc: 'Her father has made lanterns on this street for 40 years. She painted the one I bought while we talked about her exams. Ask for the blue silk ones — she makes those.' },
+  { id: 'pm2', type: 'note', title: 'Best bánh mì, no contest', placeName: 'Phan Châu Trinh St.', city: 'Hội An', author: 'Tom R.', dist: '240 m', dateFull: 'Mon, Nov 9, 2026', time: '8:05 am', vis: 'public',
+    body: 'Skip the queue at the famous one. The cart outside the yellow pharmacy opens at 6:30 and the lady adds a fried egg if you smile. 25,000₫ and worth every đồng.' },
+  { id: 'pm3', type: 'note', title: 'Ask for the lady with the blue boat', placeName: 'Bạch Đằng riverside', city: 'Hội An', author: 'Ana L.', dist: '380 m', dateFull: 'Sun, Nov 8, 2026', time: '5:30 pm', vis: 'public',
+    body: 'She rows you out just before sunset, hands you a candle lantern and doesn’t say much. It was the calmest twenty minutes of my whole trip.' }
+];
+
+const PINS = [
+  { id: 'pm1', kind: 'public', x: 92, y: 226 },
+  { id: 'pm2', kind: 'public', x: 290, y: 362 },
+  { id: 'pm3', kind: 'public', x: 318, y: 204 },
+  { id: 'm1', kind: 'mine', x: 150, y: 338 },
+  { id: 'm2', kind: 'mine', x: 240, y: 262 },
+  { id: 'sv1', kind: 'saved', x: 64, y: 430, title: 'Japanese Covered Bridge', dist: '210 m', place: 'p1' }
+];
+
+const HERE = { lat: 15.8773, lng: 108.3269, heading: 42 };
+const COORDS = {
+  pm1: { lat: 15.8779, lng: 108.3262, bearing: 28 }, pm2: { lat: 15.8766, lng: 108.3285, bearing: 14 }, pm3: { lat: 15.8791, lng: 108.3301, bearing: 66 },
+  m1: { lat: 15.8771, lng: 108.3274, bearing: 50 }, m2: { lat: 15.8775, lng: 108.3266, bearing: 95 }
+};
+const DAYS = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
+const dateParts = (m) => { const mm = /^(\w+), (\w+) (\d+), (\d+)$/.exec(m.dateFull) || []; return { num: mm[3] || '', day: DAYS[mm[1]] || mm[1] || '', my: (mm[2] || '') + ' ' + (mm[4] || '') }; };
+const fmtCoords = (c) => c ? c.lat.toFixed(4) + '° N, ' + c.lng.toFixed(4) + '° E' : '';
+const AR_PINS = [
+  { id: 'pm1', x: 126, y: 520, scale: 1, stem: 56, w: 212, imgH: 124, rot: 16, z: 3 },
+  { id: 'pm3', x: 292, y: 440, scale: 0.8, stem: 44, w: 196, imgH: 0, rot: -18, z: 2 },
+  { id: 'pm2', x: 214, y: 352, scale: 0.6, stem: 30, w: 190, imgH: 0, rot: 0, z: 1 }
+];
+const SCAN_DOTS = Array.from({ length: 44 }, (_, k) => {
+  const a = (k * 137.5) % 360, r = 30 + (k * 53) % 300;
+  return { x: Math.round(195 + Math.cos(a * Math.PI / 180) * r * 0.62), y: Math.round(380 + Math.sin(a * Math.PI / 180) * r), s: 3 + (k % 3) };
+}).filter((d) => d.x > 12 && d.x < 378 && d.y > 130 && d.y < 720);
+
+const LOCS = [
+  { id: 'l1', name: 'Hội An Ancient Town', sub: 'You are here · ±8 m', place: 'p1', x: 179 },
+  { id: 'l2', name: 'Japanese Covered Bridge', sub: '210 m away', place: 'p1', x: 120 },
+  { id: 'l3', name: 'An Hội Night Market', sub: '350 m away', place: 'p1', x: 250 }
+];
+
+const BG = { photo: '#FFF1E6', note: '#F0ECFF', list: '#E8F7EC', discovery: '#E4F1FB', checkin: '#FFF3C4' };
+const MS_PEEK = 160, MS_FULL = 760, AS_PEEK = 164, AS_FULL = 640;
+const FRIENDS = [
+  { id: 'f1', name: 'Linh', bg: '#FFF1E6', near: true },
+  { id: 'f2', name: 'Mai', bg: '#F0ECFF', near: true },
+  { id: 'f3', name: 'Khoa', bg: '#E4F1FB' },
+  { id: 'f4', name: 'Tom', bg: '#FFF3C4' },
+  { id: 'f5', name: 'Ana', bg: '#E8F7EC' },
+  { id: 'f6', name: 'Huy', bg: '#FFF1E6' }
+];
+const MEMBERS = { j1: ['f1', 'f2'], j3: ['f4'] };
+const TILTS = [-3, 2.4, -2.2, 3];
+const OFFS = [0, 18, 6];
+const AV = ['#FFF1E6', '#F0ECFF', '#E4F1FB', '#FFF3C4'];
+const IC = {
+  home: 'M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z',
+  map: 'M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14',
+  camera: 'M4 8h3l1.5-2h7L17 8h3v11H4zM12 16.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z',
+  note: 'M5 19h4L19 9l-4-4L5 15zM13 7l4 4',
+  list: 'M9 7h11M9 12h11M9 17h11M4.5 7h.01M4.5 12h.01M4.5 17h.01',
+  bookmark: 'M7 4h10v16l-5-3.5L7 20z',
+  user: 'M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5',
+  lock: 'M7.5 10.5h9a2.5 2.5 0 0 1 2.5 2.5v5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 18v-5a2.5 2.5 0 0 1 2.5-2.5zM8 10.5V8a4 4 0 0 1 8 0v2.5',
+  globe: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17',
+  pin: 'M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11zM12 12.3a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z',
+  locate: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 3v3M12 18v3M3 12h3M18 12h3',
+  bell: 'M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0',
+  cal: 'M5 7h14v12H5zM5 11h14M9 4v4M15 4v4',
+  info: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM12 11v5M12 8h.01',
+  leaf: 'M5 19C5 11 10 6 19 5c0 9-6 14-14 14zM5 19c3-4 6-7 10-10',
+  checkin: 'M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11zM9.5 10.5l2 2 3.5-3.5',
+  smile: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8.5 14c1 1.4 2.1 2 3.5 2s2.5-.6 3.5-2M9 10h.01M15 10h.01',
+  plane: 'M10.5 13.5 4 11l1.5-1.5 6 1 5-5a1.8 1.8 0 0 1 2.5 2.5l-5 5 1 6L13.5 20l-2.5-6.5z'
+};
+
+class Component extends DCLogic {
+  state = this.initial();
+
+  initial() {
+    const p = this.props || {};
+    const scr = p.startScreen || 'home';
+    const scen = p.arScenario || 'live';
+    const type = p.createType || 'photo';
+    const step = Number(p.createStep || 0);
+    const draft = this.newDraft(type, scr === 'create');
+    const s = {
+      screen: scr === 'map' ? 'home' : scr, tab: p.startTab || 'journey', stack: [], fx: 1, msH: scr === 'map' ? MS_PEEK : 0, dragging: false,
+      selId: p.startId || 'm1', journeyId: p.startId || 'j1', placeId: p.startId || 'p1',
+      capture: p.startCapture === true || p.startCapture === 'true',
+      searchOpen: false, query: '',
+      memories: MEMS.map((m) => ({ ...m, items: m.items ? m.items.map((x) => ({ ...x })) : undefined })),
+      saved: { pm1: true },
+      mapFilter: 'all', mapSel: scr === 'map' ? 'pm1' : null,
+      camOk: scen !== 'permission', arState: scr === 'ar' ? scen : 'live', arSel: 'pm1', asH: AS_PEEK, arScan: scen === 'scanning' ? 58 : 0,
+      draft, step,
+      edit: null,
+      set: { hideExact: true, precise: true, nearby: true, anniv: true, defPublic: false },
+      toast: '', toastOn: false,
+      share: null, shareSel: {}, collab: { j1: true }, members: { j1: ['f1', 'f2'], j3: ['f4'] }, checkin: null,
+      journeys: JOURNEYS.map((j) => ({ ...j })), newJ: null, endJ: false
+    };
+    if (scr === 'noteEdit') {
+      const m = MEMS.find((x) => x.id === (p.startId || 'm2')) || MEMS[1];
+      s.edit = { id: m.id, title: m.title, body: m.body };
+    }
+    return s;
+  }
+
+  newDraft(type, demo) {
+    const d = { type, title: '', desc: '', img: '', items: [], newItem: '', loc: 'l1', locOk: true, vis: 'private' };
+    if (type === 'list') d.items = [{ t: 'Lantern for Mum', done: false }];
+    if (demo) {
+      if (type === 'photo') { d.img = IMG.hoian; d.title = 'Paper boats at dusk'; d.desc = 'We let two candle boats go from the steps by the bridge. Mine drifted left, yours drifted right, and both made it to the bend.'; d.vis = 'public'; }
+      if (type === 'list') { d.title = 'Last day in Hội An'; d.items = [{ t: 'Pick up the linen shirt', done: true }, { t: 'Lantern for Mum', done: false }, { t: 'One more cao lầu', done: false }, { t: 'Sunset boat at 5:30', done: false }]; }
+      if (type === 'note') { d.title = 'What the river sounded like'; d.desc = 'Oars, a radio somewhere, a woman laughing on the other bank.'; }
+    }
+    return d;
+  }
+
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._toast); clearInterval(this._scan); }
+
+  startScan() {
+    const scen = (this.props && this.props.arScenario) || 'live';
+    clearInterval(this._scan);
+    this._scan = setInterval(() => {
+      this.setState((s) => {
+        if (s.screen !== 'ar') { clearInterval(this._scan); return null; }
+        const n = s.arScan + 3;
+        if (n >= 100) { clearInterval(this._scan); return { arScan: 100, arState: scen === 'empty' ? 'empty' : 'live' }; }
+        return { arScan: n };
+      });
+    }, 80);
+  }
+
+  nowLabel() { const n = new Date(); let h = n.getHours(); const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return h + ':' + String(n.getMinutes()).padStart(2, '0') + ' ' + ap; }
+  openCheckin() { this.setState({ capture: false, checkin: { mood: '', note: '', vis: 'friends' } }); }
+  anim() { clearTimeout(this._t); this._t = setTimeout(() => this.setState({ fx: 1 }), 40); }
+  snapshot(s) { return { screen: s.screen, selId: s.selId, journeyId: s.journeyId, placeId: s.placeId, arState: s.arState, msH: s.msH, mapSel: s.mapSel }; }
+  go(screen, extra) {
+    this.setState((s) => ({ stack: [...s.stack, this.snapshot(s)], screen, fx: 0, capture: false, ...(extra || {}) }));
+    this.anim();
+  }
+  nav(screen, extra) { this.setState({ screen, stack: [], fx: 0, capture: false, dragging: false, ...(extra || {}) }); this.anim(); }
+  back() {
+    const st = this.state.stack;
+    if (!st.length) { this.nav('home'); return; }
+    const prev = st[st.length - 1];
+    this.setState({ ...prev, stack: st.slice(0, -1), fx: 0 });
+    this.anim();
+  }
+  toast(msg) {
+    clearTimeout(this._toast);
+    this.setState({ toast: msg, toastOn: true });
+    this._toast = setTimeout(() => this.setState({ toastOn: false }), 2000);
+  }
+
+  find(id) {
+    return this.state.memories.find((m) => m.id === id) || PUBLIC.find((m) => m.id === id) || null;
+  }
+  cardItem(m) {
+    const pl = PLACES[m.place];
+    return { type: m.type, title: m.type === 'checkin' ? (pl ? pl.name : m.title) : m.title, img: m.img, tall: m.tall, body: m.body || m.desc, items: m.items, author: m.author, mood: m.mood, time: m.time,
+      placeName: pl ? pl.name : (m.placeName || '') };
+  }
+
+  openAR(focus) {
+    const s = this.state;
+    const scen = (this.props && this.props.arScenario) || 'live';
+    const arSel = AR_PINS.find((a) => a.id === focus) ? focus : 'pm1';
+    if (!s.camOk) { this.go('ar', { arState: 'permission', arSel }); return; }
+    this.go('ar', { arState: 'scanning', arSel, arScan: 0 });
+    this.startScan();
+  }
+
+  startCreate(type) {
+    this.setState({ capture: false });
+    this.go('create', { draft: this.newDraft(type, false), step: 0 });
+  }
+  upd(patch) { this.setState((s) => ({ draft: { ...s.draft, ...patch } })); }
+
+  canNext() {
+    const d = this.state.draft, st = this.state.step;
+    if (st === 0) return d.title.trim().length > 0 && (d.type !== 'photo' || !!d.img);
+    if (st === 1) return d.locOk;
+    return true;
+  }
+  publish() {
+    const d = this.state.draft;
+    const loc = LOCS.find((l) => l.id === d.loc) || LOCS[0];
+    const now = new Date();
+    let h = now.getHours(), mi = now.getMinutes();
+    const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12;
+    const m = { id: 'n' + now.getTime(), type: d.type, title: d.title.trim(), img: d.type === 'photo' ? d.img : undefined, tall: true,
+      desc: d.type === 'photo' ? d.desc : undefined, body: d.type === 'note' ? d.desc : undefined,
+      items: d.type === 'list' ? d.items.map((x) => ({ ...x })) : undefined,
+      place: loc.place, date: 'd1112', dateLabel: 'Today · Nov 12', dateFull: 'Thu, Nov 12, 2026', time: h + ':' + String(mi).padStart(2, '0') + ' ' + ap,
+      mood: 'just planted', j: (this.state.journeys.find((j) => j.now) || { id: 'j1' }).id, author: 'You', vis: d.vis, fresh: true };
+    this.setState((s) => ({ memories: [m, ...s.memories], step: 3 }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const p = this.props || {};
+    const empty = p.empty === true || p.empty === 'true';
+    const scr = s.screen;
+    const allMems = empty ? s.memories.filter((m) => m.fresh) : s.memories;
+
+    // ---------- home ----------
+    const q = s.query.trim().toLowerCase();
+    const listed = q ? allMems.filter((m) => (m.title + ' ' + ((PLACES[m.place] || {}).name || '')).toLowerCase().includes(q)) : allMems;
+    const rows = [];
+    let last = null, i = 0;
+    for (const m of listed) {
+      if (m.date !== last) { const dp = dateParts(m); rows.push({ isDate: true, isMem: false, label: m.dateLabel, dayNum: dp.num, dayName: m.date === 'd1112' ? 'Today' : dp.day, monthYear: dp.my }); last = m.date;
+        s.journeys.filter((j) => j.end === m.date).forEach((j) => rows.push({ isStart: true, isDate: false, isMem: false, kicker: 'Journey ends', title: j.title, dest: j.summaryLine, bg: '#2B2B2B', rot: 1.2, icon: IC.home }));
+        s.journeys.filter((j) => j.start === m.date).forEach((j) => rows.push({ isStart: true, isDate: false, isMem: false, kicker: 'Journey begins', title: j.title, dest: j.dest, bg: '#1E3B2F', rot: -1.5, icon: IC.plane })); }
+      const left = i % 2 === 0;
+      rows.push({
+        isDate: false, isMem: true, left, right: !left,
+        item: this.cardItem(m), open: () => this.go('memory', { selId: m.id }),
+        path: left ? 'M22 0 C 40 30, 40 70, 22 100' : 'M22 0 C 4 30, 4 70, 22 100',
+        tilt: TILTS[i % 4], offset: OFFS[i % 3], time: m.time, mood: m.mood,
+        leafLeft: left ? 'calc(50% + 10px)' : 'calc(50% - 28px)', leafTop: (52 + (i * 17) % 30) + '%', leafRot: left ? 10 : 260,
+        leafFill: i % 2 ? '#A9DDB2' : '#7CC48A'
+      });
+      i++;
+    }
+    const fanFor = (j) => { const extra = s.memories.filter((m) => m.j === j.id && m.img && m.img !== j.cover).map((m) => m.img); const imgs = [j.cover].concat(extra).filter((v, i, a) => a.indexOf(v) === i).slice(0, 3);
+      const lay = imgs.length === 1 ? [[0, 0]] : imgs.length === 2 ? [[-14, -6], [14, 6]] : [[-26, -9], [0, 0], [26, 9]];
+      return imgs.map((img, k) => ({ img, dx: lay[k][0], rot: lay[k][1], z: k === Math.floor(imgs.length / 2) ? 3 : 1 })); };
+    const journeys = (empty ? [] : s.journeys).map((j) => ({ ...j, fan: fanFor(j), summary: j.photos + ' photos · ' + j.notes + ' notes', open: () => this.go('journey', { journeyId: j.id }) }));
+    const segs = [['journey', 'Journey'], ['notes', 'Notes'], ['places', 'Places']].map(([k, label]) => {
+      const on = s.tab === k;
+      return { label, on, pick: () => this.setState({ tab: k }), bg: on ? '#FFFFFF' : 'transparent', color: on ? '#1E3B2F' : '#6E6E6E',
+        weight: on ? 800 : 700, shadow: on ? '0 1px 2px rgba(0,0,0,0.08), 0 4px 12px -6px rgba(0,0,0,0.35)' : 'none' };
+    });
+
+    // notes tab
+    const noteMems = allMems.filter((m) => m.type === 'note' || m.type === 'list');
+    const noteCards = noteMems.map((m, k) => {
+      const isList = m.type === 'list';
+      return { title: m.title, bg: isList ? '#E8F7EC' : (k % 3 === 2 ? '#FFF1E6' : '#F0ECFF'), tilt: [0.6, -0.8, 0.3, -0.4][k % 4],
+        kicker: isList ? 'List' : 'Note', kickColor: isList ? '#2E6B4A' : '#5B3FB8', icon: isList ? IC.list : IC.note,
+        preview: isList ? m.items.map((x) => (x.done ? '✓ ' : '○ ') + x.t).join('\n') : m.body,
+        clamp: isList ? 5 : (k % 2 ? 4 : 6),
+        dateShort: m.dateFull.replace(/^\w+, /, '').replace(', 2026', ''), placeName: (PLACES[m.place] || {}).name || '',
+        open: () => (isList ? this.go('memory', { selId: m.id }) : this.go('noteEdit', { edit: { id: m.id, title: m.title, body: m.body || '' } })) };
+    });
+    const noteCols = [{ pad: 0, items: noteCards.filter((_, k) => k % 2 === 0) }, { pad: 26, items: noteCards.filter((_, k) => k % 2 === 1) }];
+
+    // places tab
+    const counts = {};
+    allMems.forEach((m) => { counts[m.place] = (counts[m.place] || 0) + 1; });
+    const placeList = Object.values(PLACES).filter((pl) => pl.img && counts[pl.id]).map((pl) => ({ ...pl, count: counts[pl.id],
+      countLabel: counts[pl.id] + (counts[pl.id] === 1 ? ' memory' : ' memories'), open: () => this.go('place', { placeId: pl.id }) }));
+    const placeCols = [{ pad: 0, items: placeList.filter((_, k) => k % 2 === 0) }, { pad: 30, items: placeList.filter((_, k) => k % 2 === 1) }];
+
+    // ---------- journey detail ----------
+    const J = s.journeys.find((j) => j.id === s.journeyId) || s.journeys[0];
+    const pts = J.stops;
+    let rp = 'M' + pts[0].x + ' ' + pts[0].y;
+    for (let k = 1; k < pts.length; k++) { const a = pts[k - 1], b = pts[k]; rp += ' Q' + ((a.x + b.x) / 2) + ' ' + (Math.min(a.y, b.y) - 24) + ' ' + b.x + ' ' + b.y; }
+    const jMembers = (s.members[J.id] || []).map((id) => FRIENDS.find((f) => f.id === id)).filter(Boolean);
+    const jDays = J.start === 'd1112' ? 1 : (J.id === 'j1' ? 4 : J.id === 'j2' ? 3 : J.id === 'j3' ? 7 : J.id === 'j4' ? 9 : 7);
+    const jd = { ...J, routePath: rp, dayCount: jDays + (jDays === 1 ? ' day' : ' days'),
+      members: [{ initial: 'V', bg: '#7CC48A', ml: 0 }].concat(jMembers.map((f) => ({ initial: f.name.charAt(0), bg: f.bg, ml: -8 }))),
+      memberLine: jMembers.length === 0 ? 'Just you · invite friends to add moments' : 'You' + (jMembers.length === 1 ? ' and ' + jMembers[0].name : ', ' + jMembers.map((f) => f.name).join(', ')) + (s.collab[J.id] ? ' · all adding' : '') };
+    const jRows = s.memories.filter((m) => m.j === J.id).map((m, k) => ({
+      item: this.cardItem(m), open: () => this.go('memory', { selId: m.id }), when: m.dateFull.replace(', 2026', '') + ' · ' + m.time,
+      indent: k % 2 ? 18 : 0, tilt: k % 2 ? 0.7 : -0.6, path: k % 2 ? 'M17 0 C 4 35, 4 65, 17 100' : 'M17 0 C 30 35, 30 65, 17 100'
+    }));
+
+    // ---------- place detail ----------
+    const PL = PLACES[s.placeId] || PLACES.p1;
+    const pdMems = s.memories.filter((m) => m.place === PL.id).map((m, k) => ({ item: this.cardItem(m), open: () => this.go('memory', { selId: m.id }), tilt: k % 2 ? 0.8 : -0.8 }));
+    const pdCheck = s.memories.filter((m) => m.place === PL.id && m.type === 'checkin').length;
+    const pd = { ...PL, countLabel: pdMems.length + (pdMems.length === 1 ? ' memory' : ' memories') + (pdCheck ? ' · ' + pdCheck + (pdCheck === 1 ? ' check-in' : ' check-ins') : '') };
+
+    // ---------- memory detail ----------
+    const buildMd = (M) => {
+      const MP = PLACES[M.place];
+      const mine = M.author === 'You';
+      const isSaved = !!s.saved[M.id];
+      return {
+      ...M, hasImg: !!M.img, noImg: !M.img, bg: BG[M.type] || '#FFF1E6',
+      kicker: M.type === 'list' ? 'a list' : M.type === 'checkin' ? 'a check-in · feeling ' + M.mood : 'a note', kickColor: M.type === 'note' ? '#5B3FB8' : '#2E6B4A',
+      placeLine: MP ? MP.name : (M.placeName + ' · ' + M.city),
+      visLabel: M.vis === 'public' ? 'Public' : 'Only you',
+      initial: mine ? 'V' : M.author.charAt(0), avatarBg: mine ? '#7CC48A' : AV[M.author.length % 4],
+      authorLine: mine ? 'You' : 'Left by ' + M.author,
+      text: M.desc || M.body || '', hasText: !!(M.desc || M.body), isList: M.type === 'list',
+      items: (M.items || []).map((it, k) => ({ ...it, box: it.done ? '#7CC48A' : 'transparent', color: it.done ? '#7C7C7C' : '#121212', deco: it.done ? 'line-through' : 'none',
+        toggle: () => this.setState((st) => ({ memories: st.memories.map((x) => x.id === M.id ? { ...x, items: x.items.map((y, n) => n === k ? { ...y, done: !y.done } : y) } : x) })) })),
+      distLine: (M.dist ? M.dist + ' from you' : (MP ? MP.region : '')) + (COORDS[M.id] ? ' · ' + fmtCoords(COORDS[M.id]) : ''),
+      saved: isSaved, saveFill: isSaved ? 'currentColor' : 'none', saveText: isSaved ? 'Saved' : 'Save', saveLabel: isSaved ? 'Remove from saved' : 'Save memory',
+      toggleSave: () => { this.setState((st) => ({ saved: { ...st.saved, [M.id]: !st.saved[M.id] } })); this.toast(isSaved ? 'Removed from saved' : 'Saved to your garden'); },
+      ar: () => this.openAR(M.id), canEdit: mine && M.type === 'note', canReport: !mine,
+      edit: () => this.go('noteEdit', { edit: { id: M.id, title: M.title, body: M.body || '' } }),
+      share: () => this.setState({ share: { kind: 'memory', id: M.id }, shareSel: {} })
+      };
+    };
+    const M = this.find(s.selId) || MEMS[0];
+    const MP = PLACES[M.place];
+    const md = buildMd(M);
+
+    // ---------- map ----------
+    const filt = s.mapFilter;
+    const pins = PINS.filter((pn) => pn.kind === 'saved' || !!this.find(pn.id)).filter((pn) => filt === 'all' || (filt === 'mine' && pn.kind === 'mine') || (filt === 'nearby' && pn.kind === 'public') || (filt === 'saved' && (pn.kind === 'saved' || s.saved[pn.id])))
+      .map((pn) => {
+        const mem = pn.kind === 'saved' ? null : this.find(pn.id);
+        const sel = s.mapSel === pn.id;
+        const hasImg = pn.kind === 'mine' && mem && !!mem.img;
+        const hasIcon = pn.kind === 'saved' || (pn.kind === 'mine' && !hasImg);
+        return { ...pn, sel, scale: sel ? 1.18 : 1, hasImg, img: mem && mem.img, hasIcon, hasInitial: !hasImg && !hasIcon,
+          initial: mem ? mem.author.charAt(0) : '', icon: pn.kind === 'saved' ? IC.bookmark : IC.note,
+          size: pn.kind === 'mine' ? 46 : 38,
+          bg: pn.kind === 'mine' ? (hasImg ? '#FFF1E6' : '#F0ECFF') : pn.kind === 'saved' ? '#FFF3C4' : '#FFF1E6',
+          fg: pn.kind === 'saved' ? '#1E3B2F' : pn.kind === 'mine' ? '#5B3FB8' : '#B4541E',
+          ring: sel ? 6 : 4.5, ringColor: pn.kind === 'mine' ? '#1E3B2F' : pn.kind === 'saved' ? '#E2C94C' : '#F0A05C',
+          stem: pn.kind === 'mine' ? '#1E3B2F' : '#B4541E',
+          aria: pn.kind === 'saved' ? 'Saved place: ' + pn.title : (pn.kind === 'mine' ? 'Your memory: ' : 'Memory by ' + mem.author + ': ') + mem.title,
+          pick: () => this.setState((x) => ({ mapSel: pn.id, msH: x.msH > 0 ? x.msH : MS_PEEK })) };
+      });
+    const mapFilters = [['all', 'All', '#1E3B2F'], ['mine', 'Mine', '#7CC48A'], ['nearby', 'Nearby', '#F0A05C'], ['saved', 'Saved', '#E2C35A']].map(([k, label, dot]) => {
+      const on = filt === k;
+      return { label, on, dot: on ? '#FFFFFF' : dot, bg: on ? '#1E3B2F' : 'rgba(255,255,255,0.96)', fg: on ? '#FFFFFF' : '#121212', pick: () => this.setState({ mapFilter: k }) };
+    });
+    const selPin = s.mapSel ? pins.find((pn) => pn.id === s.mapSel) : null;
+    let sel = null;
+    if (selPin) {
+      if (selPin.kind === 'saved') {
+        sel = { hasImg: false, noImg: true, bg: '#FFF3C4', icon: IC.bookmark, iconColor: '#1E3B2F', kicker: 'Saved place', kickColor: '#2E6B4A', title: selPin.title, meta: selPin.dist + ' · Hội An Ancient Town',
+          openLabel: 'Open place', open: () => this.go('place', { placeId: selPin.place }), ar: () => this.openAR('pm1') };
+      } else {
+        const mm = this.find(selPin.id);
+        const ownM = mm.author === 'You';
+        sel = { hasImg: !!mm.img, noImg: !mm.img, img: mm.img, bg: BG[mm.type], icon: IC.note, iconColor: '#5B3FB8',
+          kicker: ownM ? 'Your memory · ' + mm.time : 'Left by ' + mm.author, kickColor: ownM ? '#1E3B2F' : '#B4541E', title: mm.title,
+          meta: (mm.dist || '40 m') + ' · ' + (mm.placeName || (PLACES[mm.place] || {}).name), openLabel: 'Open memory',
+          open: () => this.go('memory', { selId: mm.id }), ar: () => this.openAR(mm.id) };
+      }
+    }
+
+    // ---------- AR ----------
+    const live = s.arState === 'live';
+    const arPins = AR_PINS.map((a) => {
+      const mm = this.find(a.id);
+      const on = s.arSel === a.id;
+      return { ...a, title: mm.title, dist: mm.dist, author: mm.author, initial: mm.author.charAt(0), coords: fmtCoords(COORDS[a.id]), sel: on,
+        hasImg: !!mm.img, noImg: !mm.img, img: mm.img, quote: (mm.body || mm.desc || '').split('. ')[0],
+        sub: on ? mm.dist + ' · left by ' + mm.author : mm.dist, alpha: on ? 0.34 : 0.2, border: on ? 0.5 : 0.26, glow: on ? 6 : 0, scale: on ? a.scale * 1.08 : a.scale, opacity: live ? 1 : 0, z: on ? 5 : a.z,
+        aria: mm.title + ', ' + mm.dist + ' away', pick: () => this.setState((x) => ({ arSel: a.id, asH: x.asH > 0 ? x.asH : AS_PEEK })) };
+    });
+    const am = this.find(s.arSel) || PUBLIC[0];
+    const asH = s.asH || 0;
+    const asExp = Math.max(0, Math.min(1, (asH - AS_PEEK) / (AS_FULL - AS_PEEK)));
+    const adBase = buildMd(am);
+    const ad = { ...adBase, who: am.author === 'You' ? 'You' : am.author, dist: am.dist || '40 m', anchor: 'Anchored at ' + (fmtCoords(COORDS[am.id]) || fmtCoords(HERE)) };
+    const arSelD = { hasImg: !!am.img, noImg: !am.img, img: am.img, bg: BG[am.type], title: am.title, dist: am.dist || '40 m', place: am.placeName || '',
+      coords: fmtCoords(COORDS[am.id]) || fmtCoords(HERE), kicker: 'Left by ' + am.author, open: () => this.go('memory', { selId: am.id }) };
+    const scanY = 120 + s.arScan * 5.6;
+    const scanDots = SCAN_DOTS.map((d) => ({ ...d, o: d.y < scanY ? 0.95 : 0.12 }));
+    const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const headingLabel = dirs[Math.round(HERE.heading / 45) % 8] + ' ' + HERE.heading + '°';
+    const compassTicks = Array.from({ length: 13 }, (_, k) => { const deg = HERE.heading - 60 + k * 10; const major = deg % 30 === 0; return { x: 125 + (deg - HERE.heading) * 2, top: major ? 10 : 15, h: major ? 20 : 10 }; });
+    const compassPins = AR_PINS.map((a) => ({ x: 125 + (COORDS[a.id].bearing - HERE.heading) * 2, bg: s.arSel === a.id ? '#FFFFFF' : '#A9DDB2' }));
+    const scanTitle = s.arScan < 40 ? 'Scanning this spot…' : s.arScan < 80 ? 'Matching your position…' : 'Anchoring memories…';
+    const scanSub = s.arScan < 40 ? 'Hold still and point at the street' : s.arScan < 80 ? 'Finding what was left at these coordinates' : 'Almost there';
+
+    // ---------- settings ----------
+    const st = s.set;
+    const tog = (key, label, sub, icon) => ({ label, sub, hasSub: !!sub, icon, isToggle: true, isLink: false, role: 'switch', on: !!st[key],
+      track: st[key] ? '#1E3B2F' : '#D1D1D1', knob: st[key] ? 20 : 0,
+      act: () => this.setState((x) => ({ set: { ...x.set, [key]: !x.set[key] } })) });
+    const link = (label, value, icon, act, sub) => ({ label, value, icon, sub, hasSub: !!sub, isToggle: false, isLink: true, role: 'button', on: undefined, act: act || (() => this.toast('Not part of this prototype yet')) });
+    const savedCount = Object.values(s.saved).filter(Boolean).length;
+    const settingGroups = [
+      { title: 'Account', tint: '#FFF1E6', rows: [link('Profile & account', 'Vinh', IC.user), link('Saved memories', String(savedCount), IC.bookmark)] },
+      { title: 'Privacy', tint: '#F0ECFF', rows: [
+        link('Default visibility', st.defPublic ? 'Public' : 'Only you', IC.lock, () => this.setState((x) => ({ set: { ...x.set, defPublic: !x.set.defPublic } })), 'Tap to switch'),
+        tog('hideExact', 'Blur exact spot on public memories', 'Shows the area, not the doorstep', IC.pin)] },
+      { title: 'Location', tint: '#E4F1FB', rows: [link('Location access', 'While using', IC.locate), tog('precise', 'Precise location', 'Needed to discover memories nearby', IC.globe)] },
+      { title: 'Notifications', tint: '#FFF3C4', rows: [tog('nearby', 'Memories found nearby', null, IC.bell), tog('anniv', 'On this day', 'A year ago, you were in…', IC.cal)] },
+      { title: 'About', tint: '#E8F7EC', rows: [link('About Morrow', 'v0.1', IC.leaf), link('Help & feedback', '', IC.info)] }
+    ].map((g) => ({ ...g, rows: g.rows.map((r, k) => ({ ...r, border: k < g.rows.length - 1 ? '1px solid #E9E9E9' : '0' })) }));
+
+    // ---------- create ----------
+    const d = s.draft;
+    const step = s.step;
+    const typeName = { photo: 'photo memory', note: 'note', list: 'list' }[d.type];
+    const ok = this.canNext();
+    const loc = LOCS.find((l) => l.id === d.loc) || LOCS[0];
+    const c = {
+      ...d, s0: step === 0, s1: step === 1, s2: step === 2, s3: step === 3,
+      heading: ['New ' + typeName, 'Place & visibility', 'Preview', ''][step], stepLabel: 'Step ' + Math.min(step + 1, 3) + ' of 3',
+      bars: [0, 1, 2].map((k) => ({ bg: k <= step ? '#1E3B2F' : '#E2E2E2' })),
+      isPhoto: d.type === 'photo', isList: d.type === 'list', hasDesc: d.type !== 'list',
+      hasImg: !!d.img, noImg: !d.img, photoRing: d.img ? 'transparent' : '#E2C9AC',
+      photos: ['hoian', 'hue', 'coast', 'dalat', 'kyoto', 'sapa', 'halong', 'lisbon'].map((k, n) => ({ img: IMG[k], on: d.img === IMG[k], ring: d.img === IMG[k] ? 3 : 0, aria: 'Choose photo ' + (n + 1), pick: () => this.upd({ img: IMG[k] }) })),
+      titlePh: d.type === 'list' ? 'e.g. Things to eat in Hội An' : d.type === 'note' ? 'Give your note a name' : 'What was this moment?',
+      descLabel: d.type === 'note' ? 'Note' : 'The story', descPh: d.type === 'note' ? 'Write whatever you want to remember…' : 'What happened, who was there, how it felt…',
+      rows: d.type === 'note' ? 9 : 4, fieldBg: d.type === 'note' ? '#F0ECFF' : '#FFFFFF',
+      items: d.items.map((it, k) => ({ ...it, box: it.done ? '#7CC48A' : 'transparent', color: it.done ? '#7C7C7C' : '#121212', deco: it.done ? 'line-through' : 'none',
+        toggle: () => this.upd({ items: d.items.map((y, n) => n === k ? { ...y, done: !y.done } : y) }),
+        remove: () => this.upd({ items: d.items.filter((_, n) => n !== k) }) })),
+      pinX: loc.x,
+      locs: LOCS.map((l) => { const on = d.loc === l.id; return { ...l, on, bg: on ? '#FFF3C4' : '#FFFFFF', ring: on ? '#1E3B2F' : 'rgba(0,0,0,0.12)', dot: on ? '#1E3B2F' : 'transparent', pick: () => this.upd({ loc: l.id, locOk: true }) }; }),
+      locOkBg: d.locOk ? '#1E3B2F' : 'transparent',
+      vis: [['private', 'Only you', 'Private to your journal', IC.lock], ['public', 'Public', 'Travelers nearby can discover it', IC.globe]].map(([k, label, sub, icon]) => {
+        const on = d.vis === k; return { label, sub, icon, on, bg: on ? '#FFF3C4' : '#FFFFFF', ring: on ? '#1E3B2F' : 'rgba(0,0,0,0.12)', pick: () => this.upd({ vis: k }) }; }),
+      previewItem: { type: d.type, title: d.title || 'Untitled', img: d.img, tall: true, body: d.desc, items: d.items, placeName: loc.name, author: 'You' },
+      summary: [['Place', loc.name], ['Who can find it', d.vis === 'public' ? 'Travelers nearby' : 'Only you'], ['Journey', 'Central Vietnam, slowly'], ['Date', 'Today, Nov 12']].map(([k, v], n) => ({ k, v, border: n < 3 ? '1px solid #E9E9E9' : '0' })),
+      blocked: !ok, nextBg: ok ? '#1E3B2F' : '#D9D9D9', nextFg: ok ? '#FFFFFF' : '#6E6E6E',
+      nextLabel: step === 0 ? (ok ? 'Continue' : (d.type === 'photo' && !d.img ? 'Choose a photo to continue' : 'Add a title to continue')) : step === 1 ? (ok ? 'Preview' : 'Confirm the pin to continue') : 'Plant this memory',
+      doneLine: d.vis === 'public' ? 'someone nearby may find it soon' : 'kept safe, just for you'
+    };
+
+    // ---------- note edit ----------
+    const E = s.edit || { id: 'm2', title: '', body: '' };
+    const EM = this.find(E.id) || MEMS[1];
+    const ne = { ...E, dateFull: EM.dateFull, placeName: (PLACES[EM.place] || {}).name || '' };
+
+    // ---------- nav ----------
+    const mk = (key, label, icon, active) => ({ label, icon, color: active ? '#1E3B2F' : '#8A8A8A', fill: active ? 'rgba(124,196,138,0.35)' : 'none', current: active ? 'page' : undefined, go: () => this.nav(key) });
+    const navLeft = [mk('home', 'Home', IC.home, scr === 'home')];
+    const msH = s.msH || 0;
+    const msExp = Math.max(0, Math.min(1, (msH - MS_PEEK) / (MS_FULL - MS_PEEK)));
+    // nudge the map up a little while the sheet is open so the selected pin stays visible
+    const mapOff = msH > 0 ? -Math.round(Math.min(120, msH * 0.25)) : 0;
+    const smM = selPin && selPin.kind !== 'saved' ? this.find(selPin.id) : null;
+    const sm = smM ? { ...buildMd(smM), isMemory: true, isPlace: false } : (selPin ? { isMemory: false, isPlace: true, img: PLACES[selPin.place].img, title: selPin.title, meta: selPin.dist + ' · ' + PLACES[selPin.place].name, open: () => this.go('place', { placeId: selPin.place }) } : { isMemory: false, isPlace: false });
+    const navSettings = mk('settings', 'Settings', '', scr === 'settings');
+
+    // ---------- share ----------
+    const shr = s.share || { kind: 'memory', id: M.id };
+    const isJ = shr.kind === 'journey';
+    const pickedN = FRIENDS.filter((f) => s.shareSel[f.id]).length;
+    const friends = FRIENDS.map((f) => {
+      const on = !!s.shareSel[f.id];
+      const already = isJ && (s.members[J.id] || []).includes(f.id);
+      return { ...f, on, initial: f.name.charAt(0), ring: on ? 3 : 0, color: on ? '#1E3B2F' : '#5C5C5C',
+        name: already ? f.name + ' ✓' : f.name, aria: (on ? 'Remove ' : 'Add ') + f.name + (f.near ? ', nearby' : ''),
+        pick: () => this.setState((x) => ({ shareSel: { ...x.shareSel, [f.id]: !x.shareSel[f.id] } })) };
+    });
+    const sh = isJ
+      ? { isJourney: true, title: 'Invite to journey', sub: J.title, bg: '#FFF3C4', hasImg: true, noImg: false, img: J.cover, name: J.title, meta: J.dest + ' · ' + J.dates,
+          friendsTitle: 'Travelling with', collab: !!s.collab[J.id], track: s.collab[J.id] ? '#1E3B2F' : '#D1D1D1', knob: s.collab[J.id] ? 20 : 0,
+          blocked: pickedN === 0, sendBg: pickedN ? '#1E3B2F' : '#D9D9D9', sendFg: pickedN ? '#FFFFFF' : '#6E6E6E',
+          sendLabel: pickedN ? 'Invite ' + pickedN + (pickedN === 1 ? ' friend' : ' friends') : 'Choose friends to invite',
+          copyLabel: 'Copy invite link', footnote: 'Invited friends see every memory in this journey, including private ones.' }
+      : { isJourney: false, title: 'Share this moment', sub: 'with someone who’d get it', bg: BG[M.type] || '#FFF1E6', hasImg: !!M.img, noImg: !M.img, img: M.img, name: M.title,
+          meta: (MP ? MP.name : M.placeName) + ' · ' + M.dateFull.replace(/^\w+, /, ''),
+          friendsTitle: 'Send in Morrow', collab: false, track: '', knob: 0,
+          blocked: pickedN === 0, sendBg: pickedN ? '#1E3B2F' : '#D9D9D9', sendFg: pickedN ? '#FFFFFF' : '#6E6E6E',
+          sendLabel: pickedN ? 'Send to ' + pickedN + (pickedN === 1 ? ' friend' : ' friends') : 'Choose friends to send to',
+          copyLabel: 'Copy link', footnote: M.vis === 'public' ? 'Anyone with the link can open it and find it in AR.' : 'This memory is private. Friends you send it to can see it; the link works only for them.' };
+
+    const capOpts = [
+      { label: 'Photo', icon: IC.camera, go: () => this.startCreate('photo') },
+      { label: 'Note', icon: IC.note, go: () => this.startCreate('note') },
+      { label: 'List', icon: IC.list, go: () => this.startCreate('list') },
+      { label: 'Check in', icon: IC.checkin, go: () => this.openCheckin() },
+      { label: 'New journey', icon: IC.plane, go: () => this.setState({ capture: false, newJ: { title: '', dest: '', cover: IMG.coast } }) }
+    ];
+    const curJ = s.journeys.find((j) => j.now) || s.journeys[0];
+    const njs = s.newJ || { title: '', dest: '', cover: IMG.coast };
+    const njOk = njs.title.trim().length > 0;
+    const nj = { ...njs, blocked: !njOk, btnBg: njOk ? '#1E3B2F' : '#D9D9D9', btnFg: njOk ? '#FFFFFF' : '#6E6E6E', btnLabel: njOk ? 'Start journey' : 'Give it a name to start',
+      covers: ['coast', 'halong', 'sapa', 'lisbon', 'kyoto', 'dalat'].map((k, n) => ({ img: IMG[k], on: njs.cover === IMG[k], ring: njs.cover === IMG[k] ? 3 : 0, aria: 'Cover ' + (n + 1), pick: () => this.setState((x) => ({ newJ: { ...x.newJ, cover: IMG[k] } })) })) };
+
+    // ---------- check-in ----------
+    const cs = s.checkin || { mood: '', note: '', vis: 'friends' };
+    const moodList = [['Happy', '#8FD17A', 'M17 31c2.6 3.4 5.6 5 9 5s6.4-1.6 9-5'], ['Excited', '#F6D23B', 'M16 30c3 4.5 7 6.5 10 6.5s7-2 10-6.5'], ['Calm', '#8ECBC4', 'M18 32c2.6 2 5.2 3 8 3s5.4-1 8-3'], ['Proud', '#F2A35E', 'M17 31c3 2 5.8 3 9 3s6-1 9-3'],
+      ['Wow', '#F4B6C4', 'M22 31a4 5 0 1 0 8 0a4 5 0 1 0-8 0'], ['Tired', '#B9C3D6', 'M18 33h16'], ['Hungry', '#F6A05C', 'M18 30c2.6 4 5.4 6 8 6s5.4-2 8-6'], ['Lost', '#C8B6F2', 'M18 33c2.6-2.4 5.4-2.4 8 0s5.4 2.4 8 0']];
+    const ci = {
+      placeName: 'Hội An Ancient Town', time: this.nowLabel(), note: cs.note,
+      moods: moodList.map(([label, color, face]) => { const on = cs.mood === label; return { label, color, face, on, ring: on ? 'inset 0 0 0 2px #121212, 0 0 0 4px #FFFFFF' : 'none',
+        pick: () => this.setState((x) => ({ checkin: { ...x.checkin, mood: on ? '' : label } })) }; }),
+      vis: [['private', 'Only me'], ['friends', 'Friends'], ['public', 'Public']].map(([k, label]) => { const on = cs.vis === k; return { label, on, bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#1E3B2F' : '#6E6E6E',
+        shadow: on ? '0 1px 2px rgba(0,0,0,0.08), 0 4px 12px -6px rgba(0,0,0,0.35)' : 'none', pick: () => this.setState((x) => ({ checkin: { ...x.checkin, vis: k } })) }; }),
+      footnote: cs.vis === 'friends' ? 'Friends see where you are on their map for the next 24 hours.' : cs.vis === 'public' ? 'Travelers nearby can see you checked in here.' : 'Only you will see this check-in.'
+    };
+
+    const arState = s.arState;
+    return {
+      s, fxO: s.fx ? 1 : 0, fxY: s.fx ? 0 : 10,
+      isHome: scr === 'home', isJourney: scr === 'journey', isPlace: scr === 'place', isMemory: scr === 'memory', isAR: scr === 'ar',
+      isSettings: scr === 'settings', isCreate: scr === 'create', isNoteEdit: scr === 'noteEdit',
+      showNav: false,
+      isMap: scr === 'map', mapOff,
+      msH, msTr: s.dragging ? 'none' : 'height 0.42s cubic-bezier(0.22, 1, 0.36, 1)',
+      msPeekO: msExp < 0.35 ? 1 : 0, msPeekPE: msExp < 0.35 ? 'auto' : 'none',
+      msFullO: msExp > 0.35 ? 1 : 0, msFullPE: msExp > 0.35 ? 'auto' : 'none', msScroll: msExp > 0.95 && !s.dragging ? 'auto' : 'hidden',
+      msLabelB: msH + 14, msBtnB: msH + 12, msBtnO: msExp > 0.5 ? 0 : 1,
+      msToggleLabel: msExp > 0.5 ? 'Collapse memory' : 'Read the whole memory',
+      msToggle: () => this.setState({ msH: msExp > 0.5 ? MS_PEEK : MS_FULL, dragging: false }),
+      msExpand: () => this.setState({ msH: MS_FULL, dragging: false }),
+      msDown: (e) => { if (e.target && e.target.closest && e.target.closest('button, a, input')) return; if (msExp > 0.95 && e.clientY - e.currentTarget.getBoundingClientRect().top > 60) return; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (x) {} this._drag = { y: e.clientY, h: msH, moved: false }; this.setState({ dragging: true }); },
+      msMove: (e) => { const d = this._drag; if (!d) return; const dy = d.y - e.clientY; if (Math.abs(dy) > 4) d.moved = true; this.setState({ msH: Math.max(0, Math.min(MS_FULL, d.h + dy)) }); },
+      msUp: () => { const d = this._drag; if (!d) return; this._drag = null; this.setState((x) => {
+        const h = x.msH, up = h - d.h, down = d.h - h; let target;
+        if (!d.moved) target = d.h >= MS_FULL - 10 ? MS_PEEK : MS_FULL;
+        else if (up > 70) target = MS_FULL;
+        else if (down > 70) target = d.h >= MS_FULL - 10 ? MS_PEEK : 0;
+        else target = h < MS_PEEK / 2 ? 0 : (h > (MS_PEEK + MS_FULL) / 2 ? MS_FULL : MS_PEEK);
+        return { msH: target, dragging: false, mapSel: target === 0 ? null : x.mapSel }; }); },
+      sm,
+      tabJourney: s.tab === 'journey', tabNotes: s.tab === 'notes', tabPlaces: s.tab === 'places',
+      isEmpty: allMems.length === 0, notEmpty: allMems.length > 0, noResults: !!q && listed.length === 0,
+      segs, rows, journeys, journeyCountLabel: journeys.length + ' journeys',
+      noteCols, notesEmpty: noteCards.length === 0, placeCols, placesEmpty: placeList.length === 0, placeCountLabel: placeList.length + ' places',
+      jd, jRows, pd, pdMems, md,
+      pins, mapFilters, hasSel: !!sel, sel: sel || {}, nearbyLine: '3 travelers left memories within 400 m',
+      arPermission: arState === 'permission', arCamera: arState !== 'permission', arScanning: arState === 'scanning', arLive: arState === 'live', arNotLive: arState !== 'live', arEmpty: arState === 'empty',
+      ad, asH, asTr: s.dragging ? 'none' : 'height 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease', asO: asH > 0 ? 1 : 0,
+      asFullO: asExp > 0.3 ? 1 : 0, asFullPE: asExp > 0.3 ? 'auto' : 'none', asScroll: asExp > 0.95 && !s.dragging ? 'auto' : 'hidden',
+      asChev: asExp > 0.5 ? 180 : 0, asToggleLabel: asExp > 0.5 ? 'Collapse' : 'Read the whole memory', asReadLabel: asExp > 0.5 ? 'Less' : 'Read story',
+      asToggle: () => this.setState({ asH: asExp > 0.5 ? AS_PEEK : AS_FULL, dragging: false }),
+      asDown: (e) => { if (e.target && e.target.closest && e.target.closest('button, a, input')) return; if (asExp > 0.95 && e.clientY - e.currentTarget.getBoundingClientRect().top > 150) return; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (x) {} this._drag = { y: e.clientY, h: asH, moved: false }; this.setState({ dragging: true }); },
+      asMove: (e) => { const d = this._drag; if (!d) return; const dy = d.y - e.clientY; if (Math.abs(dy) > 4) d.moved = true; this.setState({ asH: Math.max(0, Math.min(AS_FULL, d.h + dy)) }); },
+      asUp: () => { const d = this._drag; if (!d) return; this._drag = null; this.setState((x) => {
+        const h = x.asH, up = h - d.h, down = d.h - h; let t;
+        if (!d.moved) t = d.h >= AS_FULL - 10 ? AS_PEEK : AS_FULL;
+        else if (up > 70) t = AS_FULL;
+        else if (down > 70) t = d.h >= AS_FULL - 10 ? AS_PEEK : 0;
+        else t = h < AS_PEEK / 2 ? 0 : (h > (AS_PEEK + AS_FULL) / 2 ? AS_FULL : AS_PEEK);
+        return { asH: t, dragging: false }; }); },
+      camImg: IMG.hoian, arPins, arSelD, arScan: s.arScan, scanY, scanDots, scanTitle, scanSub, headingLabel, compassTicks, compassPins,
+      hereCoords: fmtCoords(HERE), arCount: s.arState === 'live' ? arPins.length + ' nearby' : (s.arState === 'scanning' ? 'Scanning…' : ''),
+      settingGroups, gardenLine: allMems.length + ' moments growing',
+      c, cNotDone: step < 3, ne,
+      navLeft, navSettings, plusRot: s.capture ? 45 : 0,
+      ejO: s.endJ ? 1 : 0, ejY: s.endJ ? 0 : 110, ejPE: s.endJ ? 'auto' : 'none', ejHidden: s.endJ ? 'false' : 'true',
+      askEndJourney: () => this.setState({ endJ: true }), closeEndJourney: () => this.setState({ endJ: false }),
+      endJourney: () => {
+        const line = J.photos + ' photos · ' + J.notes + ' notes · ' + jDays + (jDays === 1 ? ' day' : ' days');
+        this.setState((x) => ({ journeys: x.journeys.map((j) => j.id === J.id ? { ...j, now: false, end: 'd1112', dates: j.dates.replace(/ – now$/, ' – Nov 12'), summaryLine: line } : j), endJ: false }));
+        this.toast('Journey ended · welcome home');
+      },
+      nj, njO: s.newJ ? 1 : 0, njY: s.newJ ? 0 : 110, njPE: s.newJ ? 'auto' : 'none', njHidden: s.newJ ? 'false' : 'true',
+      closeNewJourney: () => this.setState({ newJ: null }),
+      njTitle: (e) => this.setState((x) => ({ newJ: { ...x.newJ, title: e.target.value } })),
+      njDest: (e) => this.setState((x) => ({ newJ: { ...x.newJ, dest: e.target.value } })),
+      startJourney: () => {
+        if (!njOk) return;
+        const id = 'j' + Date.now();
+        const dest = njs.dest.trim() || 'Somewhere new';
+        const nJ = { id, title: njs.title.trim(), dest, dates: 'Nov 12 – now', cover: njs.cover, photos: 0, notes: 0, places: 0, now: true, start: 'd1112', stops: [{ n: 1, name: dest.split('·')[0].trim(), x: 190, y: 86 }] };
+        this.setState((x) => ({ journeys: [nJ, ...x.journeys.map((j) => ({ ...j, now: false }))], newJ: null, tab: 'journey' }));
+        this.toast('Journey started · ' + nJ.title);
+      },
+      ci, ciO: s.checkin ? 1 : 0, ciY: s.checkin ? 0 : 110, ciPE: s.checkin ? 'auto' : 'none', ciHidden: s.checkin ? 'false' : 'true',
+      openCheckin: () => this.openCheckin(), closeCheckin: () => this.setState({ checkin: null }),
+      ciNote: (e) => this.setState((x) => ({ checkin: { ...x.checkin, note: e.target.value } })),
+      doCheckin: () => {
+        const c = s.checkin || cs;
+        const m = { id: 'c' + Date.now(), type: 'checkin', title: 'Checked in at Hội An Ancient Town', body: c.note.trim(), mood: c.mood ? c.mood.toLowerCase() : 'just here',
+          place: 'p1', date: 'd1112', dateLabel: 'Today · Nov 12', dateFull: 'Thu, Nov 12, 2026', time: this.nowLabel(), j: curJ.id, author: 'You', vis: c.vis, fresh: true };
+        this.setState((x) => ({ memories: [m, ...x.memories], checkin: null }));
+        this.toast('Checked in' + (c.mood ? ' · feeling ' + c.mood.toLowerCase() : ''));
+      },
+      friends, sh, shO: s.share ? 1 : 0, shY: s.share ? 0 : 110, shPE: s.share ? 'auto' : 'none', shHidden: s.share ? 'false' : 'true',
+      shareMemory: () => this.setState({ share: { kind: 'memory', id: M.id }, shareSel: {} }),
+      shareJourney: () => this.setState({ share: { kind: 'journey', id: J.id }, shareSel: {} }),
+      closeShare: () => this.setState({ share: null }),
+      toggleCollab: () => this.setState((x) => ({ collab: { ...x.collab, [J.id]: !x.collab[J.id] } })),
+      sendShare: () => {
+        const picked = FRIENDS.filter((f) => s.shareSel[f.id]);
+        if (!picked.length) return;
+        const names = picked.map((f) => f.name).join(', ');
+        if (sh.isJourney) {
+          this.setState((x) => ({ members: { ...x.members, [J.id]: Array.from(new Set([...(x.members[J.id] || []), ...picked.map((f) => f.id)])) }, share: null }));
+          this.toast('Invited ' + names + ' to the journey');
+        } else {
+          this.setState({ share: null });
+          this.toast('Sent to ' + names);
+        }
+      },
+      copyLink: () => this.toast('Link copied · morrow.app/m/' + (sh.isJourney ? J.id : M.id)),
+      shareOut: () => this.toast('System share sheet would open here'),
+      capOpts, capO: s.capture ? 1 : 0, capY: s.capture ? 0 : 110, capPE: s.capture ? 'auto' : 'none', capHidden: s.capture ? 'false' : 'true',
+      toastText: s.toast, toastO: s.toastOn ? 1 : 0, toastY: s.toastOn ? 0 : -12,
+
+      back: () => this.back(),
+      goSettings: () => this.go('settings'),
+      goMap: () => this.go('map', { msH: s.mapSel ? MS_PEEK : 0 }),
+      toggleSearch: () => this.setState((x) => ({ searchOpen: !x.searchOpen, query: x.searchOpen ? '' : x.query })),
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      notify: () => this.toast('2 travelers found your lantern memory'),
+      openCapture: () => this.setState({ capture: true }),
+      closeCapture: () => this.setState({ capture: false }),
+      newNote: () => this.startCreate('note'),
+      startPhotoHere: () => this.startCreate('photo'),
+      openARDefault: () => this.openAR(s.mapSel || 'pm1'),
+      recenter: () => this.toast('Centered on you · Hội An'),
+      allowCamera: () => { this.setState({ camOk: true, arState: 'scanning', arScan: 0 }); this.startScan(); },
+      report: () => this.toast('Thanks for telling us. We’ll take a look.'),
+      signOut: () => this.toast('Sign out is disabled in the prototype'),
+
+      cPrev: () => (step > 0 ? this.setState({ step: step - 1 }) : this.back()),
+      cClose: () => this.back(),
+      cNext: () => { if (!this.canNext()) return; if (step === 2) this.publish(); else this.setState({ step: step + 1 }); },
+      cTitle: (e) => this.upd({ title: e.target.value }),
+      cDesc: (e) => this.upd({ desc: e.target.value }),
+      cCamera: () => { this.upd({ img: IMG.hoian }); this.toast('Simulated camera · sample photo used'); },
+      cNewItem: (e) => this.upd({ newItem: e.target.value }),
+      cNewKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); const t = d.newItem.trim(); if (t) this.upd({ items: [...d.items, { t, done: false }], newItem: '' }); } },
+      cAddItem: () => { const t = d.newItem.trim(); if (t) this.upd({ items: [...d.items, { t, done: false }], newItem: '' }); },
+      cLocOk: () => this.upd({ locOk: !d.locOk }),
+      cSeeTimeline: () => this.nav('home', { tab: 'journey', query: '', searchOpen: false }),
+
+      neTitle: (e) => this.setState((x) => ({ edit: { ...x.edit, title: e.target.value } })),
+      neBody: (e) => this.setState((x) => ({ edit: { ...x.edit, body: e.target.value } })),
+      saveNote: () => {
+        const ed = s.edit; if (!ed) return;
+        this.setState((x) => ({ memories: x.memories.map((m) => m.id === ed.id ? { ...m, title: ed.title || 'Untitled', body: ed.body } : m) }));
+        this.toast('Note saved'); this.back();
+      },
+      deleteNote: () => {
+        const ed = s.edit; if (!ed) return;
+        this.setState((x) => ({ memories: x.memories.filter((m) => m.id !== ed.id) }));
+        this.toast('Note deleted'); this.nav('home', { tab: 'notes' });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

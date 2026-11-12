@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MemoryCard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{rootStyle}}; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #121212">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="1">
+<button type="button" onClick="{{c.open}}" aria-label="{{c.aria}}" style="display: block; width: 100%; box-sizing: border-box; text-align: left; border: 0; margin: 0; padding: 0; background: {{c.bg}}; border-radius: 26px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 14px 30px -12px rgba(0,0,0,0.35); cursor: pointer; font-family: inherit; color: #121212; overflow: hidden">
+
+<!-- visual cards: photo / discovery / place -->
+<sc-if value="{{c.hasImg}}" hint-placeholder-val="{{ true }}">
+<span style="display: block; padding: 7px 7px 0; position: relative">
+<img src="{{c.img}}" alt="" style="display: block; width: 100%; height: {{c.imgH}}px; object-fit: cover; border-radius: 20px">
+<sc-if value="{{c.isDisc}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; left: 15px; top: 15px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.94); color: #121212; font-size: 11px; font-weight: 800; padding: 4px 9px 4px 4px; border-radius: 999px"><span style="width: 20px; height: 20px; border-radius: 10px; background: #CFE5F7; color: #1F6FA8; display: flex; align-items: center; justify-content: center">{{c.initial}}</span>{{c.author}}</span>
+</sc-if>
+<sc-if value="{{c.isPlace}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; left: 15px; bottom: 8px; background: rgba(255,255,255,0.94); color: #121212; font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 999px">{{c.countLabel}}</span>
+</sc-if>
+<sc-if value="{{c.isPhoto}}" hint-placeholder-val="{{ true }}">
+<span style="position: absolute; right: 15px; top: 15px; width: 30px; height: 30px; border-radius: 15px; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-4 4 3 3-2 4 3"/></svg></span>
+</sc-if>
+</span>
+<span style="display: flex; flex-direction: column; gap: 3px; padding: 10px 13px 13px">
+<span style="font-size: {{c.titleSize}}px; font-weight: 800; line-height: 1.25; letter-spacing: -0.2px; text-wrap: pretty">{{c.title}}</span>
+<sc-if value="{{c.hasPlace}}" hint-placeholder-val="{{ true }}"><span style="font-size: 11.5px; font-weight: 600; color: #7C7C7C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.placeName}}</span></sc-if>
+</span>
+</sc-if>
+
+<!-- glyph cards: note / list / check-in -->
+<sc-if value="{{c.isGlyph}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; flex-direction: column; gap: 10px; padding: 13px 14px 14px">
+<span style="display: flex; align-items: center; justify-content: space-between"><span style="width: 44px; height: 44px; border-radius: 15px; flex: none; background: {{c.glyphBg}}; display: flex; align-items: center; justify-content: center; transform: rotate(-6deg)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{{c.glyphInk}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.glyph}}"/></svg></span><span style="font-size: 12.5px; font-weight: 700; color: #5C5C5C">{{c.when}}</span></span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: {{c.glyphTitle}}px; font-weight: 800; line-height: 1.22; letter-spacing: -0.25px; text-wrap: pretty">{{c.title}}</span>
+<sc-if value="{{c.hasPlace}}" hint-placeholder-val="{{ true }}"><span style="display: flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: #5C5C5C; line-height: 1.3"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true" style="flex: none"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>{{c.placeName}}</span></sc-if>
+<sc-if value="{{c.isNote}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 13.5px; line-height: 1.5; color: #2B2B2B; display: -webkit-box; -webkit-line-clamp: {{c.clamp}}; -webkit-box-orient: vertical; overflow: hidden; padding-top: 2px">{{c.body}}</span>
+</sc-if>
+<sc-if value="{{c.isList}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; flex-direction: column; gap: 4px; padding-top: 3px">
+<sc-for list="{{c.listItems}}" as="it" hint-placeholder-count="3">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: {{it.color}}; text-decoration: {{it.deco}}; line-height: 1.35">
+<span style="width: 17px; height: 17px; border-radius: 6px; box-sizing: border-box; border: 1.8px solid #121212; background: {{it.box}}; flex: none; display: flex; align-items: center; justify-content: center"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+<span style="min-width: 0">{{it.t}}</span>
+</span>
+</sc-for>
+<sc-if value="{{c.hasMore}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 700; color: #2E6B4A; padding-left: 25px">{{c.more}}</span></sc-if>
+<span style="height: 4px; border-radius: 2px; background: #E9E9E9; margin-top: 4px; overflow: hidden"><span style="display: block; height: 100%; width: {{c.progressPct}}%; background: #7CC48A; border-radius: 2px"></span></span>
+</span>
+</sc-if>
+<sc-if value="{{c.isCheckin}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; align-items: center; gap: 6px; padding-top: 2px"><span style="font-size: 12px; font-weight: 800; color: #B4541E; background: #FFF1E6; padding: 4px 9px; border-radius: 999px">feeling {{c.mood}}</span></span>
+<sc-if value="{{c.hasCheckinNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13.5px; line-height: 1.5; color: #2B2B2B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{c.body}}</span></sc-if>
+</sc-if>
+</span>
+</span>
+</sc-if>
+</button>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"item":{"editor":null},"onOpen":{"editor":null},"wide":{"editor":null},"$preview":{"width":400,"height":820}}'>
+const IMG = {
+  hoian: '/_blob/e7dd55dd61b31f5771c51a8483b3e6fd',
+  hue: '/_blob/67dec99c2f6ae4808f86a171f4df9914',
+  dalat: '/_blob/49cc06d961defe20a285d078b0689084'
+};
+const SAMPLES = [
+  { type: 'photo', title: 'Lanterns over the Thu Bồn', img: IMG.hoian, tall: true, placeName: 'Hội An Ancient Town' },
+  { type: 'note', title: 'Small things to keep', body: 'The tailor on Trần Phú who measured me twice and laughed both times. Cao lầu at 7 am, still steaming.', placeName: 'Hội An Ancient Town', time: '2:15 pm' },
+  { type: 'list', title: 'Hải Vân Pass, by scooter', items: [{ t: 'Rain jacket', done: true }, { t: 'Cash for the summit café', done: true }, { t: 'Fuel up in Đà Nẵng', done: false }, { t: 'Leave before 8 am', done: false }, { t: 'Charge the GoPro', done: false }], placeName: 'Hải Vân Pass' },
+  { type: 'discovery', title: 'Lotus season at the Imperial City', img: IMG.hue, author: 'Linh Trần', placeName: 'Imperial City, Huế' },
+  { type: 'place', title: 'Xuân Hương Lake', img: IMG.dalat, count: 2, placeName: 'Đà Lạt · Lâm Đồng' },
+  { type: 'checkin', title: 'Hội An Ancient Town', body: 'Back on Trần Phú for the third evening in a row.', mood: 'calm', time: '5:58 pm' }
+];
+const GL = {
+  note: { bg: '#F0ECFF', ink: '#5B3FB8', path: 'M5 19h4L19 9l-4-4L5 15zM13 7l4 4' },
+  list: { bg: '#E8F7EC', ink: '#2E6B4A', path: 'M9 7h11M9 12h11M9 17h11M4.5 7h.01M4.5 12h.01M4.5 17h.01' },
+  checkin: { bg: '#FFF1E6', ink: '#B4541E', path: 'M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11zM9.5 10.5l2 2 3.5-3.5' }
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props || {};
+    const it = p.item;
+    const wide = p.wide === 'yes' || p.wide === true;
+    const list = it ? [it] : SAMPLES;
+    const cards = list.map((c) => {
+      const items = c.items || [];
+      const visual = !!c.img && (c.type === 'photo' || c.type === 'discovery' || c.type === 'place');
+      const glyph = c.type === 'note' || c.type === 'list' || c.type === 'checkin';
+      const done = items.filter((x) => x.done).length;
+      const g = GL[c.type] || GL.note;
+      return {
+        ...c, bg: '#FFFFFF',
+        isPhoto: c.type === 'photo', isNote: c.type === 'note', isList: c.type === 'list', isDisc: c.type === 'discovery', isPlace: c.type === 'place', isCheckin: c.type === 'checkin',
+        hasImg: visual, isGlyph: glyph && !visual, imgH: wide ? (c.tall ? 210 : 180) : (c.tall ? 150 : 116),
+        titleSize: wide ? 17 : 14.5, glyphTitle: wide ? 18 : 16, clamp: wide ? 4 : 3, when: c.time || '',
+        glyphBg: g.bg, glyphInk: g.ink, glyph: g.path,
+        initial: (c.author || '?').charAt(0), hasPlace: !!c.placeName,
+        hasCheckinNote: c.type === 'checkin' && !!c.body, mood: c.mood || 'just here',
+        listItems: items.slice(0, 3).map((x) => ({ t: x.t, box: x.done ? '#121212' : 'transparent', color: x.done ? '#9A9A9A' : '#121212', deco: x.done ? 'line-through' : 'none' })),
+        hasMore: items.length > 3, more: '+ ' + (items.length - 3) + ' more', progressPct: items.length ? Math.round(done / items.length * 100) : 0,
+        countLabel: (c.count || 0) + (c.count === 1 ? ' memory' : ' memories'),
+        aria: 'Open ' + (c.title || 'memory'),
+        open: () => { if (typeof p.onOpen === 'function') p.onOpen(); }
+      };
+    });
+    return {
+      cards,
+      rootStyle: it ? 'display: block; width: 100%' : 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; padding: 24px; box-sizing: border-box; width: 400px; min-height: 820px; background-color: #F4F4F1; background-image: radial-gradient(rgba(30,59,47,0.13) 1.2px, transparent 1.2px); background-size: 18px 18px'
+    };
+  }
+}
+</script>
+</body>
+</html>
