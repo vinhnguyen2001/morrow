@@ -23,6 +23,8 @@ enum MorrowColor {
     /// Darkened for 4.5:1 contrast on ground and white.
     static let textSecondary = Color(hex: 0x5C5C5C)
     static let card = Color.white
+    /// Dot on the notification bell (Main.dc.html line 26). Decorative, not text.
+    static let notificationDot = Color(hex: 0xE8542F)
     /// Error text, about 6:1 on ground and white.
     static let error = Color(hex: 0xB00020)
 }

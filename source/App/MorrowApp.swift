@@ -7,6 +7,13 @@ struct MorrowApp: App {
 
     /// Composition root (ADR 0001): the only place that picks concrete implementations.
     init() {
+        #if DEBUG
+        // Screenshot fixtures: return before the real store is touched in any way.
+        if LaunchFixtures.requested {
+            model = LaunchFixtures.makeModel()
+            return
+        }
+        #endif
         let container: ModelContainer
         do {
             container = try SwiftDataMemoryRepository.makeContainer()

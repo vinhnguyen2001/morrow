@@ -8,13 +8,14 @@ struct CircleIconButton: View {
     var prominent = false
     /// Requested size. Promoted to `MorrowLayout.minHitSize` (44pt) if smaller.
     var diameter: CGFloat = MorrowLayout.minHitSize
+    var iconFont: Font = MorrowFont.icon
     let action: () -> Void
 
     var body: some View {
         let side = max(diameter, MorrowLayout.minHitSize)
         Button(action: action) {
             Image(systemName: systemImage)
-                .font(MorrowFont.icon)
+                .font(iconFont)
                 .foregroundStyle(prominent ? Color.white : MorrowColor.ink)
                 .frame(width: side, height: side)
                 .background(Circle().fill(prominent ? MorrowColor.action : MorrowColor.card))

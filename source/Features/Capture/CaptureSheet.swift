@@ -80,7 +80,7 @@ struct CaptureSheet: View {
                     Image(uiImage: image).resizable().scaledToFill()
                 } else {
                     Label("Choose a photo", systemImage: "photo.on.rectangle")
-                        .font(.system(.subheadline, weight: .bold))
+                        .font(MorrowFont.actionLabel)
                         .foregroundStyle(MorrowColor.ink)
                 }
             }

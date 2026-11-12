@@ -1,9 +1,11 @@
 import SwiftUI
 
-/// M2 Home: own memories, newest first, Add button. Map button arrives with M3.
+/// Home (T-005): header, memories, floating Add button.
 struct HomeView: View {
     @State var model: HomeViewModel
     @State private var showCapture = false
+    @State private var showSettings = false
+    @State private var toast: String?
     @State private var pendingDelete: Memory?
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -17,12 +19,24 @@ struct HomeView: View {
         ZStack {
             GroundView()
             VStack(spacing: 0) {
-                header
+                MorrowHeader(onNotifications: showNotificationsNotice, onSettings: { showSettings = true })
+                    .padding(.horizontal, HomeMetrics.pageSide)
+                    .padding(.top, HomeMetrics.pageTopBelowStatusBar)
+                    .padding(.bottom, 12)
                 if model.memories.isEmpty {
                     emptyState
                 } else {
                     list
                 }
+            }
+            FloatingActionBar { showCapture = true }
+        }
+        .overlay(alignment: .top) {
+            if let toast {
+                Toast(message: toast)
+                    .padding(.top, HomeMetrics.pageTopBelowStatusBar + HomeMetrics.headerHeight + 12)
+                    .transition(.opacity)
+                    .allowsHitTesting(false)
             }
         }
         .environment(\.photoStore, model.photoStore)
@@ -32,25 +46,21 @@ struct HomeView: View {
                 model.load()
             }
         }
+        .sheet(isPresented: $showSettings) { SettingsSheet() }
         .deleteConfirmation(for: $pendingDelete) { memory in
             Task { await model.delete(memory) }
         }
     }
 
-    private var header: some View {
-        HStack {
-            Text("Morrow")
-                .font(.system(.largeTitle, weight: .heavy))
-                .foregroundStyle(MorrowColor.ink)
-                .accessibilityAddTraits(.isHeader)
-            Spacer()
-            CircleIconButton(systemImage: "plus", label: "Add memory", prominent: true) {
-                showCapture = true
-            }
+    /// The bell is placeholder chrome: it says so instead of showing fake content.
+    private func showNotificationsNotice() {
+        let message = MorrowPlaceholders.notificationsMessage
+        AccessibilityNotification.Announcement(message).post()
+        withAnimation(.easeOut(duration: 0.25)) { toast = message }
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+            withAnimation(.easeOut(duration: 0.25)) { toast = nil }
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 12)
     }
 
     private var list: some View {
@@ -65,8 +75,8 @@ struct HomeView: View {
                         .accessibilityAction(named: "Delete") { pendingDelete = memory }
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 24)
+            .padding(.horizontal, HomeMetrics.pageSide)
+            .padding(.bottom, HomeMetrics.pageBottom)
             if let message = model.errorMessage {
                 Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.error)
             }
@@ -77,7 +87,7 @@ struct HomeView: View {
         VStack(spacing: 10) {
             Spacer()
             Text("No memories yet")
-                .font(.system(.title3, weight: .heavy))
+                .font(MorrowFont.emptyTitle)
                 .foregroundStyle(MorrowColor.ink)
             Text("Tap + to save a photo or a note.")
                 .font(MorrowFont.body)
@@ -93,3 +103,9 @@ struct HomeView: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+#if DEBUG
+#Preview("Home with fixtures") {
+    HomeView(model: LaunchFixtures.makeModel())
+}
+#endif

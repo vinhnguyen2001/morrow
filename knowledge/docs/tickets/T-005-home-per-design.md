@@ -1,6 +1,6 @@
 # T-005: Home per design (full Home, reopens ADR 0003 scope)
 
-- Status: Todo. User decisions applied 2026-11-12 (see "User decisions"); steps 1-2 first.
+- Status: In progress. Step 1 done, step 2 next (see "Implementation summary"). User decisions applied 2026-11-12 (see "User decisions").
 - Author: Danny (spec). Mark implements. User rules: one screen/step = one commit, tests green; no dead buttons; no fake data shown as real.
 - Related: ADR 0001-0004, 0007-0009, new 0010 (Home scope), 0011 (Journey). Design: knowledge/design/canvas/Main.dc.html (HOME lines 18-209, JOURNEYS 991, rows/segs 1241-1290, TILTS/OFFS 1085-1086), MemoryCard.dc.html.
 - Nothing here is compiled; measurements are read from the HTML. Mark re-checks while building.
@@ -77,4 +77,13 @@ Q1 order: T-005 step 1-2 first, then T-004 step 3-4. Q2 font: Inter. Q3 Journey 
 - Possible dead code after step 3: `Tilt`/`TiltModifier` if unused (update notes/tilt.md).
 
 ## Implementation summary / Review outcome
-(fill in per step)
+### Step 1 (Mark, tokens + header)
+Files: `DesignSystem/Tokens/HomeMetrics.swift` (new), `MorrowMetrics.swift` (MorrowFont: all `.system(` now live here; new tokens logo, emptyTitle, notice, actionLabel, iconLarge; icon 17 -> 20), `MorrowColor.swift` (notificationDot), `Components/MorrowMark.swift` (Shape + `MorrowLogo`), `Components/FloatingActionBar.swift`, `Components/Toast.swift`, `Components/CircleIconButton.swift` (iconFont param, reused at 46 and 64), `Features/Home/MorrowHeader.swift`, `MorrowPlaceholders.swift`, `HomeView.swift`, `Features/Settings/SettingsSheet.swift`, `Features/Capture/CaptureSheet.swift` (font token only), `App/LaunchFixtures.swift` (DEBUG only), `App/MorrowApp.swift`, `MorrowTests/HomeMetricsTests.swift`.
+Deliberate step shift: the Add button moved from the header to `FloatingActionBar` in step 1 (otherwise Add would vanish between steps). The Map button, its badge and `nearbyCount` are NOT built (no destination until step 7; no dead constant).
+Decisions: header top = safe area + 7 (design 54 minus the 47pt status bar), not 54 below the safe area. Add/bell/gear use the one `CircleIconButton`. Bell label is "Notifications" (hint "Coming soon"), the dot is decorative and hidden from VoiceOver. Bell tap shows a `Toast` and posts a VoiceOver announcement.
+Fixtures: `-MorrowFixtures` (add `empty` for no memories), DEBUG only, returns before `makeContainer`, in-memory SwiftData, temp photo folder, generated gradients, fixed IDs/dates ("now" = 2026-11-12 20:30 UTC+7). Release build compiled and the binary has no "MorrowFixtures" string.
+Tests: 52 pass on iPhone 17 simulator (was 47; +5 HomeMetricsTests).
+Visual check on iPhone 16e simulator (390pt, iOS 26 runtime; the phone runs iOS 17.4, so system chrome differs). Screenshot taken by `simctl io`, viewed by eye, crops not measured to the pixel:
+- Match: header buttons 46pt, top of buttons about 55pt, bell dot position (26pt from button left, top-right), logo mark + "Morrow" green, logo placed by space-between as in the design, Add 64pt 20pt from the right and 30pt from the bottom, #1E3B2F, no rotation.
+- Differences: system font instead of Inter (accepted), search slot empty (step 5), Journeys/segments/"Recent moments"/timeline not yet (step 2+), shadows are the app's `morrowCardShadow` not the lighter header shadow.
+- Not checked: Settings sheet and toast appearance (no UI automation here); VoiceOver; 375pt width.
