@@ -37,3 +37,12 @@ struct Memory: Identifiable, Hashable, Sendable {
         self.createdAt = createdAt
     }
 }
+
+extension Memory {
+    /// Text limits (security-checklist). One source for Capture and any future editor.
+    enum Limits {
+        static let title = 100
+        static let body = 2000
+        static let place = 100
+    }
+}

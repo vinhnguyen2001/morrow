@@ -61,4 +61,24 @@ final class PhotoStoreTests: XCTestCase {
         XCTAssertNil(store.thumbnailData(for: name))
         XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appending(path: name).path))
     }
+
+    func testThumbnailWriteFailureLeavesNoFullFile() throws {
+        let store = PhotoStore(directory: dir)
+        let id = UUID()
+        let fileName = "\(id.uuidString).jpg"
+        // A directory where the thumbnail file belongs makes that write fail.
+        try FileManager.default.createDirectory(
+            at: dir.appending(path: PhotoStore.thumbName(for: fileName)), withIntermediateDirectories: true)
+        XCTAssertThrowsError(try store.save(imageData: jpeg(width: 300, height: 300), id: id))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appending(path: fileName).path))
+    }
+
+    func testRejectsOversizedInput() {
+        let store = PhotoStore(directory: dir)
+        let big = Data(count: PhotoStore.maxInputBytes + 1)
+        XCTAssertThrowsError(try store.save(imageData: big, id: UUID())) { error in
+            XCTAssertEqual(error as? PhotoStore.Failure, .tooLarge)
+        }
+        XCTAssertThrowsError(try store.previewData(from: big))
+    }
 }

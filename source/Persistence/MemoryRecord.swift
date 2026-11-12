@@ -26,6 +26,16 @@ final class MemoryRecord {
         isSoftDeleted = false
     }
 
+    /// Soft delete: drop all personal content, keep only the tombstone (id, updatedAt, isSoftDeleted).
+    func scrub() {
+        title = ""
+        body = nil
+        placeName = nil
+        photoFileName = nil
+        isSoftDeleted = true
+        updatedAt = Date()
+    }
+
     /// Nil when `kindRaw` is unknown (for example written by a newer app version).
     var memory: Memory? {
         guard let kind = MemoryKind(rawValue: kindRaw) else { return nil }

@@ -10,7 +10,7 @@
 
 ## Local data (M2+)
 - Auth tokens and sessions in Keychain, never UserDefaults.
-- SwiftData store and photo cache protected with file protection (`.completeUnlessOpen` minimum). Photos: done. Store: being set in T-004 step 0 (iOS default is weaker; coordinates make this matter).
+- SwiftData store and photo cache protected with file protection (`.completeUnlessOpen` minimum). Photos: done. Store: moved to its own directory with `.completeUnlessOpen` in T-004 step 0 (code done; protection class not verifiable on the simulator, device check pending).
 - Coordinates are sensitive: never logged, never sent to analytics or crash reports. Use `os.Logger` with `privacy: .private`.
 
 ## Photos (M2+)

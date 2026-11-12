@@ -8,8 +8,10 @@ struct PhotoStore: Sendable {
     static let maxFullPixels = 2048
     static let maxThumbPixels = 600
     static let maxInputBytes = 40 * 1024 * 1024
+    /// Decoded size cap (about 100 MP) so a small file cannot expand into a huge bitmap.
+    static let maxInputPixels = 100_000_000
 
-    enum Failure: Error { case tooLarge, unreadable, writeFailed }
+    enum Failure: Error, Equatable { case tooLarge, unreadable, writeFailed }
 
     let directory: URL
 
@@ -27,22 +29,26 @@ struct PhotoStore: Sendable {
 
     /// Writes full + thumbnail JPEGs for `id`. Returns the full-size file name. Call off the main actor.
     func save(imageData: Data, id: UUID) throws -> String {
-        guard imageData.count <= Self.maxInputBytes else { throw Failure.tooLarge }
-        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil) else { throw Failure.unreadable }
+        let source = try imageSource(from: imageData)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
         let fileName = "\(id.uuidString).jpg"
         let full = try jpeg(from: source, maxPixels: Self.maxFullPixels, quality: 0.8)
         let thumb = try jpeg(from: source, maxPixels: Self.maxThumbPixels, quality: 0.7)
-        try write(full, to: directory.appending(path: fileName))
-        try write(thumb, to: directory.appending(path: Self.thumbName(for: fileName)))
+        do {
+            try write(full, to: directory.appending(path: fileName))
+            try write(thumb, to: directory.appending(path: Self.thumbName(for: fileName)))
+        } catch {
+            // No orphan: a failed pair leaves neither file behind.
+            remove(fileName: fileName)
+            throw error
+        }
         return fileName
     }
 
     /// Small EXIF-free JPEG for showing a just-picked photo before saving. Call off the main actor.
     func previewData(from imageData: Data) throws -> Data {
-        guard imageData.count <= Self.maxInputBytes else { throw Failure.tooLarge }
-        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil) else { throw Failure.unreadable }
+        let source = try imageSource(from: imageData)
         return try jpeg(from: source, maxPixels: Self.maxThumbPixels, quality: 0.7)
     }
 
@@ -53,6 +59,18 @@ struct PhotoStore: Sendable {
     func remove(fileName: String) {
         try? FileManager.default.removeItem(at: directory.appending(path: fileName))
         try? FileManager.default.removeItem(at: directory.appending(path: Self.thumbName(for: fileName)))
+    }
+
+    private func imageSource(from data: Data) throws -> CGImageSource {
+        guard data.count <= Self.maxInputBytes else { throw Failure.tooLarge }
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { throw Failure.unreadable }
+        if let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+           let width = props[kCGImagePropertyPixelWidth] as? Int,
+           let height = props[kCGImagePropertyPixelHeight] as? Int,
+           width * height > Self.maxInputPixels {
+            throw Failure.tooLarge
+        }
+        return source
     }
 
     private func write(_ data: Data, to url: URL) throws {

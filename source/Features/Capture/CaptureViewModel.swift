@@ -4,10 +4,6 @@ import Observation
 @MainActor
 @Observable
 final class CaptureViewModel {
-    static let maxTitle = 100
-    static let maxBody = 2000
-    static let maxPlace = 100
-
     var kind: MemoryKind = .photo
     var title = ""
     var body = ""
@@ -59,9 +55,9 @@ final class CaptureViewModel {
             }
             let memory = Memory(
                 id: id, kind: kind,
-                title: String(Self.clean(title).prefix(Self.maxTitle)),
-                body: kind == .note ? Self.optional(body, max: Self.maxBody) : nil,
-                placeName: Self.optional(placeName, max: Self.maxPlace),
+                title: String(Self.clean(title).prefix(Memory.Limits.title)),
+                body: kind == .note ? Self.optional(body, max: Memory.Limits.body) : nil,
+                placeName: Self.optional(placeName, max: Memory.Limits.place),
                 photoFileName: fileName)
             try repository.add(memory)
             return true

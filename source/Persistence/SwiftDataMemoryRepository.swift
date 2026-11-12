@@ -4,7 +4,7 @@ import SwiftData
 @MainActor
 final class SwiftDataMemoryRepository: MemoryRepository {
     /// Held on purpose: a `ModelContext` traps if its container has been released.
-    private let container: ModelContainer
+    let container: ModelContainer
     private var context: ModelContext { container.mainContext }
 
     init(container: ModelContainer) {
@@ -12,12 +12,9 @@ final class SwiftDataMemoryRepository: MemoryRepository {
     }
 
     static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
-        if !inMemory {
-            // A fresh install has no Application Support folder yet; without it CoreData
-            // logs "Failed to stat path default.store" errors on first launch.
-            try FileManager.default.createDirectory(at: .applicationSupportDirectory, withIntermediateDirectories: true)
-        }
-        let config = ModelConfiguration(isStoredInMemoryOnly: inMemory)
+        let config = inMemory
+            ? ModelConfiguration(isStoredInMemoryOnly: true)
+            : ModelConfiguration(url: try StoreLocation.prepare())
         return try ModelContainer(for: MemoryRecord.self, configurations: config)
     }
 
@@ -37,8 +34,7 @@ final class SwiftDataMemoryRepository: MemoryRepository {
     func delete(id: UUID) throws {
         let descriptor = FetchDescriptor<MemoryRecord>(predicate: #Predicate { $0.id == id })
         guard let record = try context.fetch(descriptor).first else { return }
-        record.isSoftDeleted = true
-        record.updatedAt = Date()
+        record.scrub()
         try context.save()
     }
 }

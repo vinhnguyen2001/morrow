@@ -15,16 +15,18 @@ struct CaptureSheet: View {
                 GroundView()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
+                        if let message = model.errorMessage {
+                            Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.error)
+                        }
                         kindPicker
                         if model.kind == .photo { photoSection } else { noteSection }
                         field("Title", text: $model.title)
+                            .limitedLength($model.title, to: Memory.Limits.title)
                         field("Place (optional)", text: $model.placeName)
+                            .limitedLength($model.placeName, to: Memory.Limits.place)
                         Label("Saved on this device. Private.", systemImage: "lock")
                             .font(MorrowFont.caption)
                             .foregroundStyle(MorrowColor.textSecondary)
-                        if let message = model.errorMessage {
-                            Text(message).font(MorrowFont.caption).foregroundStyle(.red)
-                        }
                     }
                     .padding(20)
                 }
@@ -33,7 +35,7 @@ struct CaptureSheet: View {
             .navigationTitle("New memory")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() }.disabled(model.isSaving) }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         Task {
@@ -50,8 +52,14 @@ struct CaptureSheet: View {
         }
         .tint(MorrowColor.action)
         .interactiveDismissDisabled(model.isSaving)
-        .onChange(of: pickerItem) { _, item in
-            Task { await model.setPhoto(try? await item?.loadTransferable(type: Data.self)) }
+        // `.task(id:)` cancels the previous load when the selection changes.
+        .task(id: pickerItem) {
+            let data = try? await pickerItem?.loadTransferable(type: Data.self)
+            guard !Task.isCancelled else { return }
+            await model.setPhoto(data)
+        }
+        .onChange(of: model.errorMessage) { _, message in
+            if let message { AccessibilityNotification.Announcement(message).post() }
         }
     }
 
@@ -89,9 +97,7 @@ struct CaptureSheet: View {
             .font(MorrowFont.body)
             .padding(14)
             .background(MorrowColor.card, in: RoundedRectangle(cornerRadius: MorrowRadius.cardImage, style: .continuous))
-            .onChange(of: model.body) { _, text in
-                if text.count > CaptureViewModel.maxBody { model.body = String(text.prefix(CaptureViewModel.maxBody)) }
-            }
+            .limitedLength($model.body, to: Memory.Limits.body)
     }
 
     private func field(_ title: String, text: Binding<String>) -> some View {

@@ -1,3 +1,4 @@
+import UIKit
 import XCTest
 @testable import Morrow
 
@@ -43,6 +44,29 @@ final class CaptureViewModelTests: XCTestCase {
         model.kind = .note
         model.title = String(repeating: "a", count: 500)
         _ = await model.save()
-        XCTAssertEqual(try repo.all().first?.title.count, CaptureViewModel.maxTitle)
+        XCTAssertEqual(try repo.all().first?.title.count, Memory.Limits.title)
+    }
+
+    func testConcurrentSavesStoreOneMemory() async throws {
+        let (model, repo) = try makeModel()
+        model.kind = .photo
+        model.title = "Once"
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50)).jpegData(withCompressionQuality: 1) { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 50, height: 50))
+        }
+        await model.setPhoto(image)
+        async let first = model.save()
+        async let second = model.save()
+        let results = await [first, second]
+        XCTAssertEqual(results.filter { $0 }.count, 1)
+        XCTAssertEqual(try repo.all().count, 1)
+    }
+
+    func testCorruptPhotoIsRejectedWithMessage() async throws {
+        let (model, _) = try makeModel()
+        await model.setPhoto(Data("junk".utf8))
+        XCTAssertNil(model.photoData)
+        XCTAssertNotNil(model.errorMessage)
     }
 }

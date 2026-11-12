@@ -23,4 +23,6 @@ enum MorrowColor {
     /// Darkened for 4.5:1 contrast on ground and white.
     static let textSecondary = Color(hex: 0x5C5C5C)
     static let card = Color.white
+    /// Error text, about 6:1 on ground and white.
+    static let error = Color(hex: 0xB00020)
 }

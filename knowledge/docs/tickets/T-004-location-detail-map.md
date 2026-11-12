@@ -59,7 +59,11 @@ Nits to take if the code is touched: error colour with 4.5:1 contrast plus Voice
 Capture photo and note with location; deny permission and still save; kill and relaunch; open Detail, delete with confirmation; open Map, tap a pin, drag the peek up; VoiceOver through Home, Detail, Map; accessibility Dynamic Type; airplane mode; Instruments for Home scroll and Map pan FPS, numbers written here.
 
 ## Implementation summary
-(fill in per step)
+### Step 0 (done, 31 unit tests green on simulator iOS 26)
+- Items 1-7 done with tests: thumb-write failure removes the full file; `MemoryRecord.scrub()` on soft delete; `deleteConfirmation(for:)` modifier plus "Delete" accessibility action; 1 column at accessibility Dynamic Type; Cancel disabled while saving; `.task(id: pickerItem)` (cancelled loads do not clear the photo); `Memory.Limits` plus `limitedLength` modifier.
+- Item 8: store now opens at `Application Support/Store/default.store` via `ModelConfiguration(url:)` (`Persistence/StoreLocation.swift`). The directory and files get `.completeUnlessOpen`. A legacy `default.store` (+ -wal, -shm) from 4cde0ca is moved once, main file last. Move logic is unit tested with temp dirs. NOT verified: the protection class itself (simulator ignores it) and the move on a real device with old data. Pending device check: install 4cde0ca, add memories, install this build, memories still show, and check protection if a tool allows.
+- Nits taken: `HomeViewModel.makeCapture()`, photo files removed off-main in `delete` (now async), 100 MP pixel cap in `PhotoStore` (not unit tested: needs a huge image), error colour `MorrowColor.error` plus VoiceOver announcement, error message moved to the top of the Capture form. Tests added: HomeViewModel delete, concurrent double save, corrupt and oversized image, unknown `kindRaw` filtered.
+- Files: Domain/Memory.swift, DesignSystem/Tokens/MorrowColor.swift, DesignSystem/Components/{DeleteConfirmation,LimitedText}.swift, Persistence/{PhotoStore,MemoryRecord,SwiftDataMemoryRepository,StoreLocation}.swift, Features/Home/*, Features/Capture/*, tests.
 
 ## Review outcome (Danny)
 (pending)

@@ -4,7 +4,14 @@ import SwiftUI
 struct HomeView: View {
     @State var model: HomeViewModel
     @State private var showCapture = false
-    private let columns = [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)]
+    @State private var pendingDelete: Memory?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// One column at accessibility text sizes so titles are not squeezed.
+    private var columns: [GridItem] {
+        let count = dynamicTypeSize.isAccessibilitySize ? 1 : 2
+        return Array(repeating: GridItem(.flexible(), spacing: 14), count: count)
+    }
 
     var body: some View {
         ZStack {
@@ -21,9 +28,12 @@ struct HomeView: View {
         .environment(\.photoStore, model.photoStore)
         .task { model.load() }
         .sheet(isPresented: $showCapture) {
-            CaptureSheet(model: CaptureViewModel(repository: model.repository, photoStore: model.photoStore)) {
+            CaptureSheet(model: model.makeCapture()) {
                 model.load()
             }
+        }
+        .deleteConfirmation(for: $pendingDelete) { memory in
+            Task { await model.delete(memory) }
         }
     }
 
@@ -50,14 +60,15 @@ struct HomeView: View {
                     MemoryCard(memory: memory, density: .compact)
                         .tilt(for: memory.id)
                         .contextMenu {
-                            Button("Delete", systemImage: "trash", role: .destructive) { model.delete(memory) }
+                            Button("Delete", systemImage: "trash", role: .destructive) { pendingDelete = memory }
                         }
+                        .accessibilityAction(named: "Delete") { pendingDelete = memory }
                 }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
             if let message = model.errorMessage {
-                Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.textSecondary)
+                Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.error)
             }
         }
     }
@@ -72,7 +83,7 @@ struct HomeView: View {
                 .font(MorrowFont.body)
                 .foregroundStyle(MorrowColor.textSecondary)
             if let message = model.errorMessage {
-                Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.textSecondary)
+                Text(message).font(MorrowFont.caption).foregroundStyle(MorrowColor.error)
             }
             Spacer()
             Spacer()

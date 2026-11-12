@@ -1,0 +1,32 @@
+import UIKit
+import XCTest
+@testable import Morrow
+
+@MainActor
+final class HomeViewModelTests: XCTestCase {
+    func testDeleteRemovesEntryAndPhotoFiles() async throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        let dir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let store = PhotoStore(directory: dir)
+
+        let id = UUID()
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 80, height: 80)).jpegData(withCompressionQuality: 1) { ctx in
+            UIColor.blue.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 80, height: 80))
+        }
+        let fileName = try store.save(imageData: image, id: id)
+        let memory = Memory(id: id, kind: .photo, title: "Bye", photoFileName: fileName)
+        try repo.add(memory)
+
+        let model = HomeViewModel(repository: repo, photoStore: store)
+        model.load()
+        XCTAssertEqual(model.memories.count, 1)
+
+        await model.delete(memory)
+        XCTAssertTrue(model.memories.isEmpty)
+        XCTAssertTrue(try repo.all().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appending(path: fileName).path))
+        XCTAssertNil(store.thumbnailData(for: fileName))
+    }
+}

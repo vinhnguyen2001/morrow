@@ -24,13 +24,22 @@ final class HomeViewModel {
         }
     }
 
-    func delete(_ memory: Memory) {
+    func makeCapture() -> CaptureViewModel {
+        CaptureViewModel(repository: repository, photoStore: photoStore)
+    }
+
+    /// Soft delete first (optimistic UI), then remove the photo files off the main actor.
+    func delete(_ memory: Memory) async {
         do {
             try repository.delete(id: memory.id)
-            if let fileName = memory.photoFileName { photoStore.remove(fileName: fileName) }
             memories.removeAll { $0.id == memory.id }
         } catch {
             errorMessage = "Couldn't delete that memory."
+            return
+        }
+        if let fileName = memory.photoFileName {
+            let store = photoStore
+            await Task.detached { store.remove(fileName: fileName) }.value
         }
     }
 }
