@@ -10,7 +10,8 @@ struct MapPeekRow: View {
     private var style: MemoryKindStyle { MemoryKindStyle.style(for: memory.kind) }
 
     var body: some View {
-        Button(action: onOpen) {
+        let place = MemoryDetailPresentation.placeText(for: memory)
+        return Button(action: onOpen) {
             HStack(spacing: MapMetrics.rowGap) {
                 thumbnail
                 VStack(alignment: .leading, spacing: MapMetrics.rowTextGap) {
@@ -21,7 +22,7 @@ struct MapPeekRow: View {
                         .font(MorrowFont.rowTitle)
                         .foregroundStyle(MorrowColor.ink)
                         .lineLimit(1)
-                    if let place = MemoryDetailPresentation.placeText(for: memory) {
+                    if let place {
                         Text(place)
                             .font(MorrowFont.rowDetail)
                             .foregroundStyle(MorrowColor.textSecondary)
@@ -41,7 +42,7 @@ struct MapPeekRow: View {
             .contentShape(RoundedRectangle(cornerRadius: MapMetrics.rowRadius, style: .continuous))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(MapPins.label(kind: memory.kind, title: memory.title, place: MemoryDetailPresentation.placeText(for: memory)))
+        .accessibilityLabel(MapPins.label(kind: memory.kind, title: memory.title, place: place))
         .accessibilityHint("Opens the memory")
     }
 

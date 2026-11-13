@@ -26,3 +26,10 @@
 ## Location in Capture (T-004 step 2)
 - Usage string is in project.yml. The user can remove the location and edit the place; the status line has text, not colour only; remove button is 44pt and labelled "Remove location". Not checked: VoiceOver reading order and accessibility Dynamic Type on a device.
 - No privacy manifest entry needed for CoreLocation itself; geocoding goes to the nutrition label (M6).
+
+## MapKit (T-004 step 4)
+- The device loads map tiles from Apple, so Apple sees the area being viewed (approximate). Memory content and pins are drawn on the device and are not sent anywhere.
+- The Map asks for no location permission and does not show the user's location. Offline, tiles do not load (empty background is normal).
+- Declare this in the App Store privacy label (M6) together with reverse geocoding.
+- Privacy Manifest: still no separate MapKit entry needed (re-check at M6).
+- Pin VoiceOver: `Marker` has no accessibility modifiers on iOS 17, so the screen posts `AccessibilityNotification.Announcement` with kind, title and place on selection. Improvement, needs listening on a device.

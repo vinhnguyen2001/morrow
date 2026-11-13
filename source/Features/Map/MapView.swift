@@ -9,6 +9,8 @@ struct MapView: View {
     @State private var pins: [MapPin]
     @State private var position: MapCameraPosition
     @State private var selection: UUID?
+    /// Last non-nil selection: keeps the sheet content alive while the sheet slides away, so it never flashes empty.
+    @State private var shownID: UUID?
     @State private var detent: PresentationDetent = Self.peek
     /// Latest region the camera settled on (`.onEnd` only: continuous updates would re-render on every pan frame).
     @State private var visibleRegion: MapRegion?
@@ -35,11 +37,19 @@ struct MapView: View {
                 if model.hasLoaded && pins.isEmpty { emptyOverlay }
             }
             .onChange(of: selection) { _, id in
-                if let id { center(on: id, mapHeight: proxy.size.height) } else { detent = Self.peek }
+                if let id {
+                    shownID = id
+                    // The map ignores the safe area, so it is as tall as the screen, not as the proxy.
+                    let mapHeight = proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom
+                    center(on: id, mapHeight: mapHeight)
+                    announce(id)
+                } else {
+                    detent = Self.peek
+                }
             }
         }
         .toolbar(.hidden, for: .navigationBar)
-        .onChange(of: model.memories, initial: true) { _, memories in
+        .onChange(of: model.memories) { _, memories in
             let updated = MapPins.pins(from: memories)
             guard updated != pins else { return }
             // The first memories can arrive after the screen opens: frame them once, never fight a later pan.
@@ -111,7 +121,7 @@ struct MapView: View {
 
     @ViewBuilder
     private var sheetContent: some View {
-        if let id = selection {
+        if let id = selection ?? shownID {
             if detent == .large {
                 // Built only when expanded, so the peek stays light.
                 MemoryDetailView(id: id, model: model, showsBackButton: false)
@@ -140,7 +150,14 @@ struct MapView: View {
         dismiss()
     }
 
+    /// VoiceOver cannot read a `Marker`'s kind or place (no accessibility modifiers on iOS 17), so say it on selection.
+    private func announce(_ id: UUID) {
+        guard let pin = pins.first(where: { $0.id == id }) else { return }
+        AccessibilityNotification.Announcement(pin.accessibilityLabel).post()
+    }
+
     /// Slides the camera so the pin sits above the peek sheet. Reduce Motion: jump without animation.
+    /// `visibleRegion` comes from an unrotated map; if the user rotates it the pin may land slightly off to the side (accepted).
     private func center(on id: UUID, mapHeight: CGFloat) {
         guard let pin = pins.first(where: { $0.id == id }), mapHeight > 0 else { return }
         let current = visibleRegion ?? MapFraming.region(for: pins)

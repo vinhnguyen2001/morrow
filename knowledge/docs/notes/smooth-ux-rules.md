@@ -26,3 +26,4 @@
 ## Verification
 - Requires a Mac with Xcode and a real iPhone. Record measurements in the ticket that touched the screen.
 - MemoryCard (from T-001, owed by M3 Home): measure scroll FPS of the two-layer card shadow before changing it. Candidate fix if it drops frames: put the shadow on the background shape, then `compositingGroup()`.
+- Map (T-004 step 4): FPS of pan/zoom with 200 pins on the iPhone 11 Pro is still owed; consider clustering only after that number exists.
