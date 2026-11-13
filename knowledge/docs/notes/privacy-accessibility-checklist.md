@@ -33,3 +33,5 @@
 - Declare this in the App Store privacy label (M6) together with reverse geocoding.
 - Privacy Manifest: still no separate MapKit entry needed (re-check at M6).
 - Pin VoiceOver: `Marker` has no accessibility modifiers on iOS 17, so the screen posts `AccessibilityNotification.Announcement` with kind, title and place on selection. Improvement, needs listening on a device.
+
+- Custom controls must not block Dynamic Type (no `.dynamicTypeSize(...limit)`). At accessibility sizes change the layout instead (e.g. stack the segmented control vertically, `TimelineLayout`).

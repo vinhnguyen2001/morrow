@@ -70,6 +70,9 @@ final class HomeViewModel {
         let limited = String(query.prefix(MemorySearch.maxLength))
         guard limited != searchQuery else { return }
         searchQuery = limited
+        // Timing only: the query text is never part of the signpost.
+        let interval = signposter.beginInterval("search rebuild")
+        defer { signposter.endInterval("search rebuild", interval) }
         let matches = MemorySearch.filter(memories, query: limited)
         guard matches != visibleMemories else { return }
         rebuild(showing: matches)

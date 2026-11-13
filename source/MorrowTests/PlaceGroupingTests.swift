@@ -18,6 +18,16 @@ final class PlaceGroupingTests: XCTestCase {
         XCTAssertEqual(columns.all[0].count, 3)
     }
 
+    func testDaNangAndDaNangWithStrokeAreOnePlace() {
+        let columns = build([
+            Support.memory(1, place: "Da Nang", at: Support.date(1)),
+            Support.memory(2, place: "Đà Nẵng", at: Support.date(2)),
+        ])
+        XCTAssertEqual(columns.all.count, 1)
+        XCTAssertEqual(columns.all[0].name, "Đà Nẵng")
+        XCTAssertEqual(columns.all[0].count, 2)
+    }
+
     func testMemoriesWithoutPlaceAreSkipped() {
         let columns = build([
             Support.memory(1, place: nil, at: Support.date(1)),

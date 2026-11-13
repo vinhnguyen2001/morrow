@@ -13,9 +13,12 @@ struct HomePlacesTab: View {
     var body: some View {
         VStack(spacing: 0) {
             HomeSectionHeader(title: "Places you\u{2019}ve been", layout: layout) {
-                Text(cards.all.count == 1 ? "1 place" : "\(cards.all.count) places")
-                    .font(MorrowFont.sectionMeta)
-                    .foregroundStyle(MorrowColor.action)
+                // "0 places" next to a "no match" line would be noise.
+                if searchQuery == nil || !cards.isEmpty {
+                    Text(cards.all.count == 1 ? "1 place" : "\(cards.all.count) places")
+                        .font(MorrowFont.sectionMeta)
+                        .foregroundStyle(MorrowColor.action)
+                }
             }
             .padding(.top, HomeMetrics.sectionTop)
             if cards.isEmpty {

@@ -8,6 +8,7 @@ final class MemorySearchTests: XCTestCase {
         Support.memory(1, title: "Sunrise", body: "Coffee on the pier", place: "Hội An", at: Support.date(1)),
         Support.memory(2, title: "Lanterns", place: "Đà Nẵng", at: Support.date(2)),
         Support.memory(3, title: "Train to HUẾ", at: Support.date(3)),
+        Support.memory(4, title: "Đức's birthday", place: "Da Lat", at: Support.date(4)),
     ]
 
     private func titles(_ query: String) -> [String] {
@@ -15,8 +16,8 @@ final class MemorySearchTests: XCTestCase {
     }
 
     func testEmptyAndWhitespaceQueryDoNotFilter() {
-        XCTAssertEqual(titles("").count, 3)
-        XCTAssertEqual(titles("   \n ").count, 3)
+        XCTAssertEqual(titles("").count, 4)
+        XCTAssertEqual(titles("   \n ").count, 4)
         XCTAssertNil(MemorySearch.normalized("  "))
     }
 
@@ -30,6 +31,14 @@ final class MemorySearchTests: XCTestCase {
         XCTAssertEqual(titles("lantern"), ["Lanterns"])
         XCTAssertEqual(titles("pier"), ["Sunrise"])
         XCTAssertEqual(titles("nẵng"), ["Lanterns"])
+    }
+
+    func testVietnameseDMatchesBothWays() {
+        XCTAssertEqual(titles("da nang"), ["Lanterns"])
+        XCTAssertEqual(titles("đà"), ["Lanterns", "Đức's birthday"])
+        XCTAssertEqual(titles("Đà Nẵng"), ["Lanterns"])
+        XCTAssertEqual(titles("duc"), ["Đức's birthday"])
+        XCTAssertEqual(titles("Đà Lạt"), ["Đức's birthday"])
     }
 
     func testQueryIsTrimmed() {

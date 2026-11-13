@@ -31,3 +31,5 @@ Learnings from T-004 step 3 review round 1 (2026-11-12):
 
 Learnings from T-004 step 4 review round 2 (2026-11-13):
 - Do not reset state that drives sheet content (e.g. the detent) when the selection becomes nil: the sheet is still sliding away and the content changes or disappears mid-motion. Use `.sheet(isPresented:onDismiss:)` so content stays until the sheet has closed. Device check: delete from Detail at .large and watch the slide down.
+
+- `Đ`/`đ` (U+0110/U+0111) have no Unicode decomposition, so `.diacriticInsensitive` and `localizedStandardContains` do not fold them ("da nang" misses "Đà Nẵng"). Every accent-free comparison for Vietnamese goes through `TextMatching.key`. ơ/ư/ô/ê/â/ă fold correctly; NFD input gives the same key.

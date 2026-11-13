@@ -11,7 +11,7 @@ struct NoteTile: View {
         Button { onOpen(card.id) } label: {
             content
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, HomeMetrics.noteInsetTop)
+                .padding(.horizontal, HomeMetrics.noteInsetSide)
                 .padding(.top, HomeMetrics.noteInsetTop)
                 .padding(.bottom, HomeMetrics.noteInsetBottom)
                 .background {

@@ -17,7 +17,11 @@ struct HomeNotesTab: View {
             HomeSectionHeader(title: "Notes", layout: layout, alignment: .center) { newNoteButton }
                 .padding(.top, HomeMetrics.sectionTop)
             if cards.isEmpty {
-                if let searchQuery { SearchNoMatch(query: searchQuery) } else { BlankPage(title: "a blank page", text: "Thoughts and little details you write on the road will live here.") }
+                if let searchQuery {
+                    SearchNoMatch(query: searchQuery)
+                } else {
+                    BlankPage(title: "a blank page", text: "Thoughts and little details you write on the road will live here.")
+                }
             } else {
                 StaggeredColumns(
                     columns: cards, layout: layout, rightColumnOffset: HomeMetrics.noteColumnOffset,

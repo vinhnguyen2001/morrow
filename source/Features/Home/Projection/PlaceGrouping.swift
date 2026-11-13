@@ -20,7 +20,7 @@ struct PlaceCard: Identifiable, Equatable {
 /// Pure projection of memories into Places tiles (Main.dc.html lines 1292-1297, 181-205).
 /// Memories are grouped by place name ignoring case, diacritics and surrounding spaces ("Hội An",
 /// "hội an ", "Hoi An" are one place). Memories without a place name are skipped.
-/// Known limit: `đ` is a letter of its own, not a base letter plus a mark, so "Đà Nẵng" and "Da Nang" stay apart.
+/// "Đà Nẵng" and "Da Nang" are one place (`TextMatching.key` maps `đ` to `d`).
 enum PlaceGrouping {
     /// Photo heights by display index (design varies them per place).
     static let imageHeights: [CGFloat] = [135, 150, 165]
@@ -28,7 +28,7 @@ enum PlaceGrouping {
     static func key(for name: String?) -> String? {
         let trimmed = (name ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-        return trimmed.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+        return TextMatching.key(trimmed)
     }
 
     static func countText(_ count: Int) -> String {

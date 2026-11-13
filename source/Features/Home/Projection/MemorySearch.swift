@@ -1,8 +1,7 @@
 import Foundation
 
 /// Local search over title, place name and body (T-005 step 5). Pure, no logging: the query is user text.
-/// `localizedStandardContains` ignores case and diacritics, so "hoi an" finds "Hội An".
-/// Known limit: `đ`/`Đ` is a separate letter and is not matched by "d".
+/// Matching goes through `TextMatching.key`, so "hoi an" finds "Hội An" and "da nang" finds "Đà Nẵng".
 enum MemorySearch {
     /// Longest query kept (same size as the other short text fields).
     static let maxLength = 100
@@ -15,10 +14,11 @@ enum MemorySearch {
 
     static func filter(_ memories: [Memory], query: String) -> [Memory] {
         guard let query = normalized(query) else { return memories }
+        let folded = TextMatching.key(query)
         return memories.filter { memory in
-            memory.title.localizedStandardContains(query)
-                || (memory.placeName?.localizedStandardContains(query) ?? false)
-                || (memory.body?.localizedStandardContains(query) ?? false)
+            TextMatching.key(memory.title).contains(folded)
+                || TextMatching.key(memory.placeName ?? "").contains(folded)
+                || TextMatching.key(memory.body ?? "").contains(folded)
         }
     }
 }

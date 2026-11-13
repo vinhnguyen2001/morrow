@@ -6,15 +6,28 @@ import SwiftUI
 struct CategorySegmentedControl: View {
     @Binding var selection: HomeTab
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    private var layout: TimelineLayout { TimelineLayout(dynamicTypeSize: dynamicTypeSize) }
+
+    /// One row of three pills; at accessibility text sizes the pills stack, full width, so text keeps scaling.
     var body: some View {
-        HStack(spacing: HomeMetrics.segmentGap) {
-            ForEach(HomeTab.allCases) { tab in segment(tab) }
+        Group {
+            if layout == .singleColumn {
+                // Each pill already carries 4pt above and below, so no extra spacing: 48pt rows.
+                VStack(spacing: 0) { pills }
+                    .padding(.horizontal, HomeMetrics.segmentPadding)
+                    .background(RoundedRectangle(cornerRadius: HomeMetrics.segmentHeight / 2 + HomeMetrics.segmentPadding, style: .continuous).fill(MorrowColor.segmentTrack))
+            } else {
+                HStack(spacing: HomeMetrics.segmentGap) { pills }
+                    .padding(.horizontal, HomeMetrics.segmentPadding)
+                    .background(Capsule().fill(MorrowColor.segmentTrack))
+            }
         }
-        .padding(.horizontal, HomeMetrics.segmentPadding)
-        .background(Capsule().fill(MorrowColor.segmentTrack))
-        // Three labels share one row, so they stop growing at xxxLarge (like the header logo word).
-        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+    }
+
+    @ViewBuilder private var pills: some View {
+        ForEach(HomeTab.allCases) { tab in segment(tab) }
     }
 
     private func segment(_ tab: HomeTab) -> some View {
@@ -36,7 +49,6 @@ struct CategorySegmentedControl: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(tab.title)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 

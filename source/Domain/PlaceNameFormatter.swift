@@ -13,8 +13,8 @@ enum PlaceNameFormatter {
     static func format(_ parts: PlaceParts) -> String {
         let locality = clean(parts.locality)
         let head = clean(parts.areasOfInterest.first) ?? clean(parts.thoroughfare) ?? clean(parts.name)
-        // "Hoi An" and "Hội An" are the same city.
-        let sameAsCity = head.map { $0.compare(locality ?? "", options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame } ?? false
+        // "Hoi An", "Hội An" and "Da Nang", "Đà Nẵng" are the same city.
+        let sameAsCity = head.map { TextMatching.key($0) == TextMatching.key(locality ?? "") } ?? false
         let pieces = [sameAsCity ? nil : head, locality].compactMap { $0 }
         return String(pieces.joined(separator: ", ").prefix(Memory.Limits.place))
     }

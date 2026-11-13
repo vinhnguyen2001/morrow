@@ -95,6 +95,7 @@ enum HomeMetrics {
     static let columnGap: CGFloat = 12
     static let noteColumnOffset: CGFloat = 26
     static let noteRadius: CGFloat = 24
+    static let noteInsetSide: CGFloat = 15
     static let noteInsetTop: CGFloat = 15
     static let noteInsetBottom: CGFloat = 14
     static let noteSpacing: CGFloat = 8

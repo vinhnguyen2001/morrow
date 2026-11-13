@@ -29,7 +29,7 @@ Persistent project context so no one has to re-read old conversations. Read this
 ### Tickets
 - [T-001 Skeleton, tokens, MemoryCard (M0)](tickets/T-001-skeleton-tokens-memorycard.md): Done, approved round 2, not compiled; Mac checklist open
 
-- [T-005 Home per design](tickets/T-005-home-per-design.md): steps 1-5 done (header, timeline, Notes, Places, Search); step 6 dropped; 7-8 pending
+- [T-005 Home per design](tickets/T-005-home-per-design.md): steps 1-5 done, review round 1 fixed (header, timeline, Notes, Places, Search); step 6 dropped; 7-8 pending
 
 ### Notes
 - [AR performance budget](notes/ar-performance-budget.md): thresholds, how to measure, how to keep AR fast, positioning fallbacks

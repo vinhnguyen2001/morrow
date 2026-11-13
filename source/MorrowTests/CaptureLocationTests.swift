@@ -381,6 +381,10 @@ final class PlaceNameFormatterTests: XCTestCase {
         XCTAssertEqual(PlaceNameFormatter.format(PlaceParts(name: "hoi an", locality: "Hoi An")), "Hoi An")
     }
 
+    func testStrokedDCityIsNotRepeated() {
+        XCTAssertEqual(PlaceNameFormatter.format(PlaceParts(name: "Da Nang", locality: "Đà Nẵng")), "Đà Nẵng")
+    }
+
     func testEmptyAndBlankGiveEmpty() {
         XCTAssertEqual(PlaceNameFormatter.format(PlaceParts()), "")
         XCTAssertEqual(PlaceNameFormatter.format(PlaceParts(areasOfInterest: ["  "], name: " ", thoroughfare: "", locality: "\n")), "")
