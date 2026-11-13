@@ -330,6 +330,31 @@ final class CaptureLocationTests: XCTestCase {
         XCTAssertEqual(model.coordinate, here)
     }
 
+    func testFailedSaveAfterRemoveLocationDoesNotLocateAgain() async throws {
+        let provider = FakeLocationProvider(authorization: .authorized, result: here)
+        let (model, _) = try makeModel(provider, failFirstSave: true)
+        await model.startLocating()
+        XCTAssertEqual(provider.coordinateCalls, 1)
+        model.clearLocation()
+        let saved = await model.save()
+        XCTAssertFalse(saved)
+        await model.startLocating()
+        XCTAssertEqual(provider.coordinateCalls, 1)
+        XCTAssertNil(model.coordinate)
+    }
+
+    func testFailedSaveWhileUnavailableStillRestartsAfterRecheck() async throws {
+        let provider = FakeLocationProvider(authorization: .denied, result: here)
+        let (model, _) = try makeModel(provider, failFirstSave: true)
+        await model.startLocating()
+        XCTAssertEqual(model.locationState, .unavailable)
+        let saved = await model.save()
+        XCTAssertFalse(saved)
+        provider.authorization = .authorized
+        await model.recheckAuthorization()
+        XCTAssertEqual(model.coordinate, here)
+    }
+
     func testRecheckDoesNotRestartAfterUserRemovedLocation() async throws {
         let provider = FakeLocationProvider(authorization: .authorized, result: here)
         let (model, _) = try makeModel(provider)

@@ -160,6 +160,7 @@ final class CaptureViewModel {
         guard canSave else { return false }
         // Save never waits for the location; whatever arrived is kept, the rest is dropped.
         let wasLocating = locationState == .locating
+        let wasClosed = locationClosed
         stopLocating()
         isSaving = true
         defer { isSaving = false }
@@ -183,8 +184,9 @@ final class CaptureViewModel {
         } catch {
             if let fileName { photoStore.remove(fileName: fileName) }
             errorMessage = "Couldn't save. Please try again."
-            // The sheet stays open, so reopen the search (smallest fix: only a search that Save cut short).
-            locationClosed = false
+            // The sheet stays open: restore what it was before Save (a removed location stays removed),
+            // and reopen only a search that Save cut short.
+            locationClosed = wasClosed
             if wasLocating { _ = beginLocating() }
             return false
         }

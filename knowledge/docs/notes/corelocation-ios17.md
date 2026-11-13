@@ -18,3 +18,4 @@
 Learnings from T-004 step 2 review round 1 (2026-11-13):
 - Set `.locating` synchronously in `startLocating()` before creating the Task; set inside the Task it lets two quick calls start two lookups.
 - `stopLocating()` returns the state to `.idle` when it was `.locating`, so a failed Save (or a dismissed sheet) never leaves a dead "locating". A failed Save reopens the search it cut short.
+- A failed Save must restore `locationClosed` to its value BEFORE Save, never hard-set false (a removed location must stay removed). Reopen the search only when Save cut it short at `.locating`.
