@@ -72,6 +72,8 @@ enum MorrowFont {
     /// Tab empty-state heading (design 14/600) and text (15).
     static let blankTitle = Font.system(.subheadline, weight: .semibold)
     static let blankText = Font.system(.subheadline)
+    /// Text typed into the search box (design 15).
+    static let searchInput = Font.system(.subheadline)
     /// Small labels: kind line in the Map peek row and the badge on the Home Map button (design 11/800).
     static let micro = Font.system(.caption2, weight: .heavy)
 }

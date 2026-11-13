@@ -22,3 +22,19 @@ struct BlankPage: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+/// Shown on any tab when a search matches nothing (Main.dc.html line 144). Not logged: it echoes user text.
+struct SearchNoMatch: View {
+    let query: String
+
+    var body: some View {
+        Text("Nothing in your garden matches \u{201C}\(query)\u{201D}.")
+            .font(MorrowFont.blankText)
+            .foregroundStyle(MorrowColor.textSecondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 30)
+            .padding(.top, HomeMetrics.blankTop)
+            .frame(maxWidth: .infinity)
+    }
+}
+

@@ -3,6 +3,8 @@ import SwiftUI
 /// Notes tab (Main.dc.html lines 156-179): title, "New note", two lazy columns of note tiles.
 struct HomeNotesTab: View {
     let cards: TwoColumns<NoteCard>
+    /// Set while a search is active: an empty list then means "no match", not "no notes yet".
+    let searchQuery: String?
     let onNewNote: () -> Void
     let onOpen: (UUID) -> Void
 
@@ -15,7 +17,7 @@ struct HomeNotesTab: View {
             HomeSectionHeader(title: "Notes", layout: layout, alignment: .center) { newNoteButton }
                 .padding(.top, HomeMetrics.sectionTop)
             if cards.isEmpty {
-                BlankPage(title: "a blank page", text: "Thoughts and little details you write on the road will live here.")
+                if let searchQuery { SearchNoMatch(query: searchQuery) } else { BlankPage(title: "a blank page", text: "Thoughts and little details you write on the road will live here.") }
             } else {
                 StaggeredColumns(
                     columns: cards, layout: layout, rightColumnOffset: HomeMetrics.noteColumnOffset,

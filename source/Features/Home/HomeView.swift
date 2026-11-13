@@ -7,6 +7,8 @@ struct HomeView: View {
     /// What the Capture sheet opens on: photo from Add, note from "New note".
     @State private var captureKind: MemoryKind = .photo
     @State private var tab: HomeTab
+    @State private var isSearchOpen: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showSettings = false
     @State private var toast: String?
     @State private var toastTask: Task<Void, Never>?
@@ -17,6 +19,7 @@ struct HomeView: View {
     /// `initialPath` lets DEBUG fixtures open straight on a screen (screenshots); it is empty in normal use.
     init(model: HomeViewModel, initialPath: [Route] = [], initialTab: HomeTab = .moments, showsCaptureOnLaunch: Bool = false) {
         _tab = State(initialValue: initialTab)
+        _isSearchOpen = State(initialValue: model.activeQuery != nil) // fixtures can start with a query
         _showCapture = State(initialValue: showsCaptureOnLaunch)
         _model = State(initialValue: model)
         _path = State(initialValue: initialPath)
@@ -48,6 +51,12 @@ struct HomeView: View {
         path.append(.memory(id))
     }
 
+    /// Closing the box clears the query, so every tab shows everything again.
+    private func toggleSearch() {
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) { isSearchOpen.toggle() }
+        if !isSearchOpen { model.setSearchQuery("") }
+    }
+
     private func startCapture(_ kind: MemoryKind) {
         captureKind = kind
         showCapture = true
@@ -64,8 +73,13 @@ struct HomeView: View {
             GroundView()
             ScrollView {
                 VStack(spacing: 0) {
-                    MorrowHeader(onNotifications: showNotificationsNotice, onSettings: { showSettings = true })
+                    MorrowHeader(isSearchOpen: isSearchOpen, onSearch: toggleSearch, onNotifications: showNotificationsNotice, onSettings: { showSettings = true })
                         .padding(.top, HomeMetrics.pageTopBelowStatusBar)
+                    if isSearchOpen {
+                        HomeSearchField(text: Binding(get: { model.searchQuery }, set: { model.setSearchQuery($0) }))
+                            .padding(.top, HomeMetrics.searchFieldTop)
+                            .transition(.opacity)
+                    }
                     CategorySegmentedControl(selection: $tab)
                         .padding(.top, HomeMetrics.segmentTop)
                     content
@@ -79,6 +93,7 @@ struct HomeView: View {
                 .padding(.horizontal, HomeMetrics.pageSide)
                 .padding(.bottom, HomeMetrics.pageBottom)
             }
+            .scrollDismissesKeyboard(.immediately)
             FloatingActionBar(onMap: openMap) { startCapture(.photo) }
         }
         .overlay(alignment: .top) {
@@ -116,9 +131,9 @@ struct HomeView: View {
             switch tab {
             case .moments: momentsTab
             case .notes:
-                HomeNotesTab(cards: model.noteCards, onNewNote: { startCapture(.note) }, onOpen: open)
+                HomeNotesTab(cards: model.noteCards, searchQuery: model.activeQuery, onNewNote: { startCapture(.note) }, onOpen: open)
             case .places:
-                HomePlacesTab(cards: model.placeCards)
+                HomePlacesTab(cards: model.placeCards, searchQuery: model.activeQuery)
             }
         }
     }
@@ -126,7 +141,11 @@ struct HomeView: View {
     @ViewBuilder
     private var momentsTab: some View {
         if model.timeline.rows.isEmpty {
-            HomeEmptyState { startCapture(.photo) }
+            if let query = model.activeQuery {
+                SearchNoMatch(query: query)
+            } else {
+                HomeEmptyState { startCapture(.photo) }
+            }
         } else {
             HomeTimeline(
                 timeline: model.timeline,

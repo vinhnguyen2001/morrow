@@ -62,6 +62,49 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertTrue(model.noteCards.isEmpty)
     }
 
+    func testSearchFiltersEveryTabAndClearingRestores() throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        try repo.add(Memory(kind: .note, title: "Coffee", placeName: "Hội An"))
+        try repo.add(Memory(kind: .note, title: "Train", placeName: "Huế"))
+        try repo.add(Memory(kind: .photo, title: "Market", placeName: "Hội An"))
+        let model = HomeViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory))
+        model.load()
+        XCTAssertEqual(model.noteCards.all.count, 2)
+        XCTAssertEqual(model.placeCards.all.count, 2)
+
+        model.setSearchQuery("hoi an")
+        XCTAssertEqual(model.activeQuery, "hoi an")
+        XCTAssertEqual(model.noteCards.all.map(\.title), ["Coffee"])
+        XCTAssertEqual(model.placeCards.all.map(\.name), ["Hội An"])
+        XCTAssertEqual(model.placeCards.all.first?.count, 2)
+        XCTAssertEqual(model.memories.count, 3) // the full list stays for Map and Detail
+
+        model.setSearchQuery("nothing here")
+        XCTAssertTrue(model.timeline.rows.isEmpty)
+        XCTAssertTrue(model.noteCards.isEmpty)
+        XCTAssertTrue(model.placeCards.isEmpty)
+
+        model.setSearchQuery("   ")
+        XCTAssertNil(model.activeQuery)
+        XCTAssertEqual(model.noteCards.all.count, 2)
+        XCTAssertFalse(model.timeline.rows.isEmpty)
+    }
+
+    func testSearchSurvivesReloadAndDelete() async throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        let coffee = Memory(kind: .note, title: "Coffee")
+        try repo.add(coffee)
+        try repo.add(Memory(kind: .note, title: "Train"))
+        let model = HomeViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory))
+        model.load()
+        model.setSearchQuery("coffee")
+        model.load()
+        XCTAssertEqual(model.noteCards.all.map(\.title), ["Coffee"])
+        await model.delete(coffee)
+        XCTAssertTrue(model.noteCards.isEmpty)
+        XCTAssertEqual(model.activeQuery, "coffee")
+    }
+
     func testLookupByIdReturnsMemoryThenNilAfterDelete() async throws {
         let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
         let memory = Memory(kind: .note, title: "Gone soon")

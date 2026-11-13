@@ -3,6 +3,8 @@ import SwiftUI
 /// Places tab (Main.dc.html lines 181-205): "Places you've been", a count, two lazy columns of place tiles.
 struct HomePlacesTab: View {
     let cards: TwoColumns<PlaceCard>
+    /// Set while a search is active: an empty list then means "no match", not "no pins yet".
+    let searchQuery: String?
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -17,7 +19,11 @@ struct HomePlacesTab: View {
             }
             .padding(.top, HomeMetrics.sectionTop)
             if cards.isEmpty {
-                BlankPage(title: "no pins yet", text: "Every place you leave a memory becomes a little landmark here.")
+                if let searchQuery {
+                    SearchNoMatch(query: searchQuery)
+                } else {
+                    BlankPage(title: "no pins yet", text: "Every place you leave a memory becomes a little landmark here.")
+                }
             } else {
                 StaggeredColumns(
                     columns: cards, layout: layout, rightColumnOffset: HomeMetrics.placeColumnOffset,

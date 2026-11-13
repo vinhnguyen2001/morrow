@@ -37,6 +37,10 @@ enum LaunchFixtures {
         value(after: "-MorrowFixtureTab").flatMap(HomeTab.init(rawValue:)) ?? .moments
     }
 
+    /// `-MorrowFixtureQuery <word>` starts with the search box open and that query (one word: launch arguments
+    /// are not split on spaces here). For screenshots.
+    private static var initialQuery: String { value(after: "-MorrowFixtureQuery") ?? "" }
+
     /// `-MorrowFixtureMapSelect <n>` opens the Map with fixture memory n selected (peek sheet up);
     /// add `-MorrowFixtureMapLarge` to start with the sheet expanded to Detail.
     static var mapSelection: UUID? {
@@ -92,9 +96,11 @@ enum LaunchFixtures {
         let location = captureMode.map(FixtureLocation.init)
         let provider: LocationProviding = location ?? NoLocationProvider()
         let namer: PlaceNaming = location ?? NoPlaceNamer()
-        return HomeViewModel(repository: repository, photoStore: photoStore,
-                             locationProvider: provider, placeNamer: namer,
-                             calendar: calendar, now: { now })
+        let model = HomeViewModel(repository: repository, photoStore: photoStore,
+                                  locationProvider: provider, placeNamer: namer,
+                                  calendar: calendar, now: { now })
+        model.setSearchQuery(initialQuery)
+        return model
     }
 
     // Force unwraps are intended: compile-time UUID literals (notes/sample-data.md).

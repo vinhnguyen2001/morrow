@@ -108,4 +108,9 @@ enum HomeMetrics {
     static let placeImageRadius: CGFloat = 19
     static let placeColumnOffset: CGFloat = 30
     static let placeRowGap: CGFloat = 14
+
+    // Search box (lines 31-33): 8 below the header, 46 high, radius 18, padding 0 14, gap 8.
+    static let searchFieldTop: CGFloat = 8
+    static let searchFieldHeight: CGFloat = 46
+    static let searchFieldRadius: CGFloat = 18
 }

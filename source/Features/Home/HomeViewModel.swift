@@ -12,12 +12,16 @@ final class HomeViewModel {
     private(set) var noteCards: TwoColumns<NoteCard> = .empty
     /// Places tab tiles, computed once per load.
     private(set) var placeCards: TwoColumns<PlaceCard> = .empty
+    /// What the user typed in the search box. Never logged.
+    private(set) var searchQuery = ""
     private(set) var errorMessage: String?
     /// False until the first load finishes, so the empty state does not flash before local data arrives.
     private(set) var hasLoaded = false
 
     let repository: MemoryRepository
     let photoStore: PhotoStore
+    /// `memories` that match `searchQuery`; every tab is built from this.
+    private var visibleMemories: [Memory] = []
     private let locationProvider: LocationProviding
     private let placeNamer: PlaceNaming
     /// Also used by Detail to format dates in the same calendar and time zone as the timeline.
@@ -57,10 +61,29 @@ final class HomeViewModel {
         if !hasLoaded { hasLoaded = true }
     }
 
-    /// Recomputes every tab's projection from `memories`. Each assignment is guarded so a tab only re-renders
-    /// when its own data changed (e.g. not on scene activation).
+    /// The query when it has text, else nil (no filter). The tabs use it for the "no match" message.
+    var activeQuery: String? { MemorySearch.normalized(searchQuery) }
+
+    /// Filters every tab. Typing re-filters here, never in `body`; when the matches are the same as before
+    /// (another letter that excludes nothing more) nothing is rebuilt.
+    func setSearchQuery(_ query: String) {
+        let limited = String(query.prefix(MemorySearch.maxLength))
+        guard limited != searchQuery else { return }
+        searchQuery = limited
+        let matches = MemorySearch.filter(memories, query: limited)
+        guard matches != visibleMemories else { return }
+        rebuild(showing: matches)
+    }
+
+    /// Recomputes every tab's projection from the memories that match the search.
+    /// Each assignment is guarded so a tab only re-renders when its own data changed (e.g. not on scene activation).
     private func rebuild() {
+        rebuild(showing: MemorySearch.filter(memories, query: searchQuery))
+    }
+
+    private func rebuild(showing memories: [Memory]) {
         let current = now()
+        if memories != visibleMemories { visibleMemories = memories }
         let timeline = TimelineBuilder.build(memories: memories, calendar: calendar, now: current)
         if timeline != self.timeline { self.timeline = timeline }
         let noteCards = NoteCards.build(memories: memories, calendar: calendar, now: current)

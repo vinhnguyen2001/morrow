@@ -34,6 +34,12 @@ final class HomeMetricsTests: XCTestCase {
         XCTAssertEqual(HomeMetrics.placeRowGap, 14)
     }
 
+    func testSearchFieldMeasurementsMatchDesign() {
+        XCTAssertEqual(HomeMetrics.searchFieldHeight, 46)
+        XCTAssertEqual(HomeMetrics.searchFieldRadius, 18)
+        XCTAssertEqual(HomeMetrics.searchFieldTop, 8)
+    }
+
     func testTabsAreMomentsNotesPlaces() {
         XCTAssertEqual(HomeTab.allCases.map(\.title), ["Moments", "Notes", "Places"])
     }

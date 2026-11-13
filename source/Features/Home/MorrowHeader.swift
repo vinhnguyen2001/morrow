@@ -1,16 +1,21 @@
 import SwiftUI
 
-/// Home header (Main.dc.html lines 22-28): empty slot where Search arrives (T-005 step 5),
-/// logo in the middle, notification bell and settings gear on the right.
+/// Home header (Main.dc.html lines 22-28): Search button on the left, logo in the middle (placed by
+/// space-between like the design), notification bell and settings gear on the right.
 /// The bell's dot is placeholder chrome (see `MorrowPlaceholders`).
 struct MorrowHeader: View {
+    let isSearchOpen: Bool
+    let onSearch: () -> Void
     let onNotifications: () -> Void
     let onSettings: () -> Void
 
     var body: some View {
         HStack(spacing: 0) {
-            Color.clear.frame(width: HomeMetrics.headerButton, height: HomeMetrics.headerButton)
-                .accessibilityHidden(true)
+            CircleIconButton(
+                systemImage: "magnifyingglass", label: "Search memories",
+                diameter: HomeMetrics.headerButton, action: onSearch
+            )
+            .accessibilityAddTraits(isSearchOpen ? .isSelected : [])
             Spacer(minLength: 0)
             MorrowLogo()
             Spacer(minLength: 0)
@@ -46,7 +51,7 @@ struct MorrowHeader: View {
 }
 
 #Preview("Header") {
-    MorrowHeader(onNotifications: {}, onSettings: {})
+    MorrowHeader(isSearchOpen: false, onSearch: {}, onNotifications: {}, onSettings: {})
         .padding(.horizontal, HomeMetrics.pageSide)
         .background(MorrowColor.ground)
 }
