@@ -137,5 +137,5 @@ Step 3 device-only checklist (add to step 5): swipe back from the left edge (als
 
 ## Device check results (user, iPhone 11 Pro iOS 17.4.1, build b25045e, 2026-11-13)
 - Location prompt appeared and "Allow While Using App" worked; the place was filled and pinned automatically, indoors.
-- Pressing Cancel while still "Finding your place..." stops the search (user observed no further location activity). This answers the open question about `CLLocationUpdate.liveUpdates()` honouring cancellation: no extra timeout/race workaround (N1) needed for now. Not measured: exact seconds to first fix, nor the status-bar arrow timing.
+- Pressing Cancel while still "Finding your place..." creates no memory (user observed). NOT confirmed: whether the status-bar location arrow disappears after Cancel, i.e. whether `CLLocationUpdate.liveUpdates()` really stops on cancellation (N1 stays open). Not measured: seconds to first fix.
 - Map opened and showed pins. NOT yet confirmed by the user: delete from the large detail sheet without flashing, tapping a pin while the sheet is sliding down, VoiceOver, FPS with many pins.
