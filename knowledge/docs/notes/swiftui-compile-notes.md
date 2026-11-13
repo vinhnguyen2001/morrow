@@ -28,3 +28,6 @@ Learnings from T-004 step 3 review round 1 (2026-11-12):
 - ImageIO does not enlarge a small image when `kCGImageSourceThumbnailMaxPixelSize` is larger than the source (tested with 300x200: full, thumb and display stay at 300 or less). Test images must be made with renderer scale 1, or pixels triple.
 
 - A TextField placeholder is its accessibility label. If the placeholder changes with state (for example "Finding your place..."), add a fixed `.accessibilityLabel("Place")`. Announce state changes (located/unavailable) with `AccessibilityNotification.Announcement`.
+
+Learnings from T-004 step 4 review round 2 (2026-11-13):
+- Do not reset state that drives sheet content (e.g. the detent) when the selection becomes nil: the sheet is still sliding away and the content changes or disappears mid-motion. Use `.sheet(isPresented:onDismiss:)` so content stays until the sheet has closed. Device check: delete from Detail at .large and watch the slide down.

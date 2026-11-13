@@ -43,8 +43,6 @@ struct MapView: View {
                     let mapHeight = proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom
                     center(on: id, mapHeight: mapHeight)
                     announce(id)
-                } else {
-                    detent = Self.peek
                 }
             }
         }
@@ -58,7 +56,9 @@ struct MapView: View {
             // A memory deleted while its peek is open closes the sheet.
             selection = MapPins.validSelection(selection, in: updated)
         }
-        .sheet(isPresented: sheetBinding) { sheet }
+        // Reset the detent only after the sheet has closed (swipe or code): changing it while the sheet slides away
+        // would swap or remove the content mid-motion. A sheet removed together with this view loses `detent` with it.
+        .sheet(isPresented: sheetBinding, onDismiss: { detent = Self.peek }) { sheet }
         #if DEBUG
         // Screenshot fixtures: select a pin once the screen is on show (a sheet presented mid-push can fail).
         .task {
