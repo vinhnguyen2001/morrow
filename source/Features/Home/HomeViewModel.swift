@@ -14,6 +14,8 @@ final class HomeViewModel {
 
     let repository: MemoryRepository
     let photoStore: PhotoStore
+    private let locationProvider: LocationProviding
+    private let placeNamer: PlaceNaming
     /// Also used by Detail to format dates in the same calendar and time zone as the timeline.
     let calendar: Calendar
     private let now: () -> Date
@@ -23,11 +25,15 @@ final class HomeViewModel {
     init(
         repository: MemoryRepository,
         photoStore: PhotoStore,
+        locationProvider: LocationProviding = NoLocationProvider(),
+        placeNamer: PlaceNaming = NoPlaceNamer(),
         calendar: Calendar = .current,
         now: @escaping () -> Date = Date.init
     ) {
         self.repository = repository
         self.photoStore = photoStore
+        self.locationProvider = locationProvider
+        self.placeNamer = placeNamer
         self.calendar = calendar
         self.now = now
     }
@@ -63,7 +69,8 @@ final class HomeViewModel {
     }
 
     func makeCapture() -> CaptureViewModel {
-        CaptureViewModel(repository: repository, photoStore: photoStore)
+        CaptureViewModel(repository: repository, photoStore: photoStore,
+                         locationProvider: locationProvider, placeNamer: placeNamer)
     }
 
     /// Soft delete first (optimistic UI), then remove the photo files off the main actor.

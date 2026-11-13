@@ -3,7 +3,7 @@ import SwiftUI
 /// Home (T-005): header, "Recent moments" timeline or the empty state, floating Add button.
 struct HomeView: View {
     @State var model: HomeViewModel
-    @State private var showCapture = false
+    @State private var showCapture: Bool
     @State private var showSettings = false
     @State private var toast: String?
     @State private var toastTask: Task<Void, Never>?
@@ -12,7 +12,8 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     /// `initialPath` lets DEBUG fixtures open straight on a screen (screenshots); it is empty in normal use.
-    init(model: HomeViewModel, initialPath: [Route] = []) {
+    init(model: HomeViewModel, initialPath: [Route] = [], showsCaptureOnLaunch: Bool = false) {
+        _showCapture = State(initialValue: showsCaptureOnLaunch)
         _model = State(initialValue: model)
         _path = State(initialValue: initialPath)
     }

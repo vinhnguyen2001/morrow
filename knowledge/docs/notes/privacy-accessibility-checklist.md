@@ -22,3 +22,7 @@
 - Native sheets for VoiceOver; the "tap handle to toggle" gesture needs an accessible action.
 
 - Reverse geocoding sends the coordinate to Apple: declare it in the privacy nutrition label (M6). `Coordinate` redacts its value when printed.
+
+## Location in Capture (T-004 step 2)
+- Usage string is in project.yml. The user can remove the location and edit the place; the status line has text, not colour only; remove button is 44pt and labelled "Remove location". Not checked: VoiceOver reading order and accessibility Dynamic Type on a device.
+- No privacy manifest entry needed for CoreLocation itself; geocoding goes to the nutrition label (M6).

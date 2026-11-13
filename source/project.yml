@@ -18,6 +18,7 @@ targets:
       - Domain
       - Features
       - Persistence
+      - Platform
     scheme:
       testTargets:
         - MorrowTests
@@ -30,6 +31,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIUserInterfaceStyle: Light
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Morrow uses your location while you create a memory, to pin it on the map and suggest a place name."
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
   MorrowTests:
     type: bundle.unit-test

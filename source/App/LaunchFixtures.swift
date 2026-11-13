@@ -29,6 +29,32 @@ enum LaunchFixtures {
         return [.memory(id(number))]
     }
 
+    /// `-MorrowFixtureCapture locating|located|denied` opens the Capture sheet with a fake location source.
+    enum CaptureMode: String { case locating, located, denied }
+
+    static var captureMode: CaptureMode? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "-MorrowFixtureCapture"), index + 1 < args.count else { return nil }
+        return CaptureMode(rawValue: args[index + 1])
+    }
+
+    /// Fake location for screenshots only: no CoreLocation, no permission prompt, no real position.
+    @MainActor
+    private final class FixtureLocation: LocationProviding, PlaceNaming {
+        let mode: CaptureMode
+        init(_ mode: CaptureMode) { self.mode = mode }
+        var authorization: LocationAuthorization { mode == .denied ? .denied : .authorized }
+        func requestWhenInUse() async {}
+        func currentCoordinate() async -> Coordinate? {
+            switch mode {
+            case .denied: return nil
+            case .locating: try? await Task.sleep(for: .seconds(3600)); return nil
+            case .located: return Coordinate(latitude: 10.0, longitude: 100.0)
+            }
+        }
+        nonisolated func placeName(for coordinate: Coordinate) async -> String? { "Fixture Market, Fixture City" }
+    }
+
     @MainActor
     static func makeModel() -> HomeViewModel {
         // In-memory container: never touches Application Support. Failure is a programmer error in a debug tool.
@@ -46,7 +72,12 @@ enum LaunchFixtures {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         calendar.locale = Locale(identifier: "en_US")
-        return HomeViewModel(repository: repository, photoStore: photoStore, calendar: calendar, now: { now })
+        let location = captureMode.map(FixtureLocation.init)
+        let provider: LocationProviding = location ?? NoLocationProvider()
+        let namer: PlaceNaming = location ?? NoPlaceNamer()
+        return HomeViewModel(repository: repository, photoStore: photoStore,
+                             locationProvider: provider, placeNamer: namer,
+                             calendar: calendar, now: { now })
     }
 
     // Force unwraps are intended: compile-time UUID literals (notes/sample-data.md).

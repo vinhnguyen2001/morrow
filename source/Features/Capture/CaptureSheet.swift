@@ -8,6 +8,8 @@ struct CaptureSheet: View {
     var onSaved: () -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var pickerItem: PhotosPickerItem?
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         NavigationStack {
@@ -22,8 +24,9 @@ struct CaptureSheet: View {
                         if model.kind == .photo { photoSection } else { noteSection }
                         field("Title", text: $model.title)
                             .limitedLength($model.title, to: Memory.Limits.title)
-                        field("Place (optional)", text: $model.placeName)
-                            .limitedLength($model.placeName, to: Memory.Limits.place)
+                        field(placePlaceholder, text: placeBinding)
+                            .limitedLength(placeBinding, to: Memory.Limits.place)
+                        locationLine
                         Label("Saved on this device. Private.", systemImage: "lock")
                             .font(MorrowFont.caption)
                             .foregroundStyle(MorrowColor.textSecondary)
@@ -58,8 +61,66 @@ struct CaptureSheet: View {
             guard !Task.isCancelled else { return }
             await model.setPhoto(data)
         }
+        // Not tied to pickerItem; cancelled when the sheet goes away, and by Save.
+        .task { await model.startLocating() }
+        // The user may have changed the permission in Settings while the sheet was open.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await model.recheckAuthorization() } }
+        }
         .onChange(of: model.errorMessage) { _, message in
             if let message { AccessibilityNotification.Announcement(message).post() }
+        }
+    }
+
+    /// Typing marks the place as the user's own, so a late suggestion never overwrites it.
+    private var placeBinding: Binding<String> {
+        Binding(get: { model.placeName }, set: { model.setPlaceName(byUser: $0) })
+    }
+
+    private var placePlaceholder: String {
+        model.locationState == .locating || model.isFindingPlace ? "Finding your place\u{2026}" : "Place (optional)"
+    }
+
+    /// One quiet line under Place: nothing while looking, the pin and a remove button when found, the reason when not.
+    @ViewBuilder private var locationLine: some View {
+        switch model.locationState {
+        case .idle, .locating:
+            EmptyView()
+        case .located:
+            HStack(spacing: 4) {
+                Label("Pinned to your location", systemImage: "location.fill")
+                    .font(MorrowFont.caption)
+                    .foregroundStyle(MorrowColor.textSecondary)
+                Spacer(minLength: 0)
+                Button {
+                    withAnimation(.easeOut(duration: 0.2)) { model.clearLocation() }
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(MorrowColor.textSecondary)
+                        .frame(width: MorrowLayout.minHitSize, height: MorrowLayout.minHitSize)
+                }
+                .accessibilityLabel("Remove location")
+            }
+        case .unavailable:
+            HStack(spacing: 6) {
+                Label(unavailableText, systemImage: "location.slash")
+                    .font(MorrowFont.caption)
+                    .foregroundStyle(MorrowColor.textSecondary)
+                if model.offersSettingsLink {
+                    Button("Open Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                    }
+                    .font(MorrowFont.caption)
+                }
+            }
+        }
+    }
+
+    private var unavailableText: String {
+        switch model.authorization {
+        case .denied: return "Location is off. You can still save."
+        case .restricted: return "Location isn't available on this device."
+        case .notDetermined, .authorized: return "Couldn't find your location. You can still save."
         }
     }
 

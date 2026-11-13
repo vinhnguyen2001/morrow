@@ -39,3 +39,7 @@
 ## Status
 - M0 has no network, persistence, or secrets, so nothing applies yet beyond "no secrets in repo". The xcconfig pattern starts at the first backend milestone.
 - At the first backend milestone `.gitignore` gains `Config.xcconfig`, and a committed `Config.example.xcconfig` documents the keys.
+
+## Location (T-004 step 2)
+- Done: When-In-Use only, requested when Capture opens; no Always key; denied and restricted handled; no coordinate or place name in logs (the adapters do not log; `Coordinate` is redacted); CoreLocation imported only in `Platform/`.
+- Reverse geocoding sends the coordinate to Apple (CLGeocoder), one request, no retry. Declare in the privacy nutrition label at M6.
