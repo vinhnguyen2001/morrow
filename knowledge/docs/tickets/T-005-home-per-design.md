@@ -152,3 +152,7 @@ Still pending: step 7 (Place detail, so Place tiles are not tappable yet), step 
 3. Signpost "search rebuild" in `setSearchQuery` (time only, never the query). Nothing optimised.
 4. Nits: "0 places" hidden while a search has no match; `HomeMetrics.noteInsetSide` added (was reusing noteInsetTop for width); long line in HomeNotesTab split.
 Step 8 (device) additions: measure search on iPhone 11 Pro with `-MorrowFixtureMapPins 300`, threshold p95 8 ms per keystroke from the "search rebuild" signpost. If over, in order: (a) cache folded strings per memory at load, (b) build only the visible tab's projection, (c) background compute with cancel + generation id; debounce last. Also: VoiceOver does not announce the result count while searching (add an announcement).
+
+## Device check (user, iPhone 11 Pro iOS 17.4.1, build 4ee5140, 2026-11-13)
+- User tried Home with the Moments / Notes / Places tabs and Search and reported it is fine ("cũng ok"). Individual checks (Places merging "Đà Nẵng" and "Da Nang", search "da nang", largest accessibility text size) were not reported one by one, so treat them as accepted by eye, not measured.
+- Still owed (step 8): scroll FPS and typing latency (`search rebuild` signpost, p95 under 8 ms per key), VoiceOver, Reduce Motion, 375pt, Place detail (step 7), removing the placeholder chrome (bell "2 new" dot, Map badge "3") before TestFlight.
