@@ -49,6 +49,18 @@ final class HomeViewModelTests: XCTestCase {
         ])
     }
 
+    func testLoadBuildsNoteCardsAndDeleteUpdatesThem() async throws {
+        let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
+        let note = Memory(kind: .note, title: "A note")
+        try repo.add(note)
+        try repo.add(Memory(kind: .photo, title: "A photo"))
+        let model = HomeViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory))
+        model.load()
+        XCTAssertEqual(model.noteCards.all.map(\.title), ["A note"])
+        await model.delete(note)
+        XCTAssertTrue(model.noteCards.isEmpty)
+    }
+
     func testLookupByIdReturnsMemoryThenNilAfterDelete() async throws {
         let repo = SwiftDataMemoryRepository(container: try SwiftDataMemoryRepository.makeContainer(inMemory: true))
         let memory = Memory(kind: .note, title: "Gone soon")

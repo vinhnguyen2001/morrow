@@ -32,6 +32,11 @@ enum LaunchFixtures {
         return [.memory(id(number))]
     }
 
+    /// `-MorrowFixtureTab moments|notes|places` opens Home on that tab, for screenshots.
+    static var initialTab: HomeTab {
+        value(after: "-MorrowFixtureTab").flatMap(HomeTab.init(rawValue:)) ?? .moments
+    }
+
     /// `-MorrowFixtureMapSelect <n>` opens the Map with fixture memory n selected (peek sheet up);
     /// add `-MorrowFixtureMapLarge` to start with the sheet expanded to Detail.
     static var mapSelection: UUID? {

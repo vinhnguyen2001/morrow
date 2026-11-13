@@ -31,7 +31,14 @@ enum MorrowColor {
     /// Place chip on Detail (Main.dc.html line 435), and the neutral "Private" chip beside it.
     static let placeChipBackground = Color(hex: 0xE4F1FB)
     static let placeChipText = Color(hex: 0x1F6FA8)
-    static let neutralChipBackground = Color(hex: 0xE9E9E9)
+    /// Track of the Moments / Notes / Places control (Main.dc.html line 38); also the neutral chip.
+    static let segmentTrack = Color(hex: 0xE9E9E9)
+    static let neutralChipBackground = segmentTrack
+    /// Note cards: lavender, every third one peach, and the purple ink of the kicker and "New note"
+    /// (Main.dc.html lines 160 and 1283).
+    static let noteLavender = Color(hex: 0xF0ECFF)
+    static let notePeach = Color(hex: 0xFFF1E6)
+    static let noteInk = Color(hex: 0x5B3FB8)
     /// Error text, about 6:1 on ground and white.
     static let error = Color(hex: 0xB00020)
 }

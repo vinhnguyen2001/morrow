@@ -34,25 +34,11 @@ struct HomeTimeline: View {
     }
 
     private var sectionHeader: some View {
-        // Side by side normally; stacked at accessibility sizes so the title is not squeezed.
-        let content = Group {
-            Text("Recent moments")
-                .font(MorrowFont.sectionTitle)
-                .foregroundStyle(MorrowColor.ink)
-                .accessibilityAddTraits(.isHeader)
-            if layout == .twoColumn { Spacer() }
+        HomeSectionHeader(title: "Recent moments", layout: layout) {
             if let since = timeline.sinceText {
                 Text("since \(since)")
                     .font(MorrowFont.sectionMeta)
                     .foregroundStyle(MorrowColor.action)
-            }
-        }
-        return Group {
-            if layout == .twoColumn {
-                HStack(alignment: .firstTextBaseline) { content }
-            } else {
-                VStack(alignment: .leading, spacing: 2) { content }
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }

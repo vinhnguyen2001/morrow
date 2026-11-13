@@ -8,6 +8,8 @@ final class HomeViewModel {
     private(set) var memories: [Memory] = []
     /// Rows for the timeline, computed once per load (never in `body`).
     private(set) var timeline: Timeline = .empty
+    /// Notes tab tiles, computed once per load.
+    private(set) var noteCards: TwoColumns<NoteCard> = .empty
     private(set) var errorMessage: String?
     /// False until the first load finishes, so the empty state does not flash before local data arrives.
     private(set) var hasLoaded = false
@@ -49,13 +51,18 @@ final class HomeViewModel {
         } catch {
             errorMessage = "Couldn't load your memories."
         }
-        rebuildTimeline()
+        rebuild()
         if !hasLoaded { hasLoaded = true }
     }
 
-    private func rebuildTimeline() {
-        let rebuilt = TimelineBuilder.build(memories: memories, calendar: calendar, now: now())
-        if rebuilt != timeline { timeline = rebuilt } // no needless re-render on scene activation
+    /// Recomputes every tab's projection from `memories`. Each assignment is guarded so a tab only re-renders
+    /// when its own data changed (e.g. not on scene activation).
+    private func rebuild() {
+        let current = now()
+        let timeline = TimelineBuilder.build(memories: memories, calendar: calendar, now: current)
+        if timeline != self.timeline { self.timeline = timeline }
+        let noteCards = NoteCards.build(memories: memories, calendar: calendar, now: current)
+        if noteCards != self.noteCards { self.noteCards = noteCards }
     }
 
     /// Current state of one memory, or nil once it is deleted. Detail looks itself up here (ADR 0009), so it is never stale.
@@ -68,9 +75,9 @@ final class HomeViewModel {
         if errorMessage != nil { errorMessage = nil }
     }
 
-    func makeCapture() -> CaptureViewModel {
+    func makeCapture(initialKind: MemoryKind = .photo) -> CaptureViewModel {
         CaptureViewModel(repository: repository, photoStore: photoStore,
-                         locationProvider: locationProvider, placeNamer: placeNamer)
+                         locationProvider: locationProvider, placeNamer: placeNamer, initialKind: initialKind)
     }
 
     /// Soft delete first (optimistic UI), then remove the photo files off the main actor.
@@ -79,7 +86,7 @@ final class HomeViewModel {
         do {
             try repository.delete(id: memory.id)
             memories.removeAll { $0.id == memory.id }
-            rebuildTimeline()
+            rebuild()
         } catch {
             errorMessage = "Couldn't delete that memory."
             return

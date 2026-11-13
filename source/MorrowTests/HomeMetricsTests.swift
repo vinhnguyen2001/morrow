@@ -14,6 +14,22 @@ final class HomeMetricsTests: XCTestCase {
         XCTAssertEqual(HomeMetrics.fabBottomInset, 30)
     }
 
+    func testSegmentedAndNotesMeasurementsMatchDesign() {
+        XCTAssertEqual(HomeMetrics.segmentHeight, 40)
+        XCTAssertEqual(HomeMetrics.segmentPadding, 4)
+        XCTAssertEqual(HomeMetrics.segmentGap, 4)
+        XCTAssertEqual(HomeMetrics.noteColumnOffset, 26)
+        XCTAssertEqual(HomeMetrics.noteRadius, 24)
+        XCTAssertEqual(HomeMetrics.newNoteHeight, 40)
+        XCTAssertGreaterThanOrEqual(HomeMetrics.segmentHeight + 2 * HomeMetrics.segmentPadding, MorrowLayout.minHitSize)
+        XCTAssertEqual(MorrowColor.segmentTrack, Color(hex: 0xE9E9E9))
+        XCTAssertEqual(MorrowColor.notePeach, Color(hex: 0xFFF1E6))
+    }
+
+    func testTabsAreMomentsNotesPlaces() {
+        XCTAssertEqual(HomeTab.allCases.map(\.title), ["Moments", "Notes", "Places"])
+    }
+
     func testAddColourIsActionGreen() {
         XCTAssertEqual(MorrowColor.action, Color(hex: 0x1E3B2F))
         XCTAssertEqual(MorrowColor.textSecondary, Color(hex: 0x5C5C5C))

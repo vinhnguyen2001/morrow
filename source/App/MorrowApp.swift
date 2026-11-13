@@ -5,6 +5,7 @@ import SwiftUI
 struct MorrowApp: App {
     private let model: HomeViewModel
     private let initialPath: [Route]
+    private let initialTab: HomeTab
     private let showsCaptureOnLaunch: Bool
 
     /// Composition root (ADR 0001): the only place that picks concrete implementations.
@@ -14,11 +15,13 @@ struct MorrowApp: App {
         if LaunchFixtures.requested {
             model = LaunchFixtures.makeModel()
             initialPath = LaunchFixtures.initialPath
+            initialTab = LaunchFixtures.initialTab
             showsCaptureOnLaunch = LaunchFixtures.captureMode != nil
             return
         }
         #endif
         initialPath = []
+        initialTab = .moments
         showsCaptureOnLaunch = false
         let container: ModelContainer
         do {
@@ -36,7 +39,7 @@ struct MorrowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView(model: model, initialPath: initialPath, showsCaptureOnLaunch: showsCaptureOnLaunch)
+            HomeView(model: model, initialPath: initialPath, initialTab: initialTab, showsCaptureOnLaunch: showsCaptureOnLaunch)
         }
     }
 }

@@ -39,12 +39,15 @@ final class CaptureViewModel {
     private var locationClosed = false
     private var suggestedPlaceName: String?
 
+    /// `initialKind` lets "New note" open Capture on the note form; the default keeps the photo form.
     init(
         repository: MemoryRepository,
         photoStore: PhotoStore,
         locationProvider: LocationProviding = NoLocationProvider(),
-        placeNamer: PlaceNaming = NoPlaceNamer()
+        placeNamer: PlaceNaming = NoPlaceNamer(),
+        initialKind: MemoryKind = .photo
     ) {
+        kind = initialKind
         self.repository = repository
         self.photoStore = photoStore
         self.locationProvider = locationProvider

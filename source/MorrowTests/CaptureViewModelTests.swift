@@ -10,6 +10,14 @@ final class CaptureViewModelTests: XCTestCase {
         return (CaptureViewModel(repository: repo, photoStore: PhotoStore(directory: dir)), repo)
     }
 
+    func testInitialKindDefaultsToPhotoAndCanStartOnNote() throws {
+        let (photoModel, repo) = try makeModel()
+        XCTAssertEqual(photoModel.kind, .photo)
+        let noteModel = CaptureViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory),
+                                         initialKind: .note)
+        XCTAssertEqual(noteModel.kind, .note)
+    }
+
     func testNoteNeedsOnlyATitle() throws {
         let (model, _) = try makeModel()
         model.kind = .note

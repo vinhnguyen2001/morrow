@@ -69,40 +69,27 @@ enum TimelineBuilder {
                 memory: memory,
                 stagger: Stagger(index: lastIndex - reverseIndex),
                 dayPart: DayPart(hour: calendar.component(.hour, from: memory.createdAt)),
-                timeText: format(memory.createdAt, calendar: calendar) { $0.hour().minute() }
+                timeText: DateText.format(memory.createdAt, calendar: calendar) { $0.hour().minute() }
             )))
         }
         rows.append(.origin)
 
-        let oldest = ascending[0].createdAt
-        let sameYear = calendar.component(.year, from: oldest) == calendar.component(.year, from: now)
-        let since = format(oldest, calendar: calendar) { sameYear ? $0.month(.abbreviated).day() : $0.month(.abbreviated).day().year() }
-        return Timeline(rows: rows, sinceText: since)
+        return Timeline(rows: rows, sinceText: DateText.short(ascending[0].createdAt, calendar: calendar, now: now))
     }
 
     private static func dayHeader(for day: Date, calendar: Calendar, now: Date) -> DayHeader {
         let parts = calendar.dateComponents([.year, .month, .day], from: day)
         let id = String(format: "day-%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
         let isToday = calendar.isDate(day, inSameDayAs: now)
-        let weekdayName = format(day, calendar: calendar) { $0.weekday(.wide) }
-        let spoken = format(day, calendar: calendar) { $0.weekday(.wide).month(.wide).day() }
+        let weekdayName = DateText.format(day, calendar: calendar) { $0.weekday(.wide) }
+        let spoken = DateText.format(day, calendar: calendar) { $0.weekday(.wide).month(.wide).day() }
         return DayHeader(
             id: id,
             isToday: isToday,
-            number: format(day, calendar: calendar) { $0.day() },
+            number: DateText.format(day, calendar: calendar) { $0.day() },
             weekday: isToday ? "Today" : weekdayName,
-            monthYear: format(day, calendar: calendar) { $0.month(.wide).year() },
+            monthYear: DateText.format(day, calendar: calendar) { $0.month(.wide).year() },
             accessibilityLabel: isToday ? "Today, \(spoken)" : spoken
         )
-    }
-
-    /// Formats with the calendar's own locale and time zone, never the device's.
-    private static func format(
-        _ date: Date, calendar: Calendar, _ build: (Date.FormatStyle) -> Date.FormatStyle
-    ) -> String {
-        let base = Date.FormatStyle(
-            locale: calendar.locale ?? .current, calendar: calendar, timeZone: calendar.timeZone
-        )
-        return date.formatted(build(base))
     }
 }

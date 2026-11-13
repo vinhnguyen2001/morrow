@@ -58,6 +58,20 @@ enum MorrowFont {
     /// Glyph inside the 64pt Add button (design svg 30pt).
     static let iconLarge = Font.system(size: 28, weight: .semibold)
     static let glyph = Font.system(size: 20, weight: .semibold)
+    /// Segmented control labels (design 14.5/800 selected, 700 off).
+    static let segmentSelected = Font.system(.subheadline, weight: .heavy)
+    static let segmentOff = Font.system(.subheadline, weight: .bold)
+    /// "New note" button (design 13.5/800).
+    static let smallButton = Font.system(.footnote, weight: .heavy)
+    /// Note tile: kicker (design 11/800 caps), title (15.5/800), preview (13), date (13/600), place (11.5/700).
+    static let noteKicker = Font.system(.caption2, weight: .heavy)
+    static let noteTitle = Font.system(.subheadline, weight: .heavy)
+    static let notePreview = Font.system(.footnote)
+    static let noteDate = Font.system(.footnote, weight: .semibold)
+    static let noteMeta = Font.system(.caption, weight: .bold)
+    /// Tab empty-state heading (design 14/600) and text (15).
+    static let blankTitle = Font.system(.subheadline, weight: .semibold)
+    static let blankText = Font.system(.subheadline)
     /// Small labels: kind line in the Map peek row and the badge on the Home Map button (design 11/800).
     static let micro = Font.system(.caption2, weight: .heavy)
 }

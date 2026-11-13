@@ -13,7 +13,7 @@ struct MemoryKindStyle: Equatable {
             return MemoryKindStyle(background: Color(hex: 0xE9E9E4), ink: MorrowColor.ink,
                                    symbolName: "photo", displayName: "Photo")
         case .note:
-            return MemoryKindStyle(background: Color(hex: 0xF0ECFF), ink: Color(hex: 0x5B3FB8),
+            return MemoryKindStyle(background: MorrowColor.noteLavender, ink: MorrowColor.noteInk,
                                    symbolName: "note.text", displayName: "Note")
         }
     }

@@ -4,6 +4,9 @@ import SwiftUI
 struct HomeView: View {
     @State var model: HomeViewModel
     @State private var showCapture: Bool
+    /// What the Capture sheet opens on: photo from Add, note from "New note".
+    @State private var captureKind: MemoryKind = .photo
+    @State private var tab: HomeTab
     @State private var showSettings = false
     @State private var toast: String?
     @State private var toastTask: Task<Void, Never>?
@@ -12,7 +15,8 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     /// `initialPath` lets DEBUG fixtures open straight on a screen (screenshots); it is empty in normal use.
-    init(model: HomeViewModel, initialPath: [Route] = [], showsCaptureOnLaunch: Bool = false) {
+    init(model: HomeViewModel, initialPath: [Route] = [], initialTab: HomeTab = .moments, showsCaptureOnLaunch: Bool = false) {
+        _tab = State(initialValue: initialTab)
         _showCapture = State(initialValue: showsCaptureOnLaunch)
         _model = State(initialValue: model)
         _path = State(initialValue: initialPath)
@@ -44,6 +48,11 @@ struct HomeView: View {
         path.append(.memory(id))
     }
 
+    private func startCapture(_ kind: MemoryKind) {
+        captureKind = kind
+        showCapture = true
+    }
+
     private func openMap() {
         guard path.last != .map else { return }
         model.clearError()
@@ -57,6 +66,8 @@ struct HomeView: View {
                 VStack(spacing: 0) {
                     MorrowHeader(onNotifications: showNotificationsNotice, onSettings: { showSettings = true })
                         .padding(.top, HomeMetrics.pageTopBelowStatusBar)
+                    CategorySegmentedControl(selection: $tab)
+                        .padding(.top, HomeMetrics.segmentTop)
                     content
                     if let message = model.errorMessage {
                         Text(message)
@@ -68,7 +79,7 @@ struct HomeView: View {
                 .padding(.horizontal, HomeMetrics.pageSide)
                 .padding(.bottom, HomeMetrics.pageBottom)
             }
-            FloatingActionBar(onMap: openMap) { showCapture = true }
+            FloatingActionBar(onMap: openMap) { startCapture(.photo) }
         }
         .overlay(alignment: .top) {
             if let toast {
@@ -86,7 +97,7 @@ struct HomeView: View {
             if phase == .active { model.load() }
         }
         .sheet(isPresented: $showCapture) {
-            CaptureSheet(model: model.makeCapture()) {
+            CaptureSheet(model: model.makeCapture(initialKind: captureKind)) {
                 model.load()
             }
         }
@@ -96,12 +107,26 @@ struct HomeView: View {
         }
     }
 
+    /// Each tab reads only its own projection from the model, so a change in one does not re-render the others.
     @ViewBuilder
     private var content: some View {
         if !model.hasLoaded {
             Color.clear.frame(height: 1)
-        } else if model.timeline.rows.isEmpty {
-            HomeEmptyState { showCapture = true }
+        } else {
+            switch tab {
+            case .moments: momentsTab
+            case .notes:
+                HomeNotesTab(cards: model.noteCards, onNewNote: { startCapture(.note) }, onOpen: open)
+            case .places:
+                EmptyView() // T-005 step 4
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var momentsTab: some View {
+        if model.timeline.rows.isEmpty {
+            HomeEmptyState { startCapture(.photo) }
         } else {
             HomeTimeline(
                 timeline: model.timeline,

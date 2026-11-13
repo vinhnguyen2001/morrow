@@ -81,4 +81,24 @@ enum HomeMetrics {
     static let gardenWidth: CGFloat = 190
     static let gardenHeight: CGFloat = 170
     static let ctaHeight: CGFloat = 52
+
+    // Segmented control (lines 38-41): 12 below the header, 4 padding, 4 gap, 40 high pills.
+    // The pill is drawn 40 high; its hit area also covers the 4pt track padding, so it is 48 high (>= 44).
+    static let segmentTop: CGFloat = 12
+    static let segmentPadding: CGFloat = 4
+    static let segmentGap: CGFloat = 4
+    static let segmentHeight: CGFloat = 40
+
+    // Notes tab (lines 157-178): list 14 below the title row, columns 12 apart, second column 26 lower,
+    // tiles radius 24 with padding 15/15/14 and 8 between lines, "New note" 40 high.
+    static let tabListTop: CGFloat = 14
+    static let columnGap: CGFloat = 12
+    static let noteColumnOffset: CGFloat = 26
+    static let noteRadius: CGFloat = 24
+    static let noteInsetTop: CGFloat = 15
+    static let noteInsetBottom: CGFloat = 14
+    static let noteSpacing: CGFloat = 8
+    static let newNoteHeight: CGFloat = 40
+    /// Blank-tab message sits 40 below the title row (line 164).
+    static let blankTop: CGFloat = 40
 }
