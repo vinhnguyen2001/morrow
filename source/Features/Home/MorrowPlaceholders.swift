@@ -10,4 +10,9 @@ enum MorrowPlaceholders {
     /// VoiceOver hint on the bell.
     static let notificationsHint = "Coming soon"
     static let notificationsMessage = "Notifications are coming soon"
+
+    /// The "N nearby" badge on the Map button. Not a real count: Home does not read the location (no permission
+    /// is asked there). Decorative, hidden from VoiceOver; the button's label is just "Map".
+    static let showsNearbyBadge = true
+    static let nearbyCount = 3
 }

@@ -25,17 +25,14 @@ struct HomeView: View {
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .memory(let id): MemoryDetailView(id: id, model: model)
+                    case .map: MapView(model: model)
                     }
                 }
         }
         .environment(\.photoStore, model.photoStore)
         // The owner of the path trims it: a deleted memory must not leave a Detail on the stack (ADR 0009).
         .onChange(of: model.memories) { _, memories in
-            let alive = Set(memories.map(\.id))
-            let kept = path.filter { route in
-                if case .memory(let id) = route { return alive.contains(id) }
-                return true
-            }
+            let kept = Route.trimmed(path, alive: Set(memories.map(\.id)))
             if kept != path { path = kept }
         }
     }
@@ -45,6 +42,12 @@ struct HomeView: View {
         guard path.last != .memory(id) else { return }
         model.clearError()
         path.append(.memory(id))
+    }
+
+    private func openMap() {
+        guard path.last != .map else { return }
+        model.clearError()
+        path.append(.map)
     }
 
     private var home: some View {
@@ -65,7 +68,7 @@ struct HomeView: View {
                 .padding(.horizontal, HomeMetrics.pageSide)
                 .padding(.bottom, HomeMetrics.pageBottom)
             }
-            FloatingActionBar { showCapture = true }
+            FloatingActionBar(onMap: openMap) { showCapture = true }
         }
         .overlay(alignment: .top) {
             if let toast {

@@ -15,27 +15,39 @@ enum LaunchFixtures {
 
     static var requested: Bool { ProcessInfo.processInfo.arguments.contains(argument) }
 
-    private static var wantsEmpty: Bool {
+    /// The word after a launch argument, if any.
+    private static func value(after flag: String) -> String? {
         let args = ProcessInfo.processInfo.arguments
-        guard let index = args.firstIndex(of: argument), index + 1 < args.count else { return false }
-        return args[index + 1] == "empty"
+        guard let index = args.firstIndex(of: flag), index + 1 < args.count else { return nil }
+        return args[index + 1]
     }
 
-    /// `-MorrowFixtureOpen <n>` opens the detail of fixture memory n (1 to 8) on launch, for screenshots.
+    private static var wantsEmpty: Bool { value(after: argument) == "empty" }
+
+    /// `-MorrowFixtureOpen <n>` opens the detail of fixture memory n (1 to 8), or `map` opens the Map, for screenshots.
     static var initialPath: [Route] {
-        let args = ProcessInfo.processInfo.arguments
-        guard let index = args.firstIndex(of: "-MorrowFixtureOpen"), index + 1 < args.count,
-              let number = Int(args[index + 1]), (1...8).contains(number) else { return [] }
+        guard let value = value(after: "-MorrowFixtureOpen") else { return [] }
+        if value == "map" { return [.map] }
+        guard let number = Int(value), (1...8).contains(number) else { return [] }
         return [.memory(id(number))]
     }
+
+    /// `-MorrowFixtureMapSelect <n>` opens the Map with fixture memory n selected (peek sheet up);
+    /// add `-MorrowFixtureMapLarge` to start with the sheet expanded to Detail.
+    static var mapSelection: UUID? {
+        guard let value = value(after: "-MorrowFixtureMapSelect"), let number = Int(value), (1...8).contains(number) else { return nil }
+        return id(number)
+    }
+    static var mapLarge: Bool { ProcessInfo.processInfo.arguments.contains("-MorrowFixtureMapLarge") }
+
+    /// `-MorrowFixtureMapPins <n>` adds n generated memories with coordinates (no photos), to measure pan and zoom on a device.
+    private static var extraPinCount: Int { value(after: "-MorrowFixtureMapPins").flatMap(Int.init).map { min(max($0, 0), 1000) } ?? 0 }
 
     /// `-MorrowFixtureCapture locating|located|denied` opens the Capture sheet with a fake location source.
     enum CaptureMode: String { case locating, located, denied }
 
     static var captureMode: CaptureMode? {
-        let args = ProcessInfo.processInfo.arguments
-        guard let index = args.firstIndex(of: "-MorrowFixtureCapture"), index + 1 < args.count else { return nil }
-        return CaptureMode(rawValue: args[index + 1])
+        return value(after: "-MorrowFixtureCapture").flatMap(CaptureMode.init)
     }
 
     /// Fake location for screenshots only: no CoreLocation, no permission prompt, no real position.
@@ -67,7 +79,7 @@ enum LaunchFixtures {
         try? FileManager.default.removeItem(at: directory)
         let photoStore = PhotoStore(directory: directory)
         if !wantsEmpty {
-            for memory in memories(photoStore: photoStore) { try? repository.add(memory) }
+            for memory in memories(photoStore: photoStore) + generatedPins(count: extraPinCount) { try? repository.add(memory) }
         }
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
@@ -85,14 +97,33 @@ enum LaunchFixtures {
         UUID(uuidString: String(format: "F1000000-0000-0000-0000-%012d", n))!
     }
 
+    /// Fake positions around central Vietnam for the Map. Fixtures 3 and 5 have none, to exercise the filter.
+    private static let coordinates: [Int: Coordinate] = [
+        1: Coordinate(latitude: 15.8801, longitude: 108.3380), 2: Coordinate(latitude: 16.0544, longitude: 108.2022),
+        4: Coordinate(latitude: 15.8770, longitude: 108.3265), 6: Coordinate(latitude: 15.8520, longitude: 108.2760),
+        7: Coordinate(latitude: 16.4637, longitude: 107.5909), 8: Coordinate(latitude: 21.0285, longitude: 105.8542),
+    ].compactMapValues { $0 }
+
+    /// Deterministic grid-with-jitter of notes inside Vietnam, in memory only. No photos: cheap to build.
+    private static func generatedPins(count: Int) -> [Memory] {
+        (0..<count).map { i in
+            let latitude = 10.0 + Double(i % 25) * 0.45 + Double((i * 7) % 10) * 0.01
+            let longitude = 104.0 + Double(i / 25) * 0.6 + Double((i * 3) % 10) * 0.01
+            return Memory(id: UUID(uuidString: String(format: "F2000000-0000-0000-0000-%012d", i))!,
+                          kind: i % 3 == 0 ? .photo : .note, title: "Pin \(i + 1)", placeName: "Fixture place \(i % 40)",
+                          coordinate: Coordinate(latitude: latitude, longitude: longitude),
+                          createdAt: now.addingTimeInterval(-Double(i) * 600))
+        }
+    }
+
     private static func memories(photoStore: PhotoStore) -> [Memory] {
         func photo(_ n: Int, _ title: String, _ place: String?, hoursAgo: Double, colors: (UInt32, UInt32)) -> Memory {
             let fileName = try? photoStore.save(imageData: gradientJPEG(colors), id: id(n))
-            return Memory(id: id(n), kind: .photo, title: title, placeName: place, photoFileName: fileName,
-                          createdAt: now.addingTimeInterval(-hoursAgo * 3600))
+            return Memory(id: id(n), kind: .photo, title: title, placeName: place, coordinate: coordinates[n],
+                          photoFileName: fileName, createdAt: now.addingTimeInterval(-hoursAgo * 3600))
         }
         func note(_ n: Int, _ title: String, _ body: String?, _ place: String?, hoursAgo: Double) -> Memory {
-            Memory(id: id(n), kind: .note, title: title, body: body, placeName: place,
+            Memory(id: id(n), kind: .note, title: title, body: body, placeName: place, coordinate: coordinates[n],
                    createdAt: now.addingTimeInterval(-hoursAgo * 3600))
         }
         return [

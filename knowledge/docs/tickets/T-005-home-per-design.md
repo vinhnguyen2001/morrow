@@ -9,6 +9,7 @@
 - Font: SYSTEM SF Pro (not Inter). ADR 0004 stays. Still move every `.system(` into `MorrowFont`, choosing the nearest text styles to the design sizes (a small mismatch is accepted). No Inter files, no UIAppFonts.
 - Journeys: row HIDDEN. No `Journey` entity, no schema change, no journey marker cards, step 6 is dropped (ADR 0011 deferred). The first tab, which the design calls "Journey", is named "Moments" (orchestrator's assumption: the tab holds the timeline; tell the user) so the control is Moments / Notes / Places.
 - Notification button with "2 new" and the "N nearby" badge on the Map button: SHOWN like the design, as PLACEHOLDER chrome. The count and the red dot are not real data. Rules: all placeholders live behind one constant (`MorrowPlaceholders`) with a comment, tapping the notification button shows a small "Notifications are coming soon" message (no fake content), the gear opens a minimal real Settings sheet (app version, "Your memories are stored on this device"), the "nearby" count is a fixed placeholder. Release blocker for TestFlight (M6): remove or make real, and their VoiceOver labels must not claim data that does not exist.
+- Map button done in T-004 step 4: white 56pt, badge "3" is a fixed placeholder, Home reads no location.
 - Order: Home first (steps 1-2), then T-004 step 3-4, then T-005 step 3-5 and 7-8.
 - Q6-Q9 defaults apply: mood = computed day part, secondary text #5C5C5C, search on all tabs, Add colour #1E3B2F.
 
@@ -28,7 +29,7 @@ T-005 step 1-2 (display only) -> T-004 step 3-4 (Detail, Map; adds `Route`) -> T
 - Notes tab: "Notes" (no lists yet), "New note" opens Capture with kind note, 2 columns offset 26, lavender, every 3rd peach, tilts [0.6,-0.8,0.3,-0.4].
 - Places tab: group by normalised placeName (trim, case and diacritic insensitive); display name = most recent spelling; cover = latest photo else `mappin` glyph; "Last: <date>" replaces the region line; no coordinates needed yet.
 - Empty state "Your garden is waiting": drawn with Shapes; copy says "a photo or a note" (no "list"); button opens Capture. "See what travelers left nearby": HIDDEN (public discovery, deferred).
-- FABs: Add 64pt #1E3B2F right 20 / bottom 30 (no 45 degree rotation, Reduce Motion); Map 56pt white left, wired at step 7, no "N nearby" badge. Add opens Capture directly (no 5-item menu).
+- FABs: Add 64pt #1E3B2F right 20 / bottom 30 (no 45 degree rotation, Reduce Motion); Map 56pt white left, wired in T-004 step 4 (done); the "N nearby" badge is shown as PLACEHOLDER per the user decision above (MorrowPlaceholders, VoiceOver label just "Map"). Add opens Capture directly (no 5-item menu).
 - Secondary text stays #5C5C5C (design #7C7C7C is about 3.7:1, #6E6E6E on #E9E9E9 about 4.2:1; ADR 0002). Deliberate difference, tell the user.
 - Font: see below. Add button colour #1E3B2F (code is the source; canvas note says black).
 

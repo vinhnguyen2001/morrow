@@ -24,6 +24,12 @@ enum HomeMetrics {
     static let addButton: CGFloat = 64
     static let fabSideInset: CGFloat = 20
     static let fabBottomInset: CGFloat = 30
+    // Floating Map button (line 207): 56pt, white, 20 from the left, 30 from the bottom. Badge: min 20pt,
+    // 3pt out of the top-right corner, 2pt white ring.
+    static let mapButton: CGFloat = 56
+    static let mapBadge: CGFloat = 20
+    static let mapBadgeOffset: CGFloat = 3
+    static let mapBadgeRing: CGFloat = 2
 
     // Notification dot (line 26): 8pt, 11 from the top, 12 from the right, 2pt white ring.
     static let notificationDot: CGFloat = 8

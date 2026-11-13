@@ -58,4 +58,6 @@ enum MorrowFont {
     /// Glyph inside the 64pt Add button (design svg 30pt).
     static let iconLarge = Font.system(size: 28, weight: .semibold)
     static let glyph = Font.system(size: 20, weight: .semibold)
+    /// Small labels: kind line in the Map peek row and the badge on the Home Map button (design 11/800).
+    static let micro = Font.system(.caption2, weight: .heavy)
 }

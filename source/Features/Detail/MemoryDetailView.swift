@@ -6,6 +6,8 @@ import SwiftUI
 struct MemoryDetailView: View {
     let id: UUID
     let model: HomeViewModel
+    /// False inside the Map's sheet, where the drag indicator closes it and Back would sit on top of it.
+    var showsBackButton = true
     @State private var pendingDelete: Memory?
     /// Last non-nil memory: once a delete removes it from the model, the screen keeps drawing this while it pops.
     @State private var lastShown: Memory?
@@ -28,11 +30,13 @@ struct MemoryDetailView: View {
                 .scrollBounceBehavior(.basedOnSize)
                 .ignoresSafeArea(edges: .top) // the photo or colour runs under the status bar
             }
-            CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton) { dismiss() }
-                .accessibilitySortPriority(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, DetailMetrics.backSide)
-                .padding(.top, DetailMetrics.backTopBelowStatusBar)
+            if showsBackButton {
+                CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton) { dismiss() }
+                    .accessibilitySortPriority(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, DetailMetrics.backSide)
+                    .padding(.top, DetailMetrics.backTopBelowStatusBar)
+            }
         }
         .accessibilityElement(children: .contain)
         .toolbar(.hidden, for: .navigationBar)
