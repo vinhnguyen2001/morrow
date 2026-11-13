@@ -57,11 +57,21 @@ final class CaptureViewModel {
 
     /// Called from the sheet's `.task`. Cancelled with the sheet; Save and `clearLocation()` cancel it too.
     func startLocating() async {
-        guard locationState == .idle, !locationClosed else { return }
-        let task = Task { await locate() }
-        locatingTask = task
+        guard let task = beginLocating() else { return }
         await withTaskCancellationHandler { await task.value } onCancel: { task.cancel() }
     }
+
+    /// Sets `.locating` synchronously, before the Task exists, so a second call sees it and starts nothing.
+    private func beginLocating() -> Task<Void, Never>? {
+        guard locationState == .idle, !locationClosed else { return nil }
+        locationState = .locating
+        let task = Task { await locate() }
+        locatingTask = task
+        return task
+    }
+
+    /// The sheet went away: stop looking. Does not change what Save means.
+    func cancelLocating() { stopLocating() }
 
     /// The user may have changed the permission in Settings while the sheet was open.
     func recheckAuthorization() async {
@@ -86,16 +96,18 @@ final class CaptureViewModel {
         placeEditedByUser = true
     }
 
+    /// A cancelled search must not leave the state at `.locating`, so it goes back to `.idle`.
     private func stopLocating() {
         locationClosed = true
         isFindingPlace = false
+        if locationState == .locating { locationState = .idle }
         locatingTask?.cancel()
         locatingTask = nil
     }
 
     private func locate() async {
+        guard isCurrent else { return }
         authorization = locationProvider.authorization
-        locationState = .locating
         if authorization == .notDetermined {
             await locationProvider.requestWhenInUse()
             guard isCurrent else { return }
@@ -146,7 +158,9 @@ final class CaptureViewModel {
     /// Saves locally and returns true on success. Photo encoding runs off the main actor.
     func save() async -> Bool {
         guard canSave else { return false }
-        stopLocating() // Save never waits for the location; whatever arrived is kept, the rest is dropped
+        // Save never waits for the location; whatever arrived is kept, the rest is dropped.
+        let wasLocating = locationState == .locating
+        stopLocating()
         isSaving = true
         defer { isSaving = false }
 
@@ -169,6 +183,9 @@ final class CaptureViewModel {
         } catch {
             if let fileName { photoStore.remove(fileName: fileName) }
             errorMessage = "Couldn't save. Please try again."
+            // The sheet stays open, so reopen the search (smallest fix: only a search that Save cut short).
+            locationClosed = false
+            if wasLocating { _ = beginLocating() }
             return false
         }
     }

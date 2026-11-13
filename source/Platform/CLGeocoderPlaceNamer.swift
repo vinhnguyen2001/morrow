@@ -5,6 +5,7 @@ import CoreLocation
 /// One request, no retry. Never logs the coordinate or the result.
 struct CLGeocoderPlaceNamer: PlaceNaming {
     func placeName(for coordinate: Coordinate) async -> String? {
+        guard !Task.isCancelled else { return nil }
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let placemarks: [CLPlacemark]? = await withTaskCancellationHandler {

@@ -56,6 +56,11 @@ final class SystemLocationProvider: NSObject, LocationProviding, CLLocationManag
         }
     }
 
+    /// The fix with the smaller horizontal accuracy (the first one wins a tie). Pure, so tests need no CoreLocation stream.
+    nonisolated static func better(_ best: CLLocation?, _ location: CLLocation) -> CLLocation {
+        best.map { location.horizontalAccuracy < $0.horizontalAccuracy ? location : $0 } ?? location
+    }
+
     func currentCoordinate() async -> Coordinate? {
         guard authorization == .authorized else { return nil }
         let stream = Task { @MainActor () -> CLLocation? in
@@ -63,7 +68,7 @@ final class SystemLocationProvider: NSObject, LocationProviding, CLLocationManag
             do {
                 for try await update in CLLocationUpdate.liveUpdates() {
                     guard let location = update.location, location.horizontalAccuracy >= 0 else { continue }
-                    if best == nil || location.horizontalAccuracy < (best?.horizontalAccuracy ?? .infinity) { best = location }
+                    best = Self.better(best, location)
                     if location.horizontalAccuracy <= Self.goodAccuracy { break }
                 }
             } catch {

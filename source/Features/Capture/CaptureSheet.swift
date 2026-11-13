@@ -10,6 +10,7 @@ struct CaptureSheet: View {
     @State private var pickerItem: PhotosPickerItem?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         NavigationStack {
@@ -26,6 +27,8 @@ struct CaptureSheet: View {
                             .limitedLength($model.title, to: Memory.Limits.title)
                         field(placePlaceholder, text: placeBinding)
                             .limitedLength(placeBinding, to: Memory.Limits.place)
+                            // The placeholder is the accessibility label, and it changes: keep a fixed one.
+                            .accessibilityLabel("Place")
                         locationLine
                         Label("Saved on this device. Private.", systemImage: "lock")
                             .font(MorrowFont.caption)
@@ -67,6 +70,14 @@ struct CaptureSheet: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await model.recheckAuthorization() } }
         }
+        .onDisappear { model.cancelLocating() }
+        .onChange(of: model.locationState) { _, state in
+            switch state {
+            case .located: AccessibilityNotification.Announcement("Pinned to your location").post()
+            case .unavailable: AccessibilityNotification.Announcement(unavailableText).post()
+            case .idle, .locating: break
+            }
+        }
         .onChange(of: model.errorMessage) { _, message in
             if let message { AccessibilityNotification.Announcement(message).post() }
         }
@@ -98,11 +109,16 @@ struct CaptureSheet: View {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(MorrowColor.textSecondary)
                         .frame(width: MorrowLayout.minHitSize, height: MorrowLayout.minHitSize)
+                        .contentShape(Rectangle())
                 }
                 .accessibilityLabel("Remove location")
             }
         case .unavailable:
-            HStack(spacing: 6) {
+            // Stacks at accessibility Dynamic Type sizes so the link keeps room and a 44pt target.
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
+                : AnyLayout(HStackLayout(spacing: 6))
+            layout {
                 Label(unavailableText, systemImage: "location.slash")
                     .font(MorrowFont.caption)
                     .foregroundStyle(MorrowColor.textSecondary)
@@ -111,6 +127,8 @@ struct CaptureSheet: View {
                         if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
                     }
                     .font(MorrowFont.caption)
+                    .frame(minHeight: MorrowLayout.minHitSize)
+                    .contentShape(Rectangle())
                 }
             }
         }
