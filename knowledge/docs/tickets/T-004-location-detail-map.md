@@ -134,3 +134,8 @@ Step 3 device-only checklist (add to step 5): swipe back from the left edge (als
 - Open issues added: two memories at the same coordinate stack their pins (accepted); pins across the antimeridian give a near-world span (accepted); `Route.trimmed` is tested but the `onChange` in HomeView is not; a deleted-and-reselected edge (select, delete elsewhere) relies on `validSelection`.
 
 - Device checklist for step 4 Map (6): 1 create 1-2 new memories WITH location first (the 2 old ones have no coordinates); 2 open Map from the white button; 3 tap a pin, change pin; 4 drag the card up, down, close; 5 delete from Detail while at .large and watch the sheet slide down: content must not change or vanish, no white flash (MOST IMPORTANT), also swipe-close from .large, and VoiceOver must not read the pin twice, Back and left-edge swipe, pan/zoom smooth; 6 VoiceOver hears kind, title and place; airplane mode: empty background is normal.
+
+## Device check results (user, iPhone 11 Pro iOS 17.4.1, build b25045e, 2026-11-13)
+- Location prompt appeared and "Allow While Using App" worked; the place was filled and pinned automatically, indoors.
+- Pressing Cancel while still "Finding your place..." stops the search (user observed no further location activity). This answers the open question about `CLLocationUpdate.liveUpdates()` honouring cancellation: no extra timeout/race workaround (N1) needed for now. Not measured: exact seconds to first fix, nor the status-bar arrow timing.
+- Map opened and showed pins. NOT yet confirmed by the user: delete from the large detail sheet without flashing, tapping a pin while the sheet is sliding down, VoiceOver, FPS with many pins.
