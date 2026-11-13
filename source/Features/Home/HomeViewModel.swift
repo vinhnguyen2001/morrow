@@ -10,6 +10,8 @@ final class HomeViewModel {
     private(set) var timeline: Timeline = .empty
     /// Notes tab tiles, computed once per load.
     private(set) var noteCards: TwoColumns<NoteCard> = .empty
+    /// Places tab tiles, computed once per load.
+    private(set) var placeCards: TwoColumns<PlaceCard> = .empty
     private(set) var errorMessage: String?
     /// False until the first load finishes, so the empty state does not flash before local data arrives.
     private(set) var hasLoaded = false
@@ -63,6 +65,8 @@ final class HomeViewModel {
         if timeline != self.timeline { self.timeline = timeline }
         let noteCards = NoteCards.build(memories: memories, calendar: calendar, now: current)
         if noteCards != self.noteCards { self.noteCards = noteCards }
+        let placeCards = PlaceGrouping.build(memories: memories, calendar: calendar, now: current)
+        if placeCards != self.placeCards { self.placeCards = placeCards }
     }
 
     /// Current state of one memory, or nil once it is deleted. Detail looks itself up here (ADR 0009), so it is never stale.

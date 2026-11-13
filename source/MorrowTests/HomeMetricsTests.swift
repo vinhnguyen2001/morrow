@@ -26,6 +26,14 @@ final class HomeMetricsTests: XCTestCase {
         XCTAssertEqual(MorrowColor.notePeach, Color(hex: 0xFFF1E6))
     }
 
+    func testPlacesMeasurementsMatchDesign() {
+        XCTAssertEqual(HomeMetrics.placeCardPadding, 6)
+        XCTAssertEqual(HomeMetrics.placeCardRadius, 24)
+        XCTAssertEqual(HomeMetrics.placeImageRadius, 19)
+        XCTAssertEqual(HomeMetrics.placeColumnOffset, 30)
+        XCTAssertEqual(HomeMetrics.placeRowGap, 14)
+    }
+
     func testTabsAreMomentsNotesPlaces() {
         XCTAssertEqual(HomeTab.allCases.map(\.title), ["Moments", "Notes", "Places"])
     }

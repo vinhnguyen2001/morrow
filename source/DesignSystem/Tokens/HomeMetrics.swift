@@ -101,4 +101,11 @@ enum HomeMetrics {
     static let newNoteHeight: CGFloat = 40
     /// Blank-tab message sits 40 below the title row (line 164).
     static let blankTop: CGFloat = 40
+
+    // Places tab (lines 181-205): cards padding 6, radius 24, photo radius 19, second column 30 lower, rows 14 apart.
+    static let placeCardPadding: CGFloat = 6
+    static let placeCardRadius: CGFloat = 24
+    static let placeImageRadius: CGFloat = 19
+    static let placeColumnOffset: CGFloat = 30
+    static let placeRowGap: CGFloat = 14
 }

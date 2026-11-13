@@ -118,7 +118,7 @@ struct HomeView: View {
             case .notes:
                 HomeNotesTab(cards: model.noteCards, onNewNote: { startCapture(.note) }, onOpen: open)
             case .places:
-                EmptyView() // T-005 step 4
+                HomePlacesTab(cards: model.placeCards)
             }
         }
     }

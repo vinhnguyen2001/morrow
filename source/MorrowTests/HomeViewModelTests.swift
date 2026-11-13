@@ -57,6 +57,7 @@ final class HomeViewModelTests: XCTestCase {
         let model = HomeViewModel(repository: repo, photoStore: PhotoStore(directory: FileManager.default.temporaryDirectory))
         model.load()
         XCTAssertEqual(model.noteCards.all.map(\.title), ["A note"])
+        XCTAssertTrue(model.placeCards.isEmpty) // no place names
         await model.delete(note)
         XCTAssertTrue(model.noteCards.isEmpty)
     }
