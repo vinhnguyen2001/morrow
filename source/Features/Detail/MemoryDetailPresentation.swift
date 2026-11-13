@@ -9,12 +9,6 @@ enum MemoryDetailPresentation {
         return memory.createdAt.formatted(style)
     }
 
-    /// VoiceOver label for the photo: the title, or "Photo" when the title is blank.
-    static func photoLabel(for memory: Memory) -> String {
-        let title = memory.title.trimmingCharacters(in: .whitespacesAndNewlines)
-        return title.isEmpty ? "Photo" : title
-    }
-
     /// Small line above the title in the coloured header (design "a note").
     static func kicker(for kind: MemoryKind) -> String {
         switch kind {

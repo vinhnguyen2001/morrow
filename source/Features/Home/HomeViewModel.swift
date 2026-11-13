@@ -57,12 +57,18 @@ final class HomeViewModel {
         memories.first { $0.id == id }
     }
 
+    /// Dismisses the current error, e.g. when the user navigates on, so it does not show on another screen.
+    func clearError() {
+        if errorMessage != nil { errorMessage = nil }
+    }
+
     func makeCapture() -> CaptureViewModel {
         CaptureViewModel(repository: repository, photoStore: photoStore)
     }
 
     /// Soft delete first (optimistic UI), then remove the photo files off the main actor.
     func delete(_ memory: Memory) async {
+        clearError() // an older failure must not outlive this attempt
         do {
             try repository.delete(id: memory.id)
             memories.removeAll { $0.id == memory.id }

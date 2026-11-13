@@ -23,11 +23,6 @@ final class MemoryDetailPresentationTests: XCTestCase {
         XCTAssertTrue(french.contains("novembre"), french)
     }
 
-    func testPhotoLabelUsesTitleOrFallsBack() {
-        XCTAssertEqual(MemoryDetailPresentation.photoLabel(for: Memory(kind: .photo, title: " Harbour ")), "Harbour")
-        XCTAssertEqual(MemoryDetailPresentation.photoLabel(for: Memory(kind: .photo, title: "  ")), "Photo")
-    }
-
     func testPlaceAndBodyAreNilWhenBlank() {
         let blank = Memory(kind: .note, title: "t", body: " \n", placeName: "  ")
         XCTAssertNil(MemoryDetailPresentation.placeText(for: blank))

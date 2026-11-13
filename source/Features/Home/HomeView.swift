@@ -42,6 +42,7 @@ struct HomeView: View {
     /// A quick double tap on a card must not push the same Detail twice.
     private func open(_ id: UUID) {
         guard path.last != .memory(id) else { return }
+        model.clearError()
         path.append(.memory(id))
     }
 

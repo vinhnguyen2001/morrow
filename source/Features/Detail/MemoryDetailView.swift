@@ -28,7 +28,7 @@ struct MemoryDetailView: View {
                 .scrollBounceBehavior(.basedOnSize)
                 .ignoresSafeArea(edges: .top) // the photo or colour runs under the status bar
             }
-            CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton, showsShadow: true) { dismiss() }
+            CircleIconButton(systemImage: "chevron.left", label: "Back", diameter: DetailMetrics.backButton) { dismiss() }
                 .accessibilitySortPriority(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, DetailMetrics.backSide)

@@ -1,5 +1,6 @@
 import ImageIO
 import UIKit
+import UniformTypeIdentifiers
 import XCTest
 @testable import Morrow
 
@@ -27,7 +28,11 @@ final class PhotoStoreTests: XCTestCase {
     private func pixelSize(of data: Data) throws -> (Int, Int) {
         let source = try XCTUnwrap(CGImageSourceCreateWithData(data as CFData, nil))
         let props = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any])
-        return (props[kCGImagePropertyPixelWidth] as? Int ?? 0, props[kCGImagePropertyPixelHeight] as? Int ?? 0)
+        let width = try XCTUnwrap(props[kCGImagePropertyPixelWidth] as? Int)
+        let height = try XCTUnwrap(props[kCGImagePropertyPixelHeight] as? Int)
+        XCTAssertGreaterThan(width, 0)
+        XCTAssertGreaterThan(height, 0)
+        return (width, height)
     }
 
     func testSaveCapsFullAndThumbnailSizes() throws {
@@ -42,13 +47,34 @@ final class PhotoStoreTests: XCTestCase {
         XCTAssertLessThanOrEqual(try pixelSize(of: thumb).0, PhotoStore.maxThumbPixels)
     }
 
+    /// A JPEG that really carries a GPS dictionary (the renderer's output has none, which would make the test vacuous).
+    private func jpegWithGPS() throws -> Data {
+        let image = try XCTUnwrap(UIImage(data: jpeg(width: 400, height: 300))?.cgImage)
+        let out = NSMutableData()
+        let dest = try XCTUnwrap(CGImageDestinationCreateWithData(out, UTType.jpeg.identifier as CFString, 1, nil))
+        let gps: [CFString: Any] = [
+            kCGImagePropertyGPSLatitude: 10.7769, kCGImagePropertyGPSLatitudeRef: "N",
+            kCGImagePropertyGPSLongitude: 106.7009, kCGImagePropertyGPSLongitudeRef: "E"
+        ]
+        CGImageDestinationAddImage(dest, image, [kCGImagePropertyGPSDictionary: gps] as CFDictionary)
+        XCTAssertTrue(CGImageDestinationFinalize(dest))
+        return out as Data
+    }
+
     func testSavedFileCarriesNoGPSMetadata() throws {
+        let input = try jpegWithGPS()
+        let inputSource = try XCTUnwrap(CGImageSourceCreateWithData(input as CFData, nil))
+        let inputProps = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(inputSource, 0, nil) as? [CFString: Any])
+        XCTAssertNotNil(inputProps[kCGImagePropertyGPSDictionary], "fixture must carry GPS or this test proves nothing")
+
         let store = PhotoStore(directory: dir)
-        let name = try store.save(imageData: jpeg(width: 400, height: 300), id: UUID())
-        let data = try Data(contentsOf: dir.appending(path: name))
-        let source = try XCTUnwrap(CGImageSourceCreateWithData(data as CFData, nil))
-        let props = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any])
-        XCTAssertNil(props[kCGImagePropertyGPSDictionary])
+        let name = try store.save(imageData: input, id: UUID())
+        for fileName in [name, PhotoStore.thumbName(for: name)] {
+            let data = try Data(contentsOf: dir.appending(path: fileName))
+            let source = try XCTUnwrap(CGImageSourceCreateWithData(data as CFData, nil))
+            let props = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any])
+            XCTAssertNil(props[kCGImagePropertyGPSDictionary], fileName)
+        }
     }
 
     func testRejectsNonImageData() {
